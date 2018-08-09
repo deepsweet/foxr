@@ -1,0 +1,36 @@
+{
+  "name": "foxr",
+  "version": "0.1.0",
+  "description": "Node.js API to control Firefox",
+  "keywords": "firefox, headless, remote, marionette, puppeteer, selenium",
+  "homepage": "https://github.com/deepsweet/foxr",
+  "repository": "deepsweet/foxr",
+  "author": "Kir Belevich <kir@belevi.ch> (https://twitter.com/deepsweet)",
+  "license": "MIT",
+  "files": [
+    "build/"
+  ],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-0",
+    "typeon": "^0.1.1"
+  },
+  "devDependencies": {
+    "@deepsweet/eslint-config-node-ts": "^0.1.0",
+    "@deepsweet/start-preset-node-ts-lib": "^0.2.3",
+    "@types/node": "^10.5.6",
+    "@types/tape": "^4.2.32",
+    "tape": "^4.9.1",
+    "typescript": "~2.9.0"
+  },
+  "eslintConfig": {
+    "extends": "@deepsweet/eslint-config-node-ts",
+    "rules": {
+      "import/named": "off"
+    }
+  }
+}
