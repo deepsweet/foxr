@@ -1,7 +1,7 @@
 import { TSend } from '../protocol'
-import { createPage } from './page'
+import createPage from './page'
 
-export const createBrowser = (send: TSend, onEnd: () => void) => ({
+const createBrowser = (send: TSend, onEnd: () => void) => ({
   close: async (): Promise<void> => {
     await send('Marionette:Quit')
     onEnd()
@@ -31,3 +31,5 @@ export const createBrowser = (send: TSend, onEnd: () => void) => ({
     return send('WebDriver:GetWindowHandles')
   }
 })
+
+export default createBrowser

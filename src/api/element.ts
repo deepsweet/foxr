@@ -10,7 +10,7 @@ type TScreenshotOptions = {
   path?: string
 }
 
-export const createElement = (send: TSend, id: string) => ({
+const createElement = (send: TSend, id: string) => ({
   $: async (selector: string) => {
     type TResult = {
       value: {
@@ -56,3 +56,5 @@ export const createElement = (send: TSend, id: string) => ({
     return buffer
   }
 })
+
+export default createElement

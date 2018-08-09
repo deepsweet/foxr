@@ -1,5 +1,5 @@
 import connectToMarionette from '../protocol'
-import { createBrowser } from './browser'
+import createBrowser from './browser'
 
 const DEFAULT_HOST = 'localhost'
 const DEFAULT_PORT = 2828

@@ -4,7 +4,7 @@ import { promisify } from 'util'
 import { TJsonValue } from 'typeon'
 
 import { TSend } from '../protocol'
-import { createElement } from './element'
+import createElement from './element'
 
 const pWriteFile = promisify(writeFile)
 
@@ -14,7 +14,7 @@ type TScreenshotOptions = {
 
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue
 
-export const createPage = (send: TSend) => ({
+const createPage = (send: TSend) => ({
   $: async (selector: string) => {
     type TResult = {
       value: {
@@ -117,3 +117,5 @@ export const createPage = (send: TSend) => ({
     return result.value
   }
 })
+
+export default createPage
