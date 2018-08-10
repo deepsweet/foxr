@@ -570,9 +570,9 @@
     eslint-plugin-standard "^3.0.1"
     typescript-eslint-parser "^16.0.0"
 
-"@deepsweet/start-preset-node-ts-lib@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.2.3.tgz#d53612957b82f77f80fa4ea8a04cf1a880036418"
+"@deepsweet/start-preset-node-ts-lib@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.2.4.tgz#aa7ec69e9255787a56f212551c9cbc26a1543af1"
   dependencies:
     "@babel/core" "^7.0.0-0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0-0"
@@ -3669,7 +3669,7 @@ typescript-eslint-parser@^16.0.0:
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
-typescript@~2.9.0:
+typescript@^2.9.0:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
 
