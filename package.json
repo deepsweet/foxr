@@ -16,7 +16,8 @@
     "node": ">=6"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-0"
+    "@babel/runtime": "^7.0.0-0",
+    "typeon": "^0.1.1"
   },
   "devDependencies": {
     "@deepsweet/eslint-config-node-ts": "^0.1.0",
@@ -24,7 +25,6 @@
     "@types/node": "^10.5.6",
     "@types/tape": "^4.2.32",
     "tape": "^4.9.1",
-    "typeon": "^0.1.1",
     "typescript": "~2.9.0"
   },
   "eslintConfig": {
