@@ -1,12 +1,12 @@
 /* eslint-disable no-use-before-define */
 import { writeFile } from 'fs'
-import { promisify } from 'util'
+import makethen from 'makethen'
 import { TJsonValue } from 'typeon'
 
 import { TSend } from '../protocol'
 import createElement from './element'
 
-const pWriteFile = promisify(writeFile)
+const pWriteFile = makethen(writeFile)
 
 type TScreenshotOptions = {
   path?: string

@@ -1,10 +1,10 @@
 /* eslint-disable no-use-before-define */
 import { writeFile } from 'fs'
-import { promisify } from 'util'
+import makethen from 'makethen'
 
 import { TSend } from '../protocol'
 
-const pWriteFile = promisify(writeFile)
+const pWriteFile = makethen(writeFile)
 
 type TScreenshotOptions = {
   path?: string
