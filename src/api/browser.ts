@@ -39,6 +39,8 @@ const createBrowser = (send: TSend) => {
       const windows = await send('WebDriver:GetWindowHandles')
 
       await send('WebDriver:SwitchToWindow', {
+        // TODO: check if this `focused: true` is needed or
+        // there should be an explicit `page.bringToFront()` call from consumer
         focus: true,
         name: windows[windows.length - 1]
       })
