@@ -12,11 +12,11 @@ test('createBrowser', (t) => {
   t.end()
 })
 
-test('browser: close + `disconnected` event', testWithFirefox(async (t) => {
+test('browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const onDisconnectSpy = createSpy(() => {})
 
-  browser.once('disconnected', onDisconnectSpy)
+  browser.on('disconnected', onDisconnectSpy)
 
   // TODO: figure out how to test this for real
   await browser.close()
@@ -25,5 +25,34 @@ test('browser: close + `disconnected` event', testWithFirefox(async (t) => {
     getSpyCalls(onDisconnectSpy),
     [[]],
     'should emit `disconnected` event'
+  )
+}))
+
+test('browser: multiple sessions + `disconnect()` + `disconnected` events', testWithFirefox(async (t) => {
+  const browser1 = await foxr.connect()
+  const onDisconnectSpy1 = createSpy(() => {})
+
+  browser1.on('disconnected', onDisconnectSpy1)
+
+  // TODO: figure out how to test this for real
+  await browser1.disconnect()
+
+  const browser2 = await foxr.connect()
+  const onDisconnectSpy2 = createSpy(() => {})
+
+  browser2.on('disconnected', onDisconnectSpy2)
+
+  await browser2.disconnect()
+
+  t.deepEqual(
+    getSpyCalls(onDisconnectSpy1),
+    [[]],
+    'should emit `disconnected` event from the 1st session'
+  )
+
+  t.deepEqual(
+    getSpyCalls(onDisconnectSpy2),
+    [[]],
+    'should emit `disconnected` event from the 2nd session'
   )
 }))
