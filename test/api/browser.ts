@@ -56,3 +56,14 @@ test('browser: multiple sessions + `disconnect()` + `disconnected` events', test
     'should emit `disconnected` event from the 2nd session'
   )
 }))
+
+test('browser: `pages()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const pages = await browser.pages()
+
+  t.equal(
+    typeof pages[0].$,
+    'function',
+    'should return array of Pages'
+  )
+}))
