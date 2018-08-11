@@ -3421,6 +3421,10 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
 
+spyfn@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/spyfn/-/spyfn-0.1.1.tgz#b227fbc19e8791101cfce54e846bbaf4aef2928a"
+
 sshpk@^1.7.0:
   version "1.14.2"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.14.2.tgz#c6fc61648a3d9c4e764fd3fcdf4ea105e492ba98"

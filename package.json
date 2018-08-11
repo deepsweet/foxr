@@ -28,6 +28,7 @@
     "@types/node": "^10.5.6",
     "blue-tape": "^1.0.0",
     "execa": "^0.10.0",
+    "spyfn": "^0.1.1",
     "typescript": "^2.9.0"
   },
   "eslintConfig": {
