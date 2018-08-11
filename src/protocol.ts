@@ -25,7 +25,7 @@ const connectToMarionette = async (host: string, port: number) => {
 
     socket
       .setTimeout(CONNECTION_TIMEOUT)
-      .once('ready', () => {
+      .once('connect', () => {
         socket.once('data', (rawData) => {
           const data = parse(rawData)
 
