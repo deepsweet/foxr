@@ -782,11 +782,24 @@
     chalk "^2.4.0"
     stack-utils "^1.0.1"
 
+"@types/blue-tape@^0.1.32":
+  version "0.1.32"
+  resolved "https://registry.yarnpkg.com/@types/blue-tape/-/blue-tape-0.1.32.tgz#944cc454cd53690a6a03c791ab82cb1ee83a7b2e"
+  dependencies:
+    "@types/node" "*"
+    "@types/tape" "*"
+
+"@types/execa@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@types/execa/-/execa-0.9.0.tgz#9b025d2755f17e80beaf9368c3f4f319d8b0fb93"
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@^10.5.6":
   version "10.5.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.6.tgz#1640f021dd0eaf12e731e54198c12ad2e020dc8e"
 
-"@types/tape@^4.2.32":
+"@types/tape@*":
   version "4.2.32"
   resolved "https://registry.yarnpkg.com/@types/tape/-/tape-4.2.32.tgz#1188330d22c4e822648c344faa070277737982d9"
   dependencies:
@@ -1067,6 +1080,12 @@ bcrypt-pbkdf@^1.0.0:
 binary-extensions@^1.0.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.11.0.tgz#46aa1751fb6a2f93ee5e689bb1087d4b14c6c205"
+
+blue-tape@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/blue-tape/-/blue-tape-1.0.0.tgz#7581d04c07395c95c426b2ed6d1edb454a76b92b"
+  dependencies:
+    tape ">=2.0.0 <5.0.0"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3540,7 +3559,7 @@ tap-parser@^1.2.2:
   optionalDependencies:
     readable-stream "^2"
 
-tape@^4.9.0, tape@^4.9.1:
+"tape@>=2.0.0 <5.0.0", tape@^4.9.0:
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/tape/-/tape-4.9.1.tgz#1173d7337e040c76fbf42ec86fcabedc9b3805c9"
   dependencies:

@@ -1,6 +1,9 @@
 # https://docs.travis-ci.com/user/customizing-the-build/
-
-sudo: false
+sudo: required
+services:
+  - docker
+git:
+  depth: 1
 language: node_js
 node_js:
   - 6
@@ -20,4 +23,5 @@ branches:
     - master
 matrix:
   fast_finish: true
+before_script: docker pull deepsweet/firefox-headless-remote:61
 script: yarn start ci
