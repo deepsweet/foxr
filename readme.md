@@ -98,10 +98,7 @@ browser.newPage(): Promise<TPage>
 #### `pages`
 
 ```ts
-type TPageID = number
-type TPages = TPageID[]
-
-browser.pages(): Promise<TPages>
+browser.pages(): Promise<TPage[]>
 ```
 
 ### Page

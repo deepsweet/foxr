@@ -41,8 +41,10 @@ const createBrowser = (send: TSend) => {
       return createPage(send, pages[pages.length - 1])
     },
 
-    pages: (): Promise<number[]> => {
-      return send('WebDriver:GetWindowHandles')
+    pages: async () => {
+      const ids: number[] = await send('WebDriver:GetWindowHandles')
+
+      return ids.map((id) => createPage(send, id))
     }
   }
 }
