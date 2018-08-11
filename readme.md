@@ -192,13 +192,6 @@ element.screenshot(options?: TOptions): Promise<Buffer>
 
 See [my Start task runner preset](https://github.com/deepsweet/_/tree/master/packages/start-preset-node-ts-lib) for details.
 
-## TODO
-
-* test using Firefox on Travis
-* cover more API
-* …
-* logo
-
 ## References
 
 * [Marionette Python Client API](https://marionette-client.readthedocs.io/en/latest/reference.html)
