@@ -1,6 +1,6 @@
 import { Socket } from 'net'
 
-const checkPort = (port: number, host: string) => {
+const checkForMarionette = (port: number, host: string) => {
   return new Promise((resolve, reject) => {
     const socket = new Socket()
     let isAvailablePort = false
@@ -34,7 +34,7 @@ const checkPort = (port: number, host: string) => {
 const sleep = (timeout: number) => new Promise((resolve) => setTimeout(resolve, timeout))
 
 export default async (port: number, host = 'localhost') => {
-  while (!(await checkPort(port, host))) {
+  while (!(await checkForMarionette(port, host))) {
     await sleep(100)
   }
 }
