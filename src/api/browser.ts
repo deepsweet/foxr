@@ -19,6 +19,7 @@ const createBrowser = (send: TSend) => {
     },
 
     close: async (): Promise<void> => {
+      await send('Marionette:AcceptConnections', { value: false })
       await send('Marionette:Quit')
 
       eventEmitter.emit('disconnected')
