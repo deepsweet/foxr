@@ -36,14 +36,9 @@ const createBrowser = (send: TSend) => {
         script: 'window.open()'
       })
 
-      const windows = await send('WebDriver:GetWindowHandles')
+      const pages: number[] = await send('WebDriver:GetWindowHandles')
 
-      await send('WebDriver:SwitchToWindow', {
-        focus: true,
-        name: windows[windows.length - 1]
-      })
-
-      return createPage(send)
+      return createPage(send, pages[pages.length - 1])
     },
 
     pages: (): Promise<number[]> => {
