@@ -67,3 +67,31 @@ test('browser: `pages()`', testWithFirefox(async (t) => {
     'should return array of Pages'
   )
 }))
+
+test('browser: `newPage()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const pagesBefore = await browser.pages()
+
+  const page1 = await browser.newPage()
+  const page2 = await browser.newPage()
+
+  const pagesAfter = await browser.pages()
+
+  t.equal(
+    pagesBefore.length + 2,
+    pagesAfter.length,
+    'should create 2 pages'
+  )
+
+  t.equal(
+    typeof page1.$,
+    'function',
+    'should create real page 1'
+  )
+
+  t.equal(
+    typeof page2.$,
+    'function',
+    'should create real page 2'
+  )
+}))
