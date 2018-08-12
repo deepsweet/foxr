@@ -16,7 +16,6 @@ type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue
 
 const createPage = (send: TSend, id: number) => {
   const switchToPage = () => send('WebDriver:SwitchToWindow', {
-    focus: true,
     name: id
   })
 
