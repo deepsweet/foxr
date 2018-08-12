@@ -5,8 +5,8 @@ const SEPARATOR = ':'
 const SEPARATOR_CODE = SEPARATOR.charCodeAt(0)
 
 export const createParseStream = () => {
-  let remainingLength: number = 0
-  let currentBuffer: Buffer = Buffer.alloc(0)
+  let remainingLength = 0
+  let currentBuffer = Buffer.alloc(0)
 
   return new Transform({
     readableObjectMode: true,
@@ -39,23 +39,23 @@ export const createParseStream = () => {
   })
 }
 
-export const parse = (data: Buffer) => {
+export const parse = (buf: Buffer) => {
   const stream = createParseStream()
-  let obj: TJsonValue = {}
+  let result: TJsonValue = {}
 
   stream.once('data', (data) => {
-    obj = data
+    result = data
   })
 
-  stream.write(data)
+  stream.write(buf)
   stream.end()
 
-  return obj
+  return result
 }
 
-export const stringify = (obj: TJsonValue) => {
-  const data = jsonStringify(obj)
-  const length = Buffer.byteLength(data)
+export const stringify = (data: TJsonValue) => {
+  const str = jsonStringify(data)
+  const length = Buffer.byteLength(str)
 
-  return `${length}${SEPARATOR}${data}`
+  return `${length}${SEPARATOR}${str}`
 }
