@@ -27,6 +27,7 @@ docker run -it --rm --shm-size 2g -p 2828:2828 deepsweet/firefox-headless-remote
 
 ```js
 import foxr from 'foxr'
+// const foxr = require('foxr').default
 
 (async () => {
   try {
