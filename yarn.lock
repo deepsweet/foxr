@@ -570,9 +570,9 @@
     eslint-plugin-standard "^3.0.1"
     typescript-eslint-parser "^16.0.0"
 
-"@deepsweet/start-preset-node-ts-lib@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.2.4.tgz#aa7ec69e9255787a56f212551c9cbc26a1543af1"
+"@deepsweet/start-preset-node-ts-lib@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.3.0.tgz#5bc6c9590e6919dedf74482bd01d38fa8f2ff3da"
   dependencies:
     "@babel/core" "^7.0.0-0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0-0"
@@ -584,6 +584,7 @@
     "@start/plugin-lib-babel" "^0.2.0"
     "@start/plugin-lib-codecov" "^0.2.0"
     "@start/plugin-lib-eslint" "^0.2.0"
+    "@start/plugin-lib-esm-loader" "^0.1.1"
     "@start/plugin-lib-istanbul" "^0.2.0"
     "@start/plugin-lib-npm-publish" "^0.2.0"
     "@start/plugin-lib-npm-version" "^0.2.0"
@@ -644,6 +645,14 @@
     "@babel/runtime" "^7.0.0-0"
     "@start/plugin" "^0.2.0"
     eslint "^4.18.2"
+
+"@start/plugin-lib-esm-loader@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@start/plugin-lib-esm-loader/-/plugin-lib-esm-loader-0.1.1.tgz#156f917c9e7906cf6cdcb8279b1aab1b780f656c"
+  dependencies:
+    "@babel/runtime" "^7.0.0-0"
+    "@start/plugin" "^0.2.0"
+    copie "^0.1.0"
 
 "@start/plugin-lib-istanbul@^0.2.0":
   version "0.2.1"
@@ -1324,6 +1333,12 @@ convert-source-map@^1.1.0, convert-source-map@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
 
+copie@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/copie/-/copie-0.1.0.tgz#5e5a265483df1b7855e0af44b06f0c2aafb5a2ac"
+  dependencies:
+    "@babel/runtime" "^7.0.0-0"
+
 copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
@@ -1647,7 +1662,7 @@ eslint@^4.18.2, eslint@^4.19.1:
     table "4.0.2"
     text-table "~0.2.0"
 
-esm@^3.0.52:
+esm@^3.0.52, esm@^3.0.74:
   version "3.0.74"
   resolved "https://registry.yarnpkg.com/esm/-/esm-3.0.74.tgz#d9b5ac6d6b210068a41337373b002c502c824fbf"
 

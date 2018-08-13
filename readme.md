@@ -42,11 +42,6 @@ import foxr from 'foxr'
 })()
 ```
 
-## Requirements
-
-* Node.js >= 6
-* [`esm` loader](https://github.com/standard-things/esm)
-
 ## Install
 
 ```sh

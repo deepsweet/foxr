@@ -10,19 +10,21 @@
   "files": [
     "build/"
   ],
-  "main": "build/index.js",
+  "main": "build/esm-loader.js",
+  "module": "build/index.js",
   "types": "build/index.d.ts",
   "engines": {
     "node": ">=6"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-0",
+    "esm": "^3.0.74",
     "makethen": "^0.2.2",
     "typeon": "^0.1.1"
   },
   "devDependencies": {
     "@deepsweet/eslint-config-node-ts": "^0.1.0",
-    "@deepsweet/start-preset-node-ts-lib": "^0.2.4",
+    "@deepsweet/start-preset-node-ts-lib": "^0.3.0",
     "@types/blue-tape": "^0.1.32",
     "@types/execa": "^0.9.0",
     "@types/node": "^10.5.6",
