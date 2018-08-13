@@ -48,7 +48,7 @@ import foxr from 'foxr'
 ```sh
 yarn add --dev foxr
 # or
-npm install --dev foxr
+npm install --save-dev foxr
 ```
 
 ## API
