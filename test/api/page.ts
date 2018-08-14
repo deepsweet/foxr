@@ -11,7 +11,7 @@ test('createPage', (t) => {
   t.end()
 })
 
-test('page: `setContent` + `content`', testWithFirefox(async (t) => {
+test('page: `setContent()` + `content()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
   const html = '<h1>hello</h1>'
@@ -31,7 +31,7 @@ test('page: `setContent` + `content`', testWithFirefox(async (t) => {
   )
 }))
 
-test.only('page: `$`', testWithFirefox(async (t) => {
+test('page: `$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 

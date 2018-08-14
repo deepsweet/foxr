@@ -21,21 +21,21 @@ const createPage = (send: TSend, id: number) => {
 
   return {
     $: async (selector: string) => {
-      type TResult = {
-        value: {
-          ELEMENT: string
-        }
-      }
-
       await switchToPage()
 
       try {
-        const result: TResult = await send('WebDriver:FindElement', {
+        type TResult = {
+          value: {
+            ELEMENT: string
+          }
+        }
+
+        const { value }: TResult = await send('WebDriver:FindElement', {
           value: selector,
           using: 'css selector'
         })
 
-        return createElement(send, result.value.ELEMENT)
+        return createElement(send, value.ELEMENT)
       } catch (err) {
         if (err.error === 'no such element') {
           return null
@@ -46,11 +46,11 @@ const createPage = (send: TSend, id: number) => {
     },
 
     $$: async (selector: string) => {
+      await switchToPage()
+
       type TResult = {
         ELEMENT: string
       }
-
-      await switchToPage()
 
       const values: TResult[] = await send('WebDriver:FindElements', {
         value: selector,
