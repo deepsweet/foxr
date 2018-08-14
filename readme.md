@@ -9,7 +9,7 @@ Node.js API to control Firefox.
 * works with [Headless mode](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Headless_mode)
 * compatible subset of [Puppeteer](https://github.com/GoogleChrome/puppeteer) API
 
-At this point Foxr is more a working proof of concept, [work is pretty much in progress](https://github.com/deepsweet/foxr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Aenhancement).
+At this point Foxr is more a proof of concept, [work is pretty much in progress](https://github.com/deepsweet/foxr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Aenhancement).
 
 ## Example
 
