@@ -30,3 +30,24 @@ test('page: `setContent` + `content`', testWithFirefox(async (t) => {
     'setContent() should set page HTML'
   )
 }))
+
+test.only('page: `$`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<h2>hello</h2><h2>world</h2>')
+
+  t.equal(
+    await page.$('h1'),
+    null,
+    'should return null if nothing has been found'
+  )
+
+  const element = await page.$('h2')
+
+  t.equal(
+    element !== null && typeof element.$,
+    'function',
+    'should return a single Element'
+  )
+}))
