@@ -51,3 +51,35 @@ test('page: `$()`', testWithFirefox(async (t) => {
     'should return a single Element'
   )
 }))
+
+test('page: `$$()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<h2>hello</h2><h2>world</h2>')
+
+  t.deepEqual(
+    await page.$$('h1'),
+    [],
+    'should return empty array if nothing has been found'
+  )
+
+  const elements = await page.$$('h2')
+
+  t.true(
+    elements.length === 2,
+    'should return multiple Elements'
+  )
+
+  t.equal(
+    typeof elements[0].$,
+    'function',
+    'should return first Element'
+  )
+
+  t.equal(
+    typeof elements[1].$,
+    'function',
+    'should return second Element'
+  )
+}))
