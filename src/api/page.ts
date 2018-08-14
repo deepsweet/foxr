@@ -52,7 +52,7 @@ const createPage = (send: TSend, id: number) => {
       return values.map((value) => createElement(send, value.ELEMENT))
     },
 
-    close: async (): Promise<void> => {
+    close: async () => {
       await switchToPage()
       await send('WebDriver:ExecuteScript', {
         script: 'window.close()'
@@ -98,7 +98,7 @@ const createPage = (send: TSend, id: number) => {
       return value
     },
 
-    goto: async (url: string): Promise<void> => {
+    goto: async (url: string) => {
       await switchToPage()
       await send('WebDriver:Navigate', { url })
     },

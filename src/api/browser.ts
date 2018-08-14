@@ -18,14 +18,14 @@ const createBrowser = (send: TSend) => {
       eventEmitter.off(event, callback)
     },
 
-    close: async (): Promise<void> => {
+    close: async () => {
       await send('Marionette:AcceptConnections', { value: false })
       await send('Marionette:Quit')
 
       eventEmitter.emit('disconnected')
     },
 
-    disconnect: async (): Promise<void> => {
+    disconnect: async () => {
       await send('WebDriver:DeleteSession')
 
       eventEmitter.emit('disconnected')

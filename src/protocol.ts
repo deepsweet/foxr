@@ -17,7 +17,7 @@ const connectToMarionette = async (host: string, port: number) => {
   let queue: TQueueItem[] = []
   const socket = new Socket()
 
-  await new Promise<void>((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     const rejectAndDestroy = (error: Error) => {
       reject(error)
       socket.destroy()
