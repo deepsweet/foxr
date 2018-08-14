@@ -7,9 +7,9 @@ Node.js API to control Firefox.
 * uses a built-in [Marionette](https://vakila.github.io/blog/marionette-act-i-automation/) through [remote protocol](https://firefox-source-docs.mozilla.org/testing/marionette/marionette/index.html)
 * no [Selenium WebDriver](https://github.com/SeleniumHQ/selenium/wiki/FirefoxDriver) is needed
 * works with [Headless mode](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Headless_mode)
-* similar to compatible to [Puppeteer](https://github.com/GoogleChrome/puppeteer) API<sup>*</sup>
+* compatible subset of [Puppeteer](https://github.com/GoogleChrome/puppeteer) API
 
-<sup>*</sup>At this point Foxr is more a working proof of concept. Although the goal is to have a fully compatible to Puppeteer API, or at least a subset of it, the [work is pretty much in progress](https://github.com/deepsweet/foxr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Aenhancement).
+At this point Foxr is more a working proof of concept, [work is pretty much in progress](https://github.com/deepsweet/foxr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Aenhancement).
 
 ## Example
 
