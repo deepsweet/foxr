@@ -59,6 +59,15 @@ const createPage = (send: TSend, id: number) => {
       })
     },
 
+    content: async (): Promise<string> => {
+      type TResult = {
+        value: string
+      }
+      const { value }: TResult = await send('WebDriver:GetPageSource')
+
+      return value
+    },
+
     evaluate: async (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue> => {
       type TResult = {
         value: TJsonValue

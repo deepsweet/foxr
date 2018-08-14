@@ -117,6 +117,12 @@ page.$$(selector: string): Promise<TElement[]>
 page.close(): Promise<void>
 ```
 
+#### `content`
+
+```ts
+page.content(): Promise<string>
+```
+
 #### `evaluate`
 
 ```ts
