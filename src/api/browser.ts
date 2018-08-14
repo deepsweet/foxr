@@ -14,7 +14,7 @@ const createBrowser = (send: TSend) => {
       eventEmitter.once(event, callback)
     },
 
-    off: (event: string, callback: () => void) => {
+    removeListener: (event: string, callback: () => void) => {
       eventEmitter.off(event, callback)
     },
 
