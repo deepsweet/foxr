@@ -102,7 +102,7 @@ browser.pages(): Promise<TPage[]>
 #### `$`
 
 ```ts
-page.$(selector: string): Promise<TElement>
+page.$(selector: string): Promise<TElement | null>
 ```
 
 #### `$$`

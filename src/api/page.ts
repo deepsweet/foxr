@@ -29,12 +29,20 @@ const createPage = (send: TSend, id: number) => {
 
       await switchToPage()
 
-      const { value }: TResult = await send('WebDriver:FindElement', {
-        value: selector,
-        using: 'css selector'
-      })
+      try {
+        const result: TResult = await send('WebDriver:FindElement', {
+          value: selector,
+          using: 'css selector'
+        })
 
-      return createElement(send, value.ELEMENT)
+        return createElement(send, result.value.ELEMENT)
+      } catch (err) {
+        if (err.error === 'no such element') {
+          return null
+        }
+
+        throw err
+      }
     },
 
     $$: async (selector: string) => {
