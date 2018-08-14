@@ -187,6 +187,6 @@ See [my Start task runner preset](https://github.com/deepsweet/_/tree/master/pac
 
 ## References
 
-* [Marionette Python Client API](https://marionette-client.readthedocs.io/en/latest/reference.html)
-* [Marionette Python Client source](https://searchfox.org/mozilla-central/source/testing/marionette/client/)
-* [Marionette JS client source (outdated)](https://github.com/mozilla-b2g/gaia/tree/master/tests/jsmarionette/client)
+* Python Client: [API](https://marionette-client.readthedocs.io/en/latest/reference.html), [source](https://searchfox.org/mozilla-central/source/testing/marionette/client/)
+* Perl Client: [API](https://metacpan.org/pod/Firefox::Marionette), [source](https://metacpan.org/source/DDICK/Firefox-Marionette-0.57/lib/Firefox)
+* Node.js client (outdated): [source](https://github.com/mozilla-b2g/gaia/tree/master/tests/jsmarionette/client)
