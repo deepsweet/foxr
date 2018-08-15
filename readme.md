@@ -126,13 +126,9 @@ page.content(): Promise<string>
 #### `evaluate`
 
 ```ts
-type TAnyJson = boolean | number | string | null | TJsonArray | TJsonMap
-interface TJsonMap { [key: string]: TAnyJson }
-interface TJsonArray extends Array<TAnyJson> {}
+type TSerializableFunction = (...args: TJsonValue[]) => TJsonValue
 
-type TSerializableFunction = (...args: TAnyJson[]) => TAnyJson
-
-page.evaluate(target: TSerializableFunction | string): Promise<TAnyJson>
+page.evaluate(target: TSerializableFunction | string): Promise<TJsonValue>
 ```
 
 #### `goto`
