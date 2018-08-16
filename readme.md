@@ -1,6 +1,6 @@
 # foxr
 
-[![npm](https://img.shields.io/npm/v/foxr.svg?style=flat-square)](https://www.npmjs.com/package/foxr) [![tests](https://img.shields.io/travis/deepsweet/foxr/master.svg?label=tests&style=flat-square)](https://travis-ci.org/deepsweet/foxr) [![coverage](https://img.shields.io/codecov/c/github/deepsweet/foxr.svg?style=flat-square)](https://codecov.io/github/deepsweet/foxr)
+[![npm](https://img.shields.io/npm/v/foxr.svg?style=flat-square)](https://www.npmjs.com/package/foxr) [![install size](https://flat.badgen.net/packagephobia/install/foxr)](https://packagephobia.now.sh/result?p=foxr) [![tests](https://img.shields.io/travis/deepsweet/foxr/master.svg?label=tests&style=flat-square)](https://travis-ci.org/deepsweet/foxr) [![coverage](https://img.shields.io/codecov/c/github/deepsweet/foxr.svg?style=flat-square)](https://codecov.io/github/deepsweet/foxr)
 
 Node.js API to control Firefox.
 
