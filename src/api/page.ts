@@ -68,6 +68,8 @@ const createPage = (send: TSend, id: number) => {
     },
 
     content: async (): Promise<string> => {
+      await switchToPage()
+
       type TResult = {
         value: string
       }
