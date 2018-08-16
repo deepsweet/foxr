@@ -82,39 +82,49 @@ const createPage = (send: TSend, id: number) => {
       await switchToPage()
 
       type TResult = {
-        value: TJsonValue
+        value: {
+          error: string | null,
+          value: TJsonValue
+        }
       }
 
       if (typeof target === 'function') {
-        const { value }: TResult = await send('WebDriver:ExecuteAsyncScript', {
+        const { value: result }: TResult = await send('WebDriver:ExecuteAsyncScript', {
           script: `
           const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
           const resolve = arguments[arguments.length - 1]
-          const result = (${target.toString()})(args)
 
-          Promise.resolve(result)
-            .then(resolve)
-            .catch((error) => {
-              throw error
-            })
+          Promise.resolve()
+            .then(() => (${target.toString()})(...args))
+            .then((value) => resolve({ error: null, value }))
+            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
           args
         })
 
-        return value
+        if (result.error !== null) {
+          throw new Error(`Evaluation failed: ${result.error}`)
+        }
+
+        return result.value
       }
 
-      const { value }: TResult = await send('WebDriver:ExecuteAsyncScript', {
+      const { value: result }: TResult = await send('WebDriver:ExecuteAsyncScript', {
         script: `
-          Promise.resolve(${target})
-            .then(arguments[0])
-            .catch((error) => {
-              throw error
-            })
+          const resolve = arguments[0]
+
+          Promise.resolve()
+            .then(() => ${target})
+            .then((value) => resolve({ error: null, value }))
+            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `
       })
 
-      return value
+      if (result.error !== null) {
+        throw new Error(`Evaluation failed: ${result.error}`)
+      }
+
+      return result.value
     },
 
     goto: async (url: string) => {
