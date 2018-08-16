@@ -79,11 +79,11 @@ const createPage = (send: TSend, id: number) => {
     },
 
     evaluate: async (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue> => {
+      await switchToPage()
+
       type TResult = {
         value: TJsonValue
       }
-
-      await switchToPage()
 
       if (typeof target === 'function') {
         const { value }: TResult = await send('WebDriver:ExecuteAsyncScript', {
