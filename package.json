@@ -19,7 +19,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-0",
     "esm": "^3.0.74",
-    "makethen": "^0.2.2",
+    "makethen": "^0.2.3",
     "typeon": "^0.1.1"
   },
   "devDependencies": {

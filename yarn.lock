@@ -2577,6 +2577,10 @@ makethen@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/makethen/-/makethen-0.2.2.tgz#513e69bfbfc47ac1c9307faa4c900408ed6ac82f"
 
+makethen@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/makethen/-/makethen-0.2.3.tgz#56acfbe30f40879b973be8fddc8dfa07fb5bd44b"
+
 map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
