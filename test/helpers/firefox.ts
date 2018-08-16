@@ -7,14 +7,15 @@ export const runFirefox = () => execa('docker',
 )
 
 export const stopFirefox = () => execa('docker',
-  'stop --time 5 foxr-firefox'.split(' ')
+  'stop --time 5 foxr-firefox'.split(' '),
+  { reject: false }
 )
 
 export const testWithFirefox = (test: (t: Test) => Promise<void>) => async (t: Test) => {
-  await runFirefox()
-  await waitForMarionette(2828)
-
   try {
+    // await stopFirefox()
+    await runFirefox()
+    await waitForMarionette(2828)
     await test(t)
   } finally {
     await stopFirefox()
