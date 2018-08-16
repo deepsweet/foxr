@@ -12,7 +12,7 @@ type TScreenshotOptions = {
   path?: string
 }
 
-type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue
+type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
 
 const createPage = (send: TSend, id: number) => {
   const switchToPage = () => send('WebDriver:SwitchToWindow', {
