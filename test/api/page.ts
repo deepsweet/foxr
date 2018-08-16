@@ -95,6 +95,21 @@ test('page: `close()`', testWithFirefox(async (t) => {
   t.equal(
     pages.length,
     1,
-    'should close a page'
+    'should close page'
+  )
+}))
+
+test('page: `title()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<title>hi</title>')
+
+  const title = await page.title()
+
+  t.equal(
+    title,
+    'hi',
+    'should change page title'
   )
 }))
