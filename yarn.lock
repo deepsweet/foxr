@@ -570,9 +570,9 @@
     eslint-plugin-standard "^3.0.1"
     typescript-eslint-parser "^16.0.0"
 
-"@deepsweet/start-preset-node-ts-lib@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.3.0.tgz#5bc6c9590e6919dedf74482bd01d38fa8f2ff3da"
+"@deepsweet/start-preset-node-ts-lib@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.3.1.tgz#53bd5d63eeef414696a16d19c391847fb56f0542"
   dependencies:
     "@babel/core" "^7.0.0-0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0-0"
