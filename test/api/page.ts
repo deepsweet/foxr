@@ -83,3 +83,18 @@ test('page: `$$()`', testWithFirefox(async (t) => {
     'should return second Element'
   )
 }))
+
+test('page: `close()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.close()
+
+  const pages = await browser.pages()
+
+  t.equal(
+    pages.length,
+    1,
+    'should close a page'
+  )
+}))
