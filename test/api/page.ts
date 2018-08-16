@@ -113,3 +113,86 @@ test('page: `title()`', testWithFirefox(async (t) => {
     'should change page title'
   )
 }))
+
+test('page: `evaluate()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  t.equal(
+    await page.evaluate('2 + 2'),
+    4,
+    'should evaluate strings'
+  )
+
+  try {
+    await page.evaluate('{ throw 123 }')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: 123',
+      'should evaluate strings that throws'
+    )
+  }
+
+  t.equal(
+    await page.evaluate('Promise.resolve(2 + 2)'),
+    4,
+    'should evaluate resolved Promises as string'
+  )
+
+  try {
+    await page.evaluate('Promise.reject(123)')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: 123',
+      'should evaluate rejected Promises as string'
+    )
+  }
+
+  t.equal(
+    await page.evaluate(() => 1 + 2),
+    3,
+    'should evaluate functions without arguments'
+  )
+
+  t.equal(
+    // @ts-ignore
+    // TODO: explicitly cast args to numbers
+    await page.evaluate((x, y) => { return x + y }, 1, 2),
+    3,
+    'should evaluate functions with arguments'
+  )
+
+  try {
+    await page.evaluate(() => { throw new Error('oops') })
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that throws'
+    )
+  }
+
+  t.equal(
+    // @ts-ignore
+    // TODO: explicitly cast args to numbers
+    await page.evaluate((x, y) => Promise.resolve(x + y), 1, 2),
+    3,
+    'should evaluate functions with arguments that returns a resolved Promise'
+  )
+
+  try {
+    await page.evaluate(() => Promise.reject(new Error('oops')))
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that returns a rejected Promise'
+    )
+  }
+}))
