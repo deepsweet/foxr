@@ -60,12 +60,7 @@ npm install --save-dev foxr
 Connect to the Marionette endpoint.
 
 ```ts
-type TOptions = {
-  host?: string,
-  port?: number
-}
-
-foxr.connect(options?: TOptions): Promise<TBrowser>
+foxr.connect(options?: { host?: string, port?: number }): Promise<TBrowser>
 ```
 
 * `host` – `'localhost'` by default
@@ -140,11 +135,7 @@ page.goto(url: string): Promise<void>
 #### `screenshot`
 
 ```ts
-type TOptions = {
-  path?: string
-}
-
-page.screenshot(options?: TOptions): Promise<Buffer>
+page.screenshot(options?: { path?: string }): Promise<Buffer>
 ```
 
 #### `setContent`
@@ -176,11 +167,7 @@ element.$$(selector: string): Promise<TElement[]>
 #### `screenshot`
 
 ```ts
-type TOptions = {
-  path?: string
-}
-
-element.screenshot(options?: TOptions): Promise<Buffer>
+element.screenshot(options?: { path?: string }): Promise<Buffer>
 ```
 
 ## Development
