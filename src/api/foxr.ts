@@ -4,18 +4,14 @@ import Browser from './Browser'
 const DEFAULT_HOST = 'localhost'
 const DEFAULT_PORT = 2828
 
-type TConnectOptions = {
-  host?: string,
-  port?: number
-}
-
-const foxr = {
-  connect: async (options?: TConnectOptions) => {
+class Foxr {
+  async connect (options?: { host?: string, port?: number }) {
     const { host, port } = {
       ...options,
       host: DEFAULT_HOST,
       port: DEFAULT_PORT
     }
+
     const { send, disconnect } = await connectToMarionette(host, port)
 
     await send('WebDriver:NewSession', { capabilities: {} })
@@ -28,4 +24,4 @@ const foxr = {
   }
 }
 
-export default foxr
+export default new Foxr()
