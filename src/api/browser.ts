@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { TSend } from '../protocol'
-import createPage from './page'
+import { Page } from './page'
 
 export class Browser {
   private readonly eventEmitter = new EventEmitter()
@@ -39,12 +39,12 @@ export class Browser {
 
     const pages: number[] = await this.send('WebDriver:GetWindowHandles')
 
-    return createPage(this.send, pages[pages.length - 1])
+    return new Page(this.send, pages[pages.length - 1])
   }
 
   async pages() {
     const ids: number[] = await this.send('WebDriver:GetWindowHandles')
 
-    return ids.map((id) => createPage(this.send, id))
+    return ids.map((id) => new Page(this.send, id))
   }
 }
