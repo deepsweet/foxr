@@ -1,14 +1,14 @@
 import EventEmitter from 'events'
 import { TSend } from '../protocol'
-import createPage from './page'
+import Page from './Page'
 
 class Browser extends EventEmitter {
-  _send: TSend
+  private _send: TSend
 
-  constructor (send: TSend) {
+  constructor (arg: { send: TSend }) {
     super()
 
-    this._send = send
+    this._send = arg.send
   }
 
   async close () {
@@ -31,13 +31,21 @@ class Browser extends EventEmitter {
 
     const pages: number[] = await this._send('WebDriver:GetWindowHandles')
 
-    return createPage(this._send, pages[pages.length - 1])
+    return new Page({
+      browser: this,
+      id: pages[pages.length - 1],
+      send: this._send
+    })
   }
 
   async pages () {
     const ids: number[] = await this._send('WebDriver:GetWindowHandles')
 
-    return ids.map((id) => createPage(this._send, id))
+    return ids.map((id) => new Page({
+      browser: this,
+      id,
+      send: this._send
+    }))
   }
 }
 
