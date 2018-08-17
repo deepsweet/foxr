@@ -2,51 +2,49 @@ import EventEmitter from 'events'
 import { TSend } from '../protocol'
 import createPage from './page'
 
-const createBrowser = (send: TSend) => {
-  const eventEmitter = new EventEmitter()
+export class Browser {
+  private readonly eventEmitter = new EventEmitter()
+  constructor(private send: TSend) {
+  }
 
-  return {
-    on: (event: string, callback: () => void) => {
-      eventEmitter.on(event, callback)
-    },
+  on(event: string, callback: () => void) {
+    this.eventEmitter.on(event, callback);
+  }
 
-    once: (event: string, callback: () => void) => {
-      eventEmitter.once(event, callback)
-    },
+  once(event: string, callback: () => void) {
+    this.eventEmitter.on(event, callback);
+  }
 
-    removeListener: (event: string, callback: () => void) => {
-      eventEmitter.off(event, callback)
-    },
+  removeListener(event: string, callback: () => void) {
+    this.eventEmitter.off(event, callback)
+  }
 
-    close: async () => {
-      await send('Marionette:AcceptConnections', { value: false })
-      await send('Marionette:Quit')
+  async close() {
+    await this.send('Marionette:AcceptConnections', { value: false })
+    await this.send('Marionette:Quit')
 
-      eventEmitter.emit('disconnected')
-    },
+    this.eventEmitter.emit('disconnected')
+  }
 
-    disconnect: async () => {
-      await send('WebDriver:DeleteSession')
+  async disconnect() {
+    await this.send('WebDriver:DeleteSession')
 
-      eventEmitter.emit('disconnected')
-    },
+    this.eventEmitter.emit('disconnected')
+  }
 
-    newPage: async () => {
-      await send('WebDriver:ExecuteScript', {
-        script: 'window.open()'
-      })
+  async newPage() {
+    await this.send('WebDriver:ExecuteScript', {
+      script: 'window.open()'
+    })
 
-      const pages: number[] = await send('WebDriver:GetWindowHandles')
+    const pages: number[] = await this.send('WebDriver:GetWindowHandles')
 
-      return createPage(send, pages[pages.length - 1])
-    },
+    return createPage(this.send, pages[pages.length - 1])
+  }
 
-    pages: async () => {
-      const ids: number[] = await send('WebDriver:GetWindowHandles')
+  async pages() {
+    const ids: number[] = await this.send('WebDriver:GetWindowHandles')
 
-      return ids.map((id) => createPage(send, id))
-    }
+    return ids.map((id) => createPage(this.send, id))
   }
 }
-
-export default createBrowser
