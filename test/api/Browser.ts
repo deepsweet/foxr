@@ -3,7 +3,7 @@ import foxr from '../../src/api/foxr'
 import { testWithFirefox } from '../helpers/firefox'
 import { createSpy, getSpyCalls } from 'spyfn'
 
-test('browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
+test('Browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const onDisconnectSpy = createSpy(() => {})
 
@@ -19,7 +19,7 @@ test('browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
   )
 }))
 
-test('browser: multiple sessions + `disconnect()` + `disconnected` events', testWithFirefox(async (t) => {
+test('Browser: multiple sessions + `disconnect()` + `disconnected` events', testWithFirefox(async (t) => {
   const browser1 = await foxr.connect()
   const onDisconnectSpy1 = createSpy(() => {})
 
@@ -48,7 +48,7 @@ test('browser: multiple sessions + `disconnect()` + `disconnected` events', test
   )
 }))
 
-test('browser: `pages()`', testWithFirefox(async (t) => {
+test('Browser: `pages()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const pages = await browser.pages()
 
@@ -59,7 +59,7 @@ test('browser: `pages()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('browser: `newPage()`', testWithFirefox(async (t) => {
+test('Browser: `newPage()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const pagesBefore = await browser.pages()
 
