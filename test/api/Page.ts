@@ -1,17 +1,8 @@
 import test from 'blue-tape'
-import createPage from '../../src/api/page'
 import foxr from '../../src/api/foxr'
 import { testWithFirefox } from '../helpers/firefox'
 
-test('createPage', (t) => {
-  t.true(
-    typeof createPage === 'function',
-    'is a function'
-  )
-  t.end()
-})
-
-test('page: `setContent()` + `content()`', testWithFirefox(async (t) => {
+test('Page: `setContent()` + `content()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
   const html = '<h1>hello</h1>'
@@ -31,7 +22,7 @@ test('page: `setContent()` + `content()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('page: `$()`', testWithFirefox(async (t) => {
+test('Page: `$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -52,7 +43,7 @@ test('page: `$()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('page: `$$()`', testWithFirefox(async (t) => {
+test('Page: `$$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -84,7 +75,7 @@ test('page: `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('page: `close()`', testWithFirefox(async (t) => {
+test('Page: `close()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -99,7 +90,7 @@ test('page: `close()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('page: `title()`', testWithFirefox(async (t) => {
+test('Page: `title()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -114,7 +105,7 @@ test('page: `title()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('page: `evaluate()`', testWithFirefox(async (t) => {
+test('Page: `evaluate()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
