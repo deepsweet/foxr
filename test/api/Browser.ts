@@ -1,5 +1,6 @@
 import test from 'blue-tape'
 import foxr from '../../src/api/foxr'
+import Page from '../../src/api/Page'
 import { testWithFirefox } from '../helpers/firefox'
 import { createSpy, getSpyCalls } from 'spyfn'
 
@@ -52,9 +53,8 @@ test('Browser: `pages()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const pages = await browser.pages()
 
-  t.equal(
-    typeof pages[0].$,
-    'function',
+  t.true(
+    pages.every((page) => page instanceof Page),
     'should return array of Pages'
   )
 }))
@@ -74,15 +74,13 @@ test('Browser: `newPage()`', testWithFirefox(async (t) => {
     'should create 2 pages'
   )
 
-  t.equal(
-    typeof page1.$,
-    'function',
+  t.true(
+    page1 instanceof Page,
     'should create real page 1'
   )
 
-  t.equal(
-    typeof page2.$,
-    'function',
+  t.true(
+    page2 instanceof Page,
     'should create real page 2'
   )
 }))

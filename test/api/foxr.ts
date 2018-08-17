@@ -1,10 +1,13 @@
 import test from 'blue-tape'
 import foxr from '../../src/api/foxr'
+import Browser from '../../src/api/Browser'
 import { testWithFirefox } from '../helpers/firefox'
 
 test('foxr: `connect()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
 
-  // TODO: check `browser` for real
-  t.ok(browser, 'should connect')
+  t.true(
+    browser instanceof Browser,
+    'should return `browser`'
+  )
 }))
