@@ -6,13 +6,9 @@ import { TJsonValue } from 'typeon'
 
 import Browser from './Browser'
 import { TSend } from '../protocol'
-import createElement from './element'
+import Element from './Element'
 
 const pWriteFile = makethen(writeFile)
-
-type TScreenshotOptions = {
-  path?: string
-}
 
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
 
@@ -50,7 +46,10 @@ class Page extends EventEmitter {
         using: 'css selector'
       })
 
-      return createElement(this._send, value.ELEMENT)
+      return new Element({
+        id: value.ELEMENT,
+        send: this._send
+      })
     } catch (err) {
       if (err.error === 'no such element') {
         return null
@@ -72,7 +71,10 @@ class Page extends EventEmitter {
       using: 'css selector'
     })
 
-    return values.map((value) => createElement(this._send, value.ELEMENT))
+    return values.map((value) => new Element({
+      id: value.ELEMENT,
+      send: this._send
+    }))
   }
 
   async close () {
@@ -147,7 +149,7 @@ class Page extends EventEmitter {
     await this._send('WebDriver:Navigate', { url })
   }
 
-  async screenshot (options: TScreenshotOptions = {}): Promise<Buffer> {
+  async screenshot (options: { path?: string } = {}): Promise<Buffer> {
     await this._switchToPage()
 
     const result = await this._send('WebDriver:TakeScreenshot', {

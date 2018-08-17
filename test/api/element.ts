@@ -1,10 +1,10 @@
 import test from 'blue-tape'
-import createElement from '../../src/api/element'
+import Element from '../../src/api/Element'
 
-test('element: createElement', (t) => {
-  t.true(
-    typeof createElement === 'function',
-    'is a function'
+test('Element', (t) => {
+  t.ok(
+    Element,
+    'test me'
   )
   t.end()
 })
