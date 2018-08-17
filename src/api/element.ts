@@ -10,40 +10,43 @@ type TScreenshotOptions = {
   path?: string
 }
 
-const createElement = (send: TSend, id: string) => ({
-  $: async (selector: string) => {
+export class Element {
+  constructor(private send: TSend, private id: string) {
+  }
+
+  async $(selector: string) {
     type TResult = {
       value: {
         ELEMENT: string
       }
     }
 
-    const { value }: TResult = await send('WebDriver:FindElement', {
-      element: id,
+    const { value }: TResult = await this.send('WebDriver:FindElement', {
+      element: this.id,
       value: selector,
       using: 'css selector'
     })
 
-    return createElement(send, value.ELEMENT)
-  },
+    return new Element(this.send, value.ELEMENT)
+  }
 
-  $$: async (selector: string) => {
+  async $$(selector: string) {
     type TResult = {
       ELEMENT: string
     }
 
-    const values: TResult[] = await send('WebDriver:FindElements', {
-      element: id,
+    const values: TResult[] = await this.send('WebDriver:FindElements', {
+      element: this.id,
       value: selector,
       using: 'css selector'
     })
 
-    return values.map((value) => createElement(send, value.ELEMENT))
-  },
+    return values.map((value) => new Element(this.send, value.ELEMENT))
+  }
 
-  screenshot: async (options: TScreenshotOptions = {}): Promise<Buffer> => {
-    const result = await send('WebDriver:TakeScreenshot', {
-      id,
+  async screenshot(options: TScreenshotOptions = {}): Promise<Buffer> {
+    const result = await this.send('WebDriver:TakeScreenshot', {
+      id: this.id,
       full: false,
       hash: false
     })
@@ -55,6 +58,4 @@ const createElement = (send: TSend, id: string) => ({
 
     return buffer
   }
-})
-
-export default createElement
+}

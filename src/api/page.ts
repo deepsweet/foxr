@@ -4,7 +4,8 @@ import makethen from 'makethen'
 import { TJsonValue } from 'typeon'
 
 import { TSend } from '../protocol'
-import createElement from './element'
+import { Element } from './element'
+import { Browser } from './browser';
 
 const pWriteFile = makethen(writeFile)
 
@@ -14,110 +15,97 @@ type TScreenshotOptions = {
 
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
 
-const createPage = (send: TSend, id: number) => {
-  const switchToPage = () => send('WebDriver:SwitchToWindow', {
-    name: id
-  })
+export class Page {
+  constructor(private browser: Browser, private send: TSend, private id: number) {
+  }
 
-  return {
-    $: async (selector: string) => {
-      await switchToPage()
+  switchToPage() {
+    return this.send('WebDriver:SwitchToWindow', { name: this.id })
+  }
 
-      try {
-        type TResult = {
-          value: {
-            ELEMENT: string
-          }
-        }
+  browser() {
+    return this.browser;
+  }
 
-        const { value }: TResult = await send('WebDriver:FindElement', {
-          value: selector,
-          using: 'css selector'
-        })
-
-        return createElement(send, value.ELEMENT)
-      } catch (err) {
-        if (err.error === 'no such element') {
-          return null
-        }
-
-        throw err
-      }
-    },
-
-    $$: async (selector: string) => {
-      await switchToPage()
-
+  async $(selector: string) {
+    await this.switchToPage();
+    try {
       type TResult = {
-        ELEMENT: string
+        value: {
+          ELEMENT: string
+        }
       }
 
-      const values: TResult[] = await send('WebDriver:FindElements', {
+      const { value }: TResult = await this.send('WebDriver:FindElement', {
         value: selector,
         using: 'css selector'
       })
 
-      return values.map((value) => createElement(send, value.ELEMENT))
-    },
-
-    close: async () => {
-      await switchToPage()
-      await send('WebDriver:ExecuteScript', {
-        script: 'window.close()'
-      })
-    },
-
-    content: async (): Promise<string> => {
-      await switchToPage()
-
-      type TResult = {
-        value: string
-      }
-      const { value }: TResult = await send('WebDriver:GetPageSource')
-
-      return value
-    },
-
-    evaluate: async (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue> => {
-      await switchToPage()
-
-      type TResult = {
-        value: {
-          error: string | null,
-          value: TJsonValue
-        }
+      return new Element(this.send, value.ELEMENT)
+    } catch (err) {
+      if (err.error === 'no such element') {
+        return null
       }
 
-      if (typeof target === 'function') {
-        const { value: result }: TResult = await send('WebDriver:ExecuteAsyncScript', {
-          script: `
-          const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
-          const resolve = arguments[arguments.length - 1]
+      throw err
+    }
+  }
 
-          Promise.resolve()
-            .then(() => (${target.toString()})(...args))
-            .then((value) => resolve({ error: null, value }))
-            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
-        `,
-          args
-        })
+  async $$(selector: string) {
+    await this.switchToPage()
 
-        if (result.error !== null) {
-          throw new Error(`Evaluation failed: ${result.error}`)
-        }
+    type TResult = {
+      ELEMENT: string
+    }
 
-        return result.value
+    const values: TResult[] = await this.send('WebDriver:FindElements', {
+      value: selector,
+      using: 'css selector'
+    })
+
+    return values.map(value => new Element(this.send, value.ELEMENT))
+  }
+
+  async close() {
+    await this.switchToPage()
+    await this.send('WebDriver:ExecuteScript', {
+      script: 'window.close()'
+    })
+  }
+
+  async content(): Promise<string> {
+    await this.switchToPage()
+
+    type TResult = {
+      value: string
+    }
+    const { value }: TResult = await this.send('WebDriver:GetPageSource')
+
+    return value
+  }
+
+  async evaluate(target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue> {
+    await this.switchToPage()
+
+    type TResult = {
+      value: {
+        error: string | null,
+        value: TJsonValue
       }
+    }
 
-      const { value: result }: TResult = await send('WebDriver:ExecuteAsyncScript', {
+    if (typeof target === 'function') {
+      const { value: result }: TResult = await this.send('WebDriver:ExecuteAsyncScript', {
         script: `
-          const resolve = arguments[0]
+        const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+        const resolve = arguments[arguments.length - 1]
 
-          Promise.resolve()
-            .then(() => ${target})
-            .then((value) => resolve({ error: null, value }))
-            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
-        `
+        Promise.resolve()
+          .then(() => (${target.toString()})(...args))
+          .then((value) => resolve({ error: null, value }))
+          .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+      `,
+        args
       })
 
       if (result.error !== null) {
@@ -125,46 +113,63 @@ const createPage = (send: TSend, id: number) => {
       }
 
       return result.value
-    },
-
-    goto: async (url: string) => {
-      await switchToPage()
-      await send('WebDriver:Navigate', { url })
-    },
-
-    screenshot: async (options: TScreenshotOptions = {}): Promise<Buffer> => {
-      await switchToPage()
-
-      const result = await send('WebDriver:TakeScreenshot', {
-        full: true,
-        hash: false
-      })
-      const buffer = Buffer.from(result.value, 'base64')
-
-      if (typeof options.path === 'string') {
-        await pWriteFile(options.path, buffer)
-      }
-
-      return buffer
-    },
-
-    setContent: async (html: string) => {
-      await switchToPage()
-
-      return send('WebDriver:ExecuteScript', {
-        script: 'document.documentElement.innerHTML = arguments[0]',
-        args: [html]
-      })
-    },
-
-    title: async (): Promise<string> => {
-      await switchToPage()
-
-      const result = await send('WebDriver:GetTitle')
-
-      return result.value
     }
+
+    const { value: result }: TResult = await this.send('WebDriver:ExecuteAsyncScript', {
+      script: `
+        const resolve = arguments[0]
+
+        Promise.resolve()
+          .then(() => ${target})
+          .then((value) => resolve({ error: null, value }))
+          .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+      `
+    })
+
+    if (result.error !== null) {
+      throw new Error(`Evaluation failed: ${result.error}`)
+    }
+
+    return result.value
+  }
+
+  async goto(url: string) {
+    await this.switchToPage()
+    await this.send('WebDriver:Navigate', { url })
+  }
+
+  async screenshot(options: TScreenshotOptions = {}): Promise<Buffer> {
+    await this.switchToPage()
+
+    const result = await this.send('WebDriver:TakeScreenshot', {
+      full: true,
+      hash: false
+    })
+    const buffer = Buffer.from(result.value, 'base64')
+
+    if (typeof options.path === 'string') {
+      await pWriteFile(options.path, buffer)
+    }
+
+    return buffer
+  }
+
+  async setContent(html: string) {
+    await this.switchToPage()
+
+    return this.send('WebDriver:ExecuteScript', {
+      script: 'document.documentElement.innerHTML = arguments[0]',
+      args: [html]
+    })
+  }
+
+  async title() {
+    await this.switchToPage()
+
+    type TResult = { value: string }
+
+    const result: TResult = await this.send('WebDriver:GetTitle')
+
+    return result.value
   }
 }
-
-export default createPage
