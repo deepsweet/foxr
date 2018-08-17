@@ -1,5 +1,5 @@
 import connectToMarionette from '../protocol'
-import createBrowser from './browser'
+import Browser from './Browser'
 
 const DEFAULT_HOST = 'localhost'
 const DEFAULT_PORT = 2828
@@ -20,7 +20,7 @@ const foxr = {
 
     await send('WebDriver:NewSession', { capabilities: {} })
 
-    const browser = await createBrowser(send)
+    const browser = new Browser(send)
 
     browser.once('disconnected', disconnect)
 

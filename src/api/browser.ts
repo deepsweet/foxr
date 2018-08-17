@@ -2,51 +2,43 @@ import EventEmitter from 'events'
 import { TSend } from '../protocol'
 import createPage from './page'
 
-const createBrowser = (send: TSend) => {
-  const eventEmitter = new EventEmitter()
+class Browser extends EventEmitter {
+  _send: TSend
 
-  return {
-    on: (event: string, callback: () => void) => {
-      eventEmitter.on(event, callback)
-    },
+  constructor (send: TSend) {
+    super()
 
-    once: (event: string, callback: () => void) => {
-      eventEmitter.once(event, callback)
-    },
+    this._send = send
+  }
 
-    removeListener: (event: string, callback: () => void) => {
-      eventEmitter.off(event, callback)
-    },
+  async close () {
+    await this._send('Marionette:AcceptConnections', { value: false })
+    await this._send('Marionette:Quit')
 
-    close: async () => {
-      await send('Marionette:AcceptConnections', { value: false })
-      await send('Marionette:Quit')
+    this.emit('disconnected')
+  }
 
-      eventEmitter.emit('disconnected')
-    },
+  async disconnect () {
+    await this._send('WebDriver:DeleteSession')
 
-    disconnect: async () => {
-      await send('WebDriver:DeleteSession')
+    this.emit('disconnected')
+  }
 
-      eventEmitter.emit('disconnected')
-    },
+  async newPage () {
+    await this._send('WebDriver:ExecuteScript', {
+      script: 'window.open()'
+    })
 
-    newPage: async () => {
-      await send('WebDriver:ExecuteScript', {
-        script: 'window.open()'
-      })
+    const pages: number[] = await this._send('WebDriver:GetWindowHandles')
 
-      const pages: number[] = await send('WebDriver:GetWindowHandles')
+    return createPage(this._send, pages[pages.length - 1])
+  }
 
-      return createPage(send, pages[pages.length - 1])
-    },
+  async pages () {
+    const ids: number[] = await this._send('WebDriver:GetWindowHandles')
 
-    pages: async () => {
-      const ids: number[] = await send('WebDriver:GetWindowHandles')
-
-      return ids.map((id) => createPage(send, id))
-    }
+    return ids.map((id) => createPage(this._send, id))
   }
 }
 
-export default createBrowser
+export default Browser

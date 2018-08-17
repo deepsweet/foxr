@@ -1,16 +1,7 @@
 import test from 'blue-tape'
-import createBrowser from '../../src/api/browser'
 import foxr from '../../src/api/foxr'
 import { testWithFirefox } from '../helpers/firefox'
 import { createSpy, getSpyCalls } from 'spyfn'
-
-test('createBrowser', (t) => {
-  t.true(
-    typeof createBrowser === 'function',
-    'is a function'
-  )
-  t.end()
-})
 
 test('browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
