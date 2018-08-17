@@ -20,7 +20,7 @@ const foxr = {
 
     await send('WebDriver:NewSession', { capabilities: {} })
 
-    const browser = new Browser(send)
+    const browser = new Browser({ send })
 
     browser.once('disconnected', disconnect)
 
