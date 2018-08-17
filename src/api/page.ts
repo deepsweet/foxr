@@ -5,6 +5,7 @@ import { TJsonValue } from 'typeon'
 
 import { TSend } from '../protocol'
 import { Element } from './element'
+import { Browser } from './browser';
 
 const pWriteFile = makethen(writeFile)
 
@@ -15,11 +16,15 @@ type TScreenshotOptions = {
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
 
 export class Page {
-  constructor(private send: TSend, private id: number) {
+  constructor(private browser: Browser, private send: TSend, private id: number) {
   }
 
   switchToPage() {
     return this.send('WebDriver:SwitchToWindow', { name: this.id })
+  }
+
+  browser() {
+    return this.browser;
   }
 
   async $(selector: string) {

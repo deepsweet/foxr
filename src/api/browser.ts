@@ -39,12 +39,12 @@ export class Browser {
 
     const pages: number[] = await this.send('WebDriver:GetWindowHandles')
 
-    return new Page(this.send, pages[pages.length - 1])
+    return new Page(this, this.send, pages[pages.length - 1])
   }
 
   async pages() {
     const ids: number[] = await this.send('WebDriver:GetWindowHandles')
 
-    return ids.map((id) => new Page(this.send, id))
+    return ids.map((id) => new Page(this, this.send, id))
   }
 }
