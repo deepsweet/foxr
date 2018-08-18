@@ -75,6 +75,17 @@ test('Page: `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('Page: `browser()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  t.strictEqual(
+    browser,
+    page.browser(),
+    'should return an underlying browser instance'
+  )
+}))
+
 test('Page: `close()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()

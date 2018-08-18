@@ -79,6 +79,10 @@ class Page extends EventEmitter {
     }))
   }
 
+  browser () {
+    return this._browser
+  }
+
   async close () {
     await this._switchToPage()
     await this._send('WebDriver:ExecuteScript', {
