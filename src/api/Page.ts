@@ -69,6 +69,13 @@ class Page extends EventEmitter {
     }))
   }
 
+  async bringToFront () {
+    return this._send('WebDriver:SwitchToWindow', {
+      name: this._id,
+      focus: true
+    })
+  }
+
   browser () {
     return this._browser
   }

@@ -75,6 +75,30 @@ test('Page: `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('Page: `bringToFront()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+
+  const page1 = await browser.newPage()
+  await page1.setContent('<title>page1</title>')
+
+  const page2 = await browser.newPage()
+  await page2.setContent('<title>page2</title>')
+
+  t.equal(
+    await page1.title(),
+    'page2',
+    'should perform actions only with current page'
+  )
+
+  await page1.bringToFront()
+
+  t.equal(
+    await page1.title(),
+    'page1',
+    'should activate page'
+  )
+}))
+
 test('Page: `browser()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
