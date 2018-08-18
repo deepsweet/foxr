@@ -36,10 +36,10 @@ class Page extends EventEmitter {
 
     try {
       type TResult = {
-            value: {
-              ELEMENT: string
-            }
-          }
+        value: {
+          ELEMENT: string
+        }
+      }
 
       const { value }: TResult = await this._send('WebDriver:FindElement', {
         value: selector,
@@ -63,8 +63,8 @@ class Page extends EventEmitter {
     await this._switchToPage()
 
     type TResult = {
-          ELEMENT: string
-        }
+      ELEMENT: string
+    }
 
     const values: TResult[] = await this._send('WebDriver:FindElements', {
       value: selector,
@@ -88,8 +88,9 @@ class Page extends EventEmitter {
     await this._switchToPage()
 
     type TResult = {
-          value: string
-        }
+      value: string
+    }
+
     const { value }: TResult = await this._send('WebDriver:GetPageSource')
 
     return value
@@ -99,23 +100,23 @@ class Page extends EventEmitter {
     await this._switchToPage()
 
     type TResult = {
-          value: {
-            error: string | null,
-            value: TJsonValue
-          }
-        }
+      value: {
+        error: string | null,
+        value: TJsonValue
+      }
+    }
 
     if (typeof target === 'function') {
       const { value: result }: TResult = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
-            const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
-            const resolve = arguments[arguments.length - 1]
+          const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+          const resolve = arguments[arguments.length - 1]
 
-            Promise.resolve()
-              .then(() => (${target.toString()})(...args))
-              .then((value) => resolve({ error: null, value }))
-              .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
-          `,
+          Promise.resolve()
+            .then(() => (${target.toString()})(...args))
+            .then((value) => resolve({ error: null, value }))
+            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+        `,
         args
       })
 
@@ -128,13 +129,13 @@ class Page extends EventEmitter {
 
     const { value: result }: TResult = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
-            const resolve = arguments[0]
+        const resolve = arguments[0]
 
-            Promise.resolve()
-              .then(() => ${target})
-              .then((value) => resolve({ error: null, value }))
-              .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
-          `
+        Promise.resolve()
+          .then(() => ${target})
+          .then((value) => resolve({ error: null, value }))
+          .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+      `
     })
 
     if (result.error !== null) {
