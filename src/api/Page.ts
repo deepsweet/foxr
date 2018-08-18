@@ -27,15 +27,7 @@ class Page extends EventEmitter {
     this._send = arg.send
   }
 
-  private async _switchToPage () {
-    return this._send('WebDriver:SwitchToWindow', {
-      name: this._id
-    })
-  }
-
   async $ (selector: string) {
-    await this._switchToPage()
-
     try {
       type TResult = {
         value: {
@@ -62,8 +54,6 @@ class Page extends EventEmitter {
   }
 
   async $$ (selector: string) {
-    await this._switchToPage()
-
     type TResult = {
       ELEMENT: string
     }
@@ -84,15 +74,12 @@ class Page extends EventEmitter {
   }
 
   async close () {
-    await this._switchToPage()
     await this._send('WebDriver:ExecuteScript', {
       script: 'window.close()'
     })
   }
 
   async content (): Promise<string> {
-    await this._switchToPage()
-
     type TResult = {
       value: string
     }
@@ -103,8 +90,6 @@ class Page extends EventEmitter {
   }
 
   async evaluate (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue> {
-    await this._switchToPage()
-
     type TResult = {
       value: {
         error: string | null,
@@ -152,13 +137,10 @@ class Page extends EventEmitter {
   }
 
   async goto (url: string) {
-    await this._switchToPage()
     await this._send('WebDriver:Navigate', { url })
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
-    await this._switchToPage()
-
     const result = await this._send('WebDriver:TakeScreenshot', {
       full: true,
       hash: false
@@ -173,8 +155,6 @@ class Page extends EventEmitter {
   }
 
   async setContent (html: string) {
-    await this._switchToPage()
-
     return this._send('WebDriver:ExecuteScript', {
       script: 'document.documentElement.innerHTML = arguments[0]',
       args: [html]
@@ -182,8 +162,6 @@ class Page extends EventEmitter {
   }
 
   async title (): Promise<string> {
-    await this._switchToPage()
-
     const result = await this._send('WebDriver:GetTitle')
 
     return result.value
