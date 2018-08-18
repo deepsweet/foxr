@@ -8,7 +8,9 @@ import Browser from './Browser'
 import { TSend } from '../protocol'
 import Element from './Element'
 
-const pWriteFile = makethen(writeFile)
+// FIXME: set minimum Node.js version to 8 and use `util.promisify()`?
+type TWriteFile = (path: string, data: Buffer, options: { encoding: string | null }, cb: (err: any) => void) => void
+const pWriteFile = makethen(writeFile as TWriteFile)
 
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
 
@@ -160,7 +162,7 @@ class Page extends EventEmitter {
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
-      await pWriteFile(options.path, buffer)
+      await pWriteFile(options.path, buffer, { encoding: null })
     }
 
     return buffer

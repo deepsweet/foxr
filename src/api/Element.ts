@@ -5,7 +5,9 @@ import makethen from 'makethen'
 
 import { TSend } from '../protocol'
 
-const pWriteFile = makethen(writeFile)
+// FIXME: set minimum Node.js version to 8 and use `util.promisify()`?
+type TWriteFile = (path: string, data: Buffer, options: { encoding: string | null }, cb: (err: any) => void) => void
+const pWriteFile = makethen(writeFile as TWriteFile)
 
 class Element extends EventEmitter {
   private _id: string
@@ -63,7 +65,7 @@ class Element extends EventEmitter {
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
-      await pWriteFile(options.path, buffer)
+      await pWriteFile(options.path, buffer, { encoding: null })
     }
 
     return buffer
