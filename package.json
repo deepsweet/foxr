@@ -38,5 +38,10 @@
     "rules": {
       "import/named": "off"
     }
-  }
+  },
+  "eslintIgnore": [
+    "build/",
+    "coverage/",
+    "node_modules/"
+  ]
 }
