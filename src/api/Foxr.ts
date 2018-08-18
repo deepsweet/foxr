@@ -24,4 +24,4 @@ class Foxr {
   }
 }
 
-export default new Foxr()
+export default Foxr

@@ -1,5 +1,5 @@
 import test from 'blue-tape'
-import foxr from '../../src/api/foxr'
+import foxr from '../../src/'
 import Page from '../../src/api/Page'
 import { testWithFirefox } from '../helpers/firefox'
 import { createSpy, getSpyCalls } from 'spyfn'

@@ -1,1 +1,3 @@
-export { default } from './api/foxr'
+import Foxr from './api/Foxr'
+
+export default new Foxr()

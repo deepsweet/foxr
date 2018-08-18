@@ -1,9 +1,10 @@
 import test from 'blue-tape'
-import foxr from '../../src/api/foxr'
+import Foxr from '../../src/api/Foxr'
 import Browser from '../../src/api/Browser'
 import { testWithFirefox } from '../helpers/firefox'
 
-test('foxr: `connect()`', testWithFirefox(async (t) => {
+test('Foxr: `connect()`', testWithFirefox(async (t) => {
+  const foxr = new Foxr()
   const browser = await foxr.connect()
 
   t.true(

@@ -1,5 +1,5 @@
 import test from 'blue-tape'
-import foxr from '../../src/api/foxr'
+import foxr from '../../src/'
 import { testWithFirefox } from '../helpers/firefox'
 
 test('Page: `setContent()` + `content()`', testWithFirefox(async (t) => {
