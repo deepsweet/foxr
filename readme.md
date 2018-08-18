@@ -106,6 +106,12 @@ page.$(selector: string): Promise<TElement | null>
 page.$$(selector: string): Promise<TElement[]>
 ```
 
+#### `browser`
+
+```ts
+page.browser(): TBrowser
+```
+
 #### `close`
 
 ```ts
