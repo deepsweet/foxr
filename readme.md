@@ -4,6 +4,8 @@
 
 Node.js API to control Firefox.
 
+<img src="logo.svg" width="110" height="110" align="right" alt="logo"/>
+
 * uses a built-in [Marionette](https://vakila.github.io/blog/marionette-act-i-automation/) through [remote protocol](https://firefox-source-docs.mozilla.org/testing/marionette/marionette/index.html)
 * no [Selenium WebDriver](https://github.com/SeleniumHQ/selenium/wiki/FirefoxDriver) is needed
 * works with [Headless mode](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Headless_mode)
