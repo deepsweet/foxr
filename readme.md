@@ -106,6 +106,12 @@ page.$(selector: string): Promise<TElement | null>
 page.$$(selector: string): Promise<TElement[]>
 ```
 
+#### `bringToFront`
+
+```ts
+page.bringToFront(): Promise<void>
+```
+
 #### `browser`
 
 ```ts
