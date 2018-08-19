@@ -2,6 +2,7 @@ import { TJsonMap, TJsonValue } from 'typeon'
 import { Socket } from 'net'
 
 import { createParseStream, parse, stringify } from './transport'
+import { MarionetteError, ConnectionError } from './Error'
 
 const CONNECTION_TIMEOUT = 10000
 
@@ -18,8 +19,8 @@ const connectToMarionette = async (host: string, port: number) => {
   const socket = new Socket()
 
   await new Promise((resolve, reject) => {
-    const rejectAndDestroy = (error: Error) => {
-      reject(error)
+    const rejectAndDestroy = (message: string) => {
+      reject(new ConnectionError(message))
       socket.destroy()
     }
 
@@ -34,27 +35,33 @@ const connectToMarionette = async (host: string, port: number) => {
               return resolve()
             }
 
-            return rejectAndDestroy(new Error('Foxr works only with Marionette protocol v3'))
+            return rejectAndDestroy('Foxr works only with Marionette protocol v3')
           }
 
-          rejectAndDestroy(new Error('Marionette connection protocol error'))
+          rejectAndDestroy('Unsupported Marionette protocol')
         })
       })
-      .once('timeout', () => rejectAndDestroy(new Error('Socket connection timeout')))
-      .once('error', rejectAndDestroy)
+      .once('timeout', () => rejectAndDestroy('Socket connection timeout'))
+      .once('error', (err) => rejectAndDestroy(err.message))
       .connect(port, host)
   })
 
   const parseStream = createParseStream()
 
-  parseStream.on('data', (data: [number, number, null | Error, TJsonValue]) => {
+  type TMarionetteError = {
+    error: string,
+    message: string,
+    stacktrace: string
+  }
+
+  parseStream.on('data', (data: [number, number, TMarionetteError | null, TJsonValue]) => {
     const [type, id, error, result] = data
 
     if (type === 1) {
       queue = queue.filter((item) => {
         if (item.id === id) {
           if (error !== null) {
-            item.reject(error)
+            item.reject(new MarionetteError(error.message))
           } else {
             item.resolve(result)
           }

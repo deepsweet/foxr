@@ -45,7 +45,7 @@ class Page extends EventEmitter {
         send: this._send
       })
     } catch (err) {
-      if (err.error === 'no such element') {
+      if (err.message.startsWith('Unable to locate element')) {
         return null
       }
 
