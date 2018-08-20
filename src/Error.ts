@@ -1,17 +1,8 @@
-export class ConnectionError extends Error {
+export default class FoxrError extends Error {
   constructor (message: string) {
     super(message)
-    Error.captureStackTrace(this, ConnectionError)
+    Error.captureStackTrace(this, FoxrError)
 
-    this.name = 'SocketError'
-  }
-}
-
-export class MarionetteError extends Error {
-  constructor (message: string) {
-    super(message)
-    Error.captureStackTrace(this, MarionetteError)
-
-    this.name = 'MarionetteError'
+    this.name = 'FoxrError'
   }
 }

@@ -2,7 +2,7 @@ import { TJsonMap, TJsonValue } from 'typeon'
 import { Socket } from 'net'
 
 import { createParseStream, parse, stringify } from './transport'
-import { MarionetteError, ConnectionError } from './Error'
+import FoxrError from './Error'
 
 const CONNECTION_TIMEOUT = 10000
 
@@ -19,8 +19,8 @@ const connectToMarionette = async (host: string, port: number) => {
   const socket = new Socket()
 
   await new Promise((resolve, reject) => {
-    const rejectAndDestroy = (message: string) => {
-      reject(new ConnectionError(message))
+    const rejectAndDestroy = (error: Error) => {
+      reject(error)
       socket.destroy()
     }
 
@@ -35,14 +35,14 @@ const connectToMarionette = async (host: string, port: number) => {
               return resolve()
             }
 
-            return rejectAndDestroy('Foxr works only with Marionette protocol v3')
+            return rejectAndDestroy(new FoxrError('Foxr works only with Marionette protocol v3'))
           }
 
-          rejectAndDestroy('Unsupported Marionette protocol')
+          rejectAndDestroy(new FoxrError('Unsupported Marionette protocol'))
         })
       })
-      .once('timeout', () => rejectAndDestroy('Socket connection timeout'))
-      .once('error', (err) => rejectAndDestroy(err.message))
+      .once('timeout', () => rejectAndDestroy(new Error('Socket connection timeout')))
+      .once('error', (err) => rejectAndDestroy(err))
       .connect(port, host)
   })
 
@@ -61,7 +61,7 @@ const connectToMarionette = async (host: string, port: number) => {
       queue = queue.filter((item) => {
         if (item.id === id) {
           if (error !== null) {
-            item.reject(new MarionetteError(error.message))
+            item.reject(new FoxrError(error.message))
           } else {
             item.resolve(result)
           }
