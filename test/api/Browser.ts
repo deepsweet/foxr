@@ -49,16 +49,6 @@ test('Browser: multiple sessions + `disconnect()` + `disconnected` events', test
   )
 }))
 
-test('Browser: `pages()`', testWithFirefox(async (t) => {
-  const browser = await foxr.connect()
-  const pages = await browser.pages()
-
-  t.true(
-    pages.every((page) => page instanceof Page),
-    'should return array of Pages'
-  )
-}))
-
 test('Browser: `newPage()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const pagesBefore = await browser.pages()
@@ -82,5 +72,15 @@ test('Browser: `newPage()`', testWithFirefox(async (t) => {
   t.true(
     page2 instanceof Page,
     'should create real page 2'
+  )
+}))
+
+test('Browser: `pages()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const pages = await browser.pages()
+
+  t.true(
+    pages.every((page) => page instanceof Page),
+    'should return array of Pages'
   )
 }))

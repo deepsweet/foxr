@@ -2,26 +2,6 @@ import test from 'blue-tape'
 import foxr from '../../src/'
 import { testWithFirefox } from '../helpers/firefox'
 
-test('Page: `setContent()` + `content()`', testWithFirefox(async (t) => {
-  const browser = await foxr.connect()
-  const page = await browser.newPage()
-  const html = '<h1>hello</h1>'
-
-  t.equal(
-    await page.content(),
-    '<html><head></head><body></body></html>',
-    'content() should return page HTML'
-  )
-
-  await page.setContent(html)
-
-  t.equal(
-    await page.content(),
-    `<html><head></head><body>${html}</body></html>`,
-    'setContent() should set page HTML'
-  )
-}))
-
 test('Page: `$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
@@ -125,18 +105,23 @@ test('Page: `close()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('Page: `title()`', testWithFirefox(async (t) => {
+test('Page: `setContent()` + `content()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
-
-  await page.setContent('<title>hi</title>')
-
-  const title = await page.title()
+  const html = '<h1>hello</h1>'
 
   t.equal(
-    title,
-    'hi',
-    'should change page title'
+    await page.content(),
+    '<html><head></head><body></body></html>',
+    'content() should return page HTML'
+  )
+
+  await page.setContent(html)
+
+  t.equal(
+    await page.content(),
+    `<html><head></head><body>${html}</body></html>`,
+    'setContent() should set page HTML'
   )
 }))
 
@@ -221,4 +206,19 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
       'should evaluate functions that returns a rejected Promise'
     )
   }
+}))
+
+test('Page: `title()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<title>hi</title>')
+
+  const title = await page.title()
+
+  t.equal(
+    title,
+    'hi',
+    'should change page title'
+  )
 }))
