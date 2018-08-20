@@ -135,9 +135,8 @@ page.content(): Promise<string>
 #### `evaluate`
 
 ```ts
-type TSerializableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
-
-page.evaluate(target: TSerializableFunction | string): Promise<TJsonValue>
+page.evaluate(target: string): Promise<TJsonValue>
+page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue>
 ```
 
 #### `goto`
