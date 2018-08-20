@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-0",
-    "esm": "^3.0.77",
+    "esm": "^3.0.79",
     "makethen": "^0.2.3",
     "typeon": "^0.1.1"
   },
@@ -29,7 +29,7 @@
     "@types/execa": "^0.9.0",
     "@types/node": "^10.7.1",
     "blue-tape": "^1.0.0",
-    "execa": "^0.10.0",
+    "execa": "^0.11.0",
     "mocku": "^0.3.2",
     "spyfn": "^0.1.1",
     "typescript": "^3.0.1"
