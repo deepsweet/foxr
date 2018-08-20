@@ -1,4 +1,7 @@
+import fs from 'fs'
 import test from 'blue-tape'
+import { mock, unmock } from 'mocku'
+import { createSpy, getSpyCalls } from 'spyfn'
 import foxr from '../../src/'
 import { testWithFirefox } from '../helpers/firefox'
 
@@ -221,4 +224,49 @@ test('Page: `title()`', testWithFirefox(async (t) => {
     'hi',
     'should change page title'
   )
+}))
+
+test('Page: `screenshot()`', testWithFirefox(async (t) => {
+  const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
+
+  mock('../../src/', {
+    fs: {
+      ...fs,
+      writeFile: writeFileSpy
+    }
+  })
+
+  const { default: foxr } = await import('../../src/')
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<h1>hello</h1>')
+
+  const screenshot1 = await page.screenshot()
+
+  t.true(
+    Buffer.isBuffer(screenshot1) && screenshot1.length > 0,
+    'should return non-empty Buffer'
+  )
+
+  const screenshot2 = await page.screenshot({ path: 'test.png' })
+  const spyArgs = getSpyCalls(writeFileSpy)[0]
+
+  t.equal(
+    spyArgs[0],
+    'test.png',
+    'path: should handle `path` option'
+  )
+
+  t.true(
+    Buffer.isBuffer(spyArgs[1]) && spyArgs[1].length > 0,
+    'path: should write screenshot to file'
+  )
+
+  t.true(
+    Buffer.isBuffer(screenshot2) && screenshot2.length > 0,
+    'path: should return non-empty buffer'
+  )
+
+  unmock('../../src/')
 }))

@@ -30,6 +30,7 @@
     "@types/node": "^10.7.1",
     "blue-tape": "^1.0.0",
     "execa": "^0.10.0",
+    "mocku": "^0.3.2",
     "spyfn": "^0.1.1",
     "typescript": "^3.0.1"
   },
