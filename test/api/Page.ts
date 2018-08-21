@@ -3,6 +3,7 @@ import test from 'blue-tape'
 import { mock, unmock } from 'mocku'
 import { createSpy, getSpyCalls } from 'spyfn'
 import foxr from '../../src/'
+import Element from '../../src/api/Element'
 import { testWithFirefox } from '../helpers/firefox'
 
 test('Page: `$()`', testWithFirefox(async (t) => {
@@ -19,9 +20,8 @@ test('Page: `$()`', testWithFirefox(async (t) => {
 
   const element = await page.$('h2')
 
-  t.equal(
-    element !== null && typeof element.$,
-    'function',
+  t.true(
+    element !== null && element instanceof Element,
     'should return a single Element'
   )
 
@@ -51,20 +51,8 @@ test('Page: `$$()`', testWithFirefox(async (t) => {
   const elements = await page.$$('h2')
 
   t.true(
-    elements.length === 2,
+    elements.length === 2 && elements.every((el) => el instanceof Element),
     'should return multiple Elements'
-  )
-
-  t.equal(
-    typeof elements[0].$,
-    'function',
-    'should return first Element'
-  )
-
-  t.equal(
-    typeof elements[1].$,
-    'function',
-    'should return second Element'
   )
 }))
 
