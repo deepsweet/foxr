@@ -267,6 +267,6 @@ test('Page: `title()`', testWithFirefox(async (t) => {
   t.equal(
     title,
     'hi',
-    'should change page title'
+    'should get page title'
   )
 }))
