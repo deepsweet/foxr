@@ -29,7 +29,7 @@ class Browser extends EventEmitter {
       script: 'window.open()'
     })
 
-    const pages: number[] = await this._send('WebDriver:GetWindowHandles')
+    const pages = await this._send('WebDriver:GetWindowHandles') as number[]
     const newPageId = pages[pages.length - 1]
 
     await this._send('WebDriver:SwitchToWindow', {
@@ -45,7 +45,7 @@ class Browser extends EventEmitter {
   }
 
   async pages () {
-    const ids: number[] = await this._send('WebDriver:GetWindowHandles')
+    const ids = await this._send('WebDriver:GetWindowHandles') as number[]
 
     return ids.map((id) => new Page({
       browser: this,

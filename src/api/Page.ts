@@ -35,10 +35,10 @@ class Page extends EventEmitter {
         }
       }
 
-      const { value }: TResult = await this._send('WebDriver:FindElement', {
+      const { value } = await this._send('WebDriver:FindElement', {
         value: selector,
         using: 'css selector'
-      })
+      }) as TResult
 
       return new Element({
         id: value.ELEMENT,
@@ -58,10 +58,10 @@ class Page extends EventEmitter {
       ELEMENT: string
     }
 
-    const values: TResult[] = await this._send('WebDriver:FindElements', {
+    const values = await this._send('WebDriver:FindElements', {
       value: selector,
       using: 'css selector'
-    })
+    }) as TResult[]
 
     return values.map((value) => new Element({
       id: value.ELEMENT,
@@ -91,7 +91,7 @@ class Page extends EventEmitter {
       value: string
     }
 
-    const { value }: TResult = await this._send('WebDriver:GetPageSource')
+    const { value } = await this._send('WebDriver:GetPageSource') as TResult
 
     return value
   }
@@ -105,7 +105,7 @@ class Page extends EventEmitter {
     }
 
     if (typeof target === 'function') {
-      const { value: result }: TResult = await this._send('WebDriver:ExecuteAsyncScript', {
+      const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
           const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
           const resolve = arguments[arguments.length - 1]
@@ -116,7 +116,7 @@ class Page extends EventEmitter {
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
         args
-      })
+      }) as TResult
 
       if (result.error !== null) {
         throw new Error(`Evaluation failed: ${result.error}`)
@@ -125,7 +125,7 @@ class Page extends EventEmitter {
       return result.value
     }
 
-    const { value: result }: TResult = await this._send('WebDriver:ExecuteAsyncScript', {
+    const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[0]
 
@@ -134,7 +134,7 @@ class Page extends EventEmitter {
           .then((value) => resolve({ error: null, value }))
           .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `
-    })
+    }) as TResult
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
@@ -148,10 +148,14 @@ class Page extends EventEmitter {
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
+    type TResult = {
+      value: string
+    }
+
     const result = await this._send('WebDriver:TakeScreenshot', {
       full: true,
       hash: false
-    })
+    }) as TResult
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
@@ -169,13 +173,21 @@ class Page extends EventEmitter {
   }
 
   async title (): Promise<string> {
-    const result = await this._send('WebDriver:GetTitle')
+    type TResult = {
+      value: string
+    }
+
+    const result = await this._send('WebDriver:GetTitle') as TResult
 
     return result.value
   }
 
   async url (): Promise<string> {
-    const result = await this._send('WebDriver:GetCurrentURL')
+    type TResult = {
+      value: string
+    }
+
+    const result = await this._send('WebDriver:GetCurrentURL') as TResult
 
     return result.value
   }

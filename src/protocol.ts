@@ -1,4 +1,4 @@
-import { TJsonMap, TJsonValue } from 'typeon'
+import { TJsonMap, TJsonValue, TJsonArray } from 'typeon'
 import { Socket } from 'net'
 
 import { createParseStream, parse, stringify } from './transport'
@@ -6,13 +6,18 @@ import FoxrError from './Error'
 
 const CONNECTION_TIMEOUT = 10000
 
-export type TSend = (name: string, params?: TJsonMap) => Promise<any>
+export type TMarionetteError = {
+  error: string,
+  message: string,
+  stacktrace: string
+}
+export type TSend = (name: string, params?: TJsonMap) => Promise<TJsonMap | TJsonArray>
 
 const connectToMarionette = async (host: string, port: number) => {
   type TQueueItem = {
     id: number,
-    resolve: (arg: any) => void,
-    reject: (error: any) => void
+    resolve: (arg: TJsonMap) => void,
+    reject: (error: Error) => void
   }
   let globalId = 0
   let queue: TQueueItem[] = []
@@ -48,13 +53,7 @@ const connectToMarionette = async (host: string, port: number) => {
 
   const parseStream = createParseStream()
 
-  type TMarionetteError = {
-    error: string,
-    message: string,
-    stacktrace: string
-  }
-
-  parseStream.on('data', (data: [number, number, TMarionetteError | null, TJsonValue]) => {
+  parseStream.on('data', (data: [number, number, TMarionetteError | null, TJsonMap]) => {
     const [type, id, error, result] = data
 
     if (type === 1) {
@@ -81,7 +80,7 @@ const connectToMarionette = async (host: string, port: number) => {
       socket.end()
     },
 
-    send: (name: string, params: TJsonMap = {}): Promise<any> => {
+    send: (name: string, params: TJsonMap = {}): Promise<TJsonMap | TJsonArray> => {
       return new Promise((resolve, reject) => {
         const data: string = stringify([0, globalId, name, params])
 

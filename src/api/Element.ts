@@ -27,11 +27,11 @@ class Element extends EventEmitter {
        }
      }
 
-    const { value }: TResult = await this._send('WebDriver:FindElement', {
+    const { value } = await this._send('WebDriver:FindElement', {
       element: this._id,
       value: selector,
       using: 'css selector'
-    })
+    }) as TResult
 
     return new Element({
       send: this._send,
@@ -44,11 +44,11 @@ class Element extends EventEmitter {
       ELEMENT: string
     }
 
-    const values: TResult[] = await this._send('WebDriver:FindElements', {
+    const values = await this._send('WebDriver:FindElements', {
       element: this._id,
       value: selector,
       using: 'css selector'
-    })
+    }) as TResult[]
 
     return values.map((value) => new Element({
       send: this._send,
@@ -57,11 +57,15 @@ class Element extends EventEmitter {
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
+    type TResult = {
+      value: string
+    }
+
     const result = await this._send('WebDriver:TakeScreenshot', {
       id: this._id,
       full: false,
       hash: false
-    })
+    }) as TResult
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
