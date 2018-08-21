@@ -163,6 +163,8 @@ page.setContent(html: string): Promise<void>
 page.title(): Promise<string>
 ```
 
+#### `url`
+
 ```ts
 page.url(): Promise<string>
 ```
