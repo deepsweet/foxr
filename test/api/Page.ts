@@ -211,6 +211,27 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
   }
 }))
 
+test('Page: `goto()` + `url()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.goto('data:text/html,<title>hi</title>')
+
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hi</title>',
+    'should change page url'
+  )
+
+  await page.goto('data:text/html,<title>hello</title>')
+
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hello</title>',
+    'should change page url again'
+  )
+}))
+
 test('Page: `screenshot()`', testWithFirefox(async (t) => {
   const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
 
