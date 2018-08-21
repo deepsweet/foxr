@@ -24,6 +24,16 @@ test('Page: `$()`', testWithFirefox(async (t) => {
     'function',
     'should return a single Element'
   )
+
+  try {
+    await page.$('(')
+    t.fail()
+  } catch (err) {
+    t.true(
+      err.message.startsWith('Given css selector expression'),
+      'should throw'
+    )
+  }
 }))
 
 test('Page: `$$()`', testWithFirefox(async (t) => {
