@@ -21,22 +21,30 @@ class Element extends EventEmitter {
   }
 
   async $ (selector: string) {
-    type TResult = {
-       value: {
-         ELEMENT: string
-       }
-     }
+    try {
+      type TResult = {
+        value: {
+          ELEMENT: string
+        }
+      }
 
-    const { value } = await this._send('WebDriver:FindElement', {
-      element: this._id,
-      value: selector,
-      using: 'css selector'
-    }) as TResult
+      const { value } = await this._send('WebDriver:FindElement', {
+        element: this._id,
+        value: selector,
+        using: 'css selector'
+      }) as TResult
 
-    return new Element({
-      send: this._send,
-      id: value.ELEMENT
-    })
+      return new Element({
+        id: value.ELEMENT,
+        send: this._send
+      })
+    } catch (err) {
+      if (err.message.startsWith('Unable to locate element')) {
+        return null
+      }
+
+      throw err
+    }
   }
 
   async $$ (selector: string) {
@@ -45,14 +53,13 @@ class Element extends EventEmitter {
     }
 
     const values = await this._send('WebDriver:FindElements', {
-      element: this._id,
       value: selector,
       using: 'css selector'
     }) as TResult[]
 
     return values.map((value) => new Element({
-      send: this._send,
-      id: value.ELEMENT
+      id: value.ELEMENT,
+      send: this._send
     }))
   }
 
