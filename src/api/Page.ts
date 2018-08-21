@@ -173,6 +173,12 @@ class Page extends EventEmitter {
 
     return result.value
   }
+
+  async url (): Promise<string> {
+    const result = await this._send('WebDriver:GetCurrentURL')
+
+    return result.value
+  }
 }
 
 export default Page

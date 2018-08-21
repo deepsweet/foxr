@@ -163,6 +163,10 @@ page.setContent(html: string): Promise<void>
 page.title(): Promise<string>
 ```
 
+```ts
+page.url(): Promise<string>
+```
+
 ### Element
 
 #### `$`
