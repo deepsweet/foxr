@@ -211,21 +211,6 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
   }
 }))
 
-test('Page: `title()`', testWithFirefox(async (t) => {
-  const browser = await foxr.connect()
-  const page = await browser.newPage()
-
-  await page.setContent('<title>hi</title>')
-
-  const title = await page.title()
-
-  t.equal(
-    title,
-    'hi',
-    'should change page title'
-  )
-}))
-
 test('Page: `screenshot()`', testWithFirefox(async (t) => {
   const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
 
@@ -269,4 +254,19 @@ test('Page: `screenshot()`', testWithFirefox(async (t) => {
   )
 
   unmock('../../src/')
+}))
+
+test('Page: `title()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<title>hi</title>')
+
+  const title = await page.title()
+
+  t.equal(
+    title,
+    'hi',
+    'should change page title'
+  )
 }))
