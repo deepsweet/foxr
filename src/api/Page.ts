@@ -172,6 +172,25 @@ class Page extends EventEmitter {
     })
   }
 
+  async setViewport ({ width, height }: { width: number, height: number }) {
+    type TResult = {
+      widthDelta: number,
+      heightDelta: number
+    }
+
+    const { widthDelta, heightDelta } = await this.evaluate(`
+      ({
+        widthDelta: window.outerWidth - window.innerWidth,
+        heightDelta: window.outerHeight - window.innerHeight
+      })
+    `) as TResult
+
+    await this._send('WebDriver:SetWindowRect', {
+      width: width + widthDelta,
+      height: height + heightDelta
+    })
+  }
+
   async title (): Promise<string> {
     type TResult = {
       value: string

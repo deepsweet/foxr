@@ -157,6 +157,12 @@ page.screenshot(options?: { path?: string }): Promise<Buffer>
 page.setContent(html: string): Promise<void>
 ```
 
+#### `setViewport`
+
+```ts
+page.setViewport(viewport: { width: number, height: number }): Promise<void>
+```
+
 #### `title`
 
 ```ts
