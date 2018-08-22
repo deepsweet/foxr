@@ -9,11 +9,16 @@ import { TSend } from '../protocol'
 type TWriteFile = (path: string, data: Buffer, options: { encoding: string | null }, cb: (err: any) => void) => void
 const pWriteFile = makethen(writeFile as TWriteFile)
 
+export type TElementId = {
+  [key: string]: string,
+  ELEMENT: string
+}
+
 class Element extends EventEmitter {
-  private _id: string
+  private _id: TElementId
   private _send: TSend
 
-  constructor (params: { id: string, send: TSend }) {
+  constructor (params: { id: TElementId, send: TSend }) {
     super()
 
     this._id = params.id
@@ -23,19 +28,17 @@ class Element extends EventEmitter {
   async $ (selector: string) {
     try {
       type TResult = {
-        value: {
-          ELEMENT: string
-        }
+        value: TElementId
       }
 
       const { value } = await this._send('WebDriver:FindElement', {
-        element: this._id,
+        element: this._id.ELEMENT,
         value: selector,
         using: 'css selector'
       }) as TResult
 
       return new Element({
-        id: value.ELEMENT,
+        id: value,
         send: this._send
       })
     } catch (err) {
@@ -48,17 +51,14 @@ class Element extends EventEmitter {
   }
 
   async $$ (selector: string) {
-    type TResult = {
-      ELEMENT: string
-    }
-
     const values = await this._send('WebDriver:FindElements', {
+      element: this._id.ELEMENT,
       value: selector,
       using: 'css selector'
-    }) as TResult[]
+    }) as TElementId[]
 
     return values.map((value) => new Element({
-      id: value.ELEMENT,
+      id: value,
       send: this._send
     }))
   }
@@ -69,7 +69,7 @@ class Element extends EventEmitter {
     }
 
     const result = await this._send('WebDriver:TakeScreenshot', {
-      id: this._id,
+      id: this._id.ELEMENT,
       full: false,
       hash: false
     }) as TResult

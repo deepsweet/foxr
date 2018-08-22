@@ -6,7 +6,7 @@ import { TJsonValue } from 'typeon'
 
 import Browser from './Browser'
 import { TSend } from '../protocol'
-import Element from './Element'
+import Element, { TElementId } from './Element'
 
 // FIXME: set minimum Node.js version to 8 and use `util.promisify()`?
 type TWriteFile = (path: string, data: Buffer, options: { encoding: string | null }, cb: (err: any) => void) => void
@@ -30,9 +30,7 @@ class Page extends EventEmitter {
   async $ (selector: string) {
     try {
       type TResult = {
-        value: {
-          ELEMENT: string
-        }
+        value: TElementId
       }
 
       const { value } = await this._send('WebDriver:FindElement', {
@@ -41,7 +39,7 @@ class Page extends EventEmitter {
       }) as TResult
 
       return new Element({
-        id: value.ELEMENT,
+        id: value,
         send: this._send
       })
     } catch (err) {
@@ -54,17 +52,13 @@ class Page extends EventEmitter {
   }
 
   async $$ (selector: string) {
-    type TResult = {
-      ELEMENT: string
-    }
-
     const values = await this._send('WebDriver:FindElements', {
       value: selector,
       using: 'css selector'
-    }) as TResult[]
+    }) as TElementId[]
 
     return values.map((value) => new Element({
-      id: value.ELEMENT,
+      id: value,
       send: this._send
     }))
   }
