@@ -175,6 +175,12 @@ page.title(): Promise<string>
 page.url(): Promise<string>
 ```
 
+#### `viewport`
+
+```ts
+page.viewport(): Promise<{ width: number, height: number }>
+```
+
 ### Element
 
 #### `$`

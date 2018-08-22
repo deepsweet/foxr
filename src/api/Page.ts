@@ -210,6 +210,20 @@ class Page extends EventEmitter {
 
     return result.value
   }
+
+  async viewport (): Promise<{ width: number, height: number }> {
+    type TResult = {
+      width: number,
+      height: number
+    }
+
+    return await this.evaluate(`
+      ({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    `) as TResult
+  }
 }
 
 export default Page

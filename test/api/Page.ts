@@ -275,30 +275,15 @@ test('Page: `screenshot()`', testWithFirefox(async (t) => {
   unmock('../../src/')
 }))
 
-test('Page: `setViewport()`', testWithFirefox(async (t) => {
+test('Page: `setViewport()` + `viewport()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
-  type TResult = {
-    width: number,
-    height: number
-  }
-
-  const { width: widthBefore, height: heightBefore } = await page.evaluate(`
-    ({
-      width: window.innerWidth,
-      height: window.innerHeight
-    })
-  `) as TResult
+  const { width: widthBefore, height: heightBefore } = await page.viewport()
 
   await page.setViewport({ width: 501, height: 502 })
 
-  const { width: widthAfter, height: heightAfter } = await page.evaluate(`
-    ({
-      width: window.innerWidth,
-      height: window.innerHeight
-    })
-  `) as TResult
+  const { width: widthAfter, height: heightAfter } = await page.viewport()
 
   t.true(
     widthBefore !== widthAfter && widthAfter === 501,
