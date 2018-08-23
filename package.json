@@ -1,6 +1,6 @@
 {
   "name": "foxr",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Node.js API to control Firefox",
   "keywords": "firefox, headless, remote, marionette, puppeteer, selenium",
   "homepage": "https://github.com/deepsweet/foxr",
