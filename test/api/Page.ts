@@ -209,6 +209,46 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
   }
 }))
 
+test('Page: `focus()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<div><input/><svg></svg></div>')
+
+  const activeElementBefore = await page.evaluate('document.activeElement.tagName')
+
+  await page.focus('input')
+
+  const activeElementAfter = await page.evaluate('document.activeElement.tagName')
+
+  t.true(
+    activeElementBefore !== activeElementAfter && activeElementAfter === 'INPUT',
+    'should focus element'
+  )
+
+  try {
+    await page.focus('foo')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: Unable to find element',
+      'should throw if there is no such an element'
+    )
+  }
+
+  try {
+    await page.focus('svg')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: Found element is not HTMLElement and not focusable',
+      'should throw if found element is not focusable'
+    )
+  }
+}))
+
 test('Page: `goto()` + `url()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()

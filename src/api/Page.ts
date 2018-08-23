@@ -137,6 +137,23 @@ class Page extends EventEmitter {
     return result.value
   }
 
+  async focus (selector: string) {
+    /* istanbul ignore next */
+    return this.evaluate((sel) => {
+      const el = document.querySelector(sel as string)
+
+      if (el === null) {
+        throw new Error('Unable to find element')
+      }
+
+      if (!(el instanceof HTMLElement)) {
+        throw new Error('Found element is not HTMLElement and not focusable')
+      }
+
+      el.focus()
+    }, selector)
+  }
+
   async goto (url: string) {
     await this._send('WebDriver:Navigate', { url })
   }
