@@ -2589,7 +2589,7 @@ makethen@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/makethen/-/makethen-0.1.0.tgz#dd69b9e7296deaf6566135f1496c82b3236c5d08"
 
-makethen@^0.2.2, makethen@^0.2.3:
+makethen@^0.2.2:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/makethen/-/makethen-0.2.3.tgz#56acfbe30f40879b973be8fddc8dfa07fb5bd44b"
 

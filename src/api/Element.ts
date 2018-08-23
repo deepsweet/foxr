@@ -1,13 +1,12 @@
 /* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
 import { writeFile } from 'fs'
+import { promisify } from 'util'
 import makethen from 'makethen'
 
 import { TSend } from '../protocol'
 
-// FIXME: set minimum Node.js version to 8 and use `util.promisify()`?
-type TWriteFile = (path: string, data: Buffer, options: { encoding: string | null }, cb: (err: any) => void) => void
-const pWriteFile = makethen(writeFile as TWriteFile)
+const pWriteFile = promisify(writeFile)
 
 export type TElementId = {
   [key: string]: string,
@@ -83,7 +82,7 @@ class Element extends EventEmitter {
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
-      await pWriteFile(options.path, buffer, { encoding: null })
+      await pWriteFile(options.path, buffer)
     }
 
     return buffer

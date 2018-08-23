@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "esm": "^3.0.79",
-    "makethen": "^0.2.3",
     "typeon": "^0.1.1"
   },
   "devDependencies": {
