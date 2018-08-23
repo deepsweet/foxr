@@ -12,7 +12,7 @@ import Element, { TElementId } from './Element'
 type TWriteFile = (path: string, data: Buffer, options: { encoding: string | null }, cb: (err: any) => void) => void
 const pWriteFile = makethen(writeFile as TWriteFile)
 
-type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue>
+type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue> | void
 
 class Page extends EventEmitter {
   private _browser: Browser
@@ -90,7 +90,7 @@ class Page extends EventEmitter {
     return value
   }
 
-  async evaluate (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue> {
+  async evaluate (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue | void> {
     type TResult = {
       value: {
         error: string | null,
