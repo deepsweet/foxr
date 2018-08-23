@@ -3,6 +3,9 @@ coverage:
     javascript:
       enable_partials: yes
   status:
-    project: off
-    patch: off
-comment: off
+    project: no
+    patch: no
+comment:
+  layout: files
+  behavior: once
+  require_changes: yes
