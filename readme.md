@@ -139,6 +139,12 @@ page.evaluate(target: string): Promise<TJsonValue>
 page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue>
 ```
 
+#### `focus`
+
+```ts
+page.focus(selector: string): Promise<void>
+```
+
 #### `goto`
 
 ```ts
