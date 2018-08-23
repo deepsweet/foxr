@@ -403,13 +403,6 @@
   dependencies:
     regenerator-transform "^0.13.3"
 
-"@babel/plugin-transform-runtime@^7.0.0-0":
-  version "7.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.0.0-rc.1.tgz#dce6d4e59ab9fef0060e9cb81f1b4aeb6e49bdc5"
-  dependencies:
-    "@babel/helper-module-imports" "7.0.0-rc.1"
-    "@babel/helper-plugin-utils" "7.0.0-rc.1"
-
 "@babel/plugin-transform-shorthand-properties@7.0.0-rc.1":
   version "7.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-shorthand-properties/-/plugin-transform-shorthand-properties-7.0.0-rc.1.tgz#21724d2199d988ffad690de8dbdce8b834a7f313"
@@ -570,13 +563,12 @@
     eslint-plugin-standard "^3.0.1"
     typescript-eslint-parser "^18.0.0"
 
-"@deepsweet/start-preset-node-ts-lib@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.4.0.tgz#cac865b1b255e833ad30148c80a33ef8770c69cc"
+"@deepsweet/start-preset-node-ts-lib@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.5.0.tgz#ce337166982b41900125a0f626082d42f23c4c2b"
   dependencies:
     "@babel/core" "^7.0.0-0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0-0"
-    "@babel/plugin-transform-runtime" "^7.0.0-0"
     "@babel/preset-env" "^7.0.0-0"
     "@babel/preset-typescript" "^7.0.0-0"
     "@babel/register" "^7.0.0-0"
