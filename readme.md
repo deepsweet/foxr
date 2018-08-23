@@ -195,6 +195,12 @@ element.$(selector: string): Promise<TElement>
 element.$$(selector: string): Promise<TElement[]>
 ```
 
+#### `focus`
+
+```ts
+element:focus(): Promise<void>
+```
+
 #### `screenshot`
 
 ```ts

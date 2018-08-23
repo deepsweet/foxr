@@ -63,6 +63,13 @@ class Element extends EventEmitter {
     }))
   }
 
+  async focus () {
+    await this._send('WebDriver:ExecuteScript', {
+      'script': 'arguments[0].focus()',
+      args: [this._id]
+    })
+  }
+
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
     type TResult = {
       value: string

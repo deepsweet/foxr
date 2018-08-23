@@ -68,6 +68,31 @@ test('Element: `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('Element: `focus()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<input/>')
+
+  const target = await page.$('input')
+
+  if (target === null) {
+    t.fail('There should be element')
+    return
+  }
+
+  const activeElementBefore = await page.evaluate('document.activeElement.tagName')
+
+  await target.focus()
+
+  const activeElementAfter = await page.evaluate('document.activeElement.tagName')
+
+  t.true(
+    activeElementBefore !== activeElementAfter && activeElementAfter === 'INPUT',
+    'should focus element'
+  )
+}))
+
 test('Element: `screenshot()`', testWithFirefox(async (t) => {
   const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
 
