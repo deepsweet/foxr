@@ -56,6 +56,68 @@ test('Page: `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('Page: `$eval()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<h1>hi</h1>')
+
+  t.equal(
+    // @ts-ignore
+    await page.$eval('h1', (el) => el.tagName),
+    'H1',
+    'should evaluate function without arguments'
+  )
+
+  t.equal(
+    // @ts-ignore
+    await page.$eval('h1', (el, foo, bar) => `${el.tagName}-${foo}-${bar}`, 'foo', 'bar'),
+    'H1-foo-bar',
+    'should evaluate function with found element and passed arguments'
+  )
+
+  try {
+    await page.$eval('h1', () => { throw new Error('oops') })
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that throws'
+    )
+  }
+
+  t.equal(
+    // @ts-ignore
+    await page.$eval('h1', (el) => Promise.resolve(el.tagName)),
+    'H1',
+    'should evaluate function that returns a resolved Promise'
+  )
+
+  try {
+    await page.$eval('h1', () => Promise.reject(new Error('oops')))
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that returns a rejected Promise'
+    )
+  }
+
+  try {
+    // @ts-ignore
+    await page.$eval('h2', (el) => el.tagName)
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: unable to find element',
+      'should throw if there is no such an element'
+    )
+  }
+}))
+
 test('Page: `bringToFront()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
 

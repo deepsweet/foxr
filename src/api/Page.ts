@@ -11,6 +11,12 @@ import Element, { TElementId } from './Element'
 const pWriteFile = promisify(writeFile)
 
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue> | void
+type TEvaluateResult = {
+  value: {
+    error: string | null,
+    value: TJsonValue
+  }
+}
 
 class Page extends EventEmitter {
   private _browser: Browser
@@ -61,6 +67,32 @@ class Page extends EventEmitter {
     }))
   }
 
+  async $eval (selector: string, func: TStringifiableFunction, ...args: TJsonValue[]) {
+    const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
+      script: `
+        const resolve = arguments[arguments.length - 1]
+        const el = document.querySelector(arguments[0])
+        const args = Array.prototype.slice.call(arguments, 1, arguments.length - 1)
+
+        if (el === null) {
+          return resolve({ error: 'unable to find element' })
+        }
+
+        Promise.resolve()
+          .then(() => (${func.toString()})(el, ...args))
+          .then((value) => resolve({ error: null, value }))
+          .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+      `,
+      args: [selector, ...args]
+    }) as TEvaluateResult
+
+    if (result.error !== null) {
+      throw new Error(`Evaluation failed: ${result.error}`)
+    }
+
+    return result.value
+  }
+
   async bringToFront () {
     return this._send('WebDriver:SwitchToWindow', {
       name: this._id,
@@ -89,13 +121,6 @@ class Page extends EventEmitter {
   }
 
   async evaluate (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue | void> {
-    type TResult = {
-      value: {
-        error: string | null,
-        value: TJsonValue
-      }
-    }
-
     if (typeof target === 'function') {
       const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
@@ -108,7 +133,7 @@ class Page extends EventEmitter {
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
         args
-      }) as TResult
+      }) as TEvaluateResult
 
       if (result.error !== null) {
         throw new Error(`Evaluation failed: ${result.error}`)
@@ -126,7 +151,7 @@ class Page extends EventEmitter {
           .then((value) => resolve({ error: null, value }))
           .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `
-    }) as TResult
+    }) as TEvaluateResult
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
