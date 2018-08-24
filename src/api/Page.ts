@@ -136,12 +136,11 @@ class Page extends EventEmitter {
   }
 
   async focus (selector: string) {
-    /* istanbul ignore next */
-    return this.evaluate((sel) => {
-      const el = document.querySelector(sel as string)
+    return this.evaluate(`{
+      const el = document.querySelector('${selector}')
 
       if (el === null) {
-        throw new Error('Unable to find element')
+        throw new Error('unable to find element')
       }
 
       if (!(el instanceof HTMLElement)) {
@@ -149,7 +148,7 @@ class Page extends EventEmitter {
       }
 
       el.focus()
-    }, selector)
+    }`)
   }
 
   async goto (url: string) {

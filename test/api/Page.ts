@@ -232,7 +232,7 @@ test('Page: `focus()`', testWithFirefox(async (t) => {
   } catch (err) {
     t.equal(
       err.message,
-      'Evaluation failed: Unable to find element',
+      'Evaluation failed: unable to find element',
       'should throw if there is no such an element'
     )
   }
