@@ -108,6 +108,12 @@ page.$(selector: string): Promise<TElement | null>
 page.$$(selector: string): Promise<TElement[]>
 ```
 
+#### `$eval`
+
+```ts
+page.$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue>
+```
+
 #### `bringToFront`
 
 ```ts
