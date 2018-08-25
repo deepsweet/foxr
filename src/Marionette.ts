@@ -35,6 +35,7 @@ class Marionette extends EventEmitter {
   }
 
   async connect (host: string, port: number) {
+    // TODO: extract everything about socket as separate "transport" module
     await new Promise((resolve, reject) => {
       const rejectAndDestroy = (error: Error) => {
         reject(error)

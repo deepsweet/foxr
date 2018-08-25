@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import Marionette from '../protocol'
+import Marionette from '../Marionette'
 import Page from './Page'
 
 class Browser extends EventEmitter {

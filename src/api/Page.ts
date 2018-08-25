@@ -6,7 +6,7 @@ import { TJsonValue } from 'typeon'
 
 import Browser from './Browser'
 import Element, { TElementId } from './Element'
-import Marionette from '../protocol'
+import Marionette from '../Marionette'
 
 const pWriteFile = promisify(writeFile)
 

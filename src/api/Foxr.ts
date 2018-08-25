@@ -1,4 +1,4 @@
-import Marionette from '../protocol'
+import Marionette from '../Marionette'
 import Browser from './Browser'
 
 const DEFAULT_HOST = 'localhost'

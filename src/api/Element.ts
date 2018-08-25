@@ -4,7 +4,7 @@ import { writeFile } from 'fs'
 import { promisify } from 'util'
 
 import Page from './Page'
-import Marionette from '../protocol'
+import Marionette from '../Marionette'
 
 const pWriteFile = promisify(writeFile)
 
