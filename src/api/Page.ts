@@ -5,8 +5,8 @@ import { promisify } from 'util'
 import { TJsonValue } from 'typeon'
 
 import Browser from './Browser'
-import { TSend } from '../protocol'
 import Element, { TElementId } from './Element'
+import Marionette from '../protocol'
 
 const pWriteFile = promisify(writeFile)
 
@@ -23,9 +23,9 @@ type TEvaluateResult = {
 class Page extends EventEmitter {
   private _browser: Browser
   private _id: string
-  private _send: TSend
+  private _send: Marionette['send']
 
-  constructor (params: { browser: Browser, id: string, send: TSend }) {
+  constructor (params: { browser: Browser, id: string, send: Marionette['send'] }) {
     super()
 
     this._browser = params.browser

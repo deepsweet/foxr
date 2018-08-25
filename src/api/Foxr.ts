@@ -1,4 +1,4 @@
-import connectToMarionette from '../protocol'
+import Marionette from '../protocol'
 import Browser from './Browser'
 
 const DEFAULT_HOST = 'localhost'
@@ -12,13 +12,22 @@ class Foxr {
       port: DEFAULT_PORT
     }
 
-    const { send, disconnect } = await connectToMarionette(host, port)
+    const marionette = new Marionette()
 
-    await send('WebDriver:NewSession', { capabilities: {} })
+    await marionette.connect(host, port)
+    await marionette.send('WebDriver:NewSession', { capabilities: {} })
 
-    const browser = new Browser({ send })
+    const browser = new Browser({ send: marionette.send })
 
-    browser.once('disconnected', disconnect)
+    marionette.once('close', async ({ isManuallyClosed }) => {
+      if (!isManuallyClosed) {
+        browser.emit('disconnected')
+      }
+    })
+
+    browser.once('disconnected', () => {
+      marionette.disconnect()
+    })
 
     return browser
   }

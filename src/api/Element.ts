@@ -3,7 +3,7 @@ import EventEmitter from 'events'
 import { writeFile } from 'fs'
 import { promisify } from 'util'
 
-import { TSend } from '../protocol'
+import Marionette from '../protocol'
 
 const pWriteFile = promisify(writeFile)
 
@@ -16,7 +16,7 @@ const cache = new Map<string, Element>()
 
 class Element extends EventEmitter {
   private _id: TElementId
-  private _send: TSend
+  private _send: Marionette['send']
 
   constructor (params: { id: TElementId, send: TSend }) {
     super()
