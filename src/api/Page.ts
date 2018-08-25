@@ -93,6 +93,29 @@ class Page extends EventEmitter {
     return result.value
   }
 
+  async $$eval (selector: string, func: TStringifiableFunction, ...args: TJsonValue[]) {
+    const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
+      script: `
+        const resolve = arguments[arguments.length - 1]
+        const els = Array.from(document.querySelectorAll(arguments[0]))
+        const args = Array.prototype.slice.call(arguments, 1, arguments.length - 1)
+
+        Promise.all(
+          els.map((el) => Promise.resolve().then(() => (${func.toString()})(el, ...args)))
+        )
+        .then((value) => resolve({ error: null, value }))
+        .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+      `,
+      args: [selector, ...args]
+    }) as TEvaluateResult
+
+    if (result.error !== null) {
+      throw new Error(`Evaluation failed: ${result.error}`)
+    }
+
+    return result.value
+  }
+
   async bringToFront () {
     return this._send('WebDriver:SwitchToWindow', {
       name: this._id,

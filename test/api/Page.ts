@@ -118,6 +118,63 @@ test('Page: `$eval()`', testWithFirefox(async (t) => {
   }
 }))
 
+test('Page: `$$eval()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<div><h2>hi</h2><h2>hello</h2></div>')
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h2', (el) => el.textContent),
+    ['hi', 'hello'],
+    'should evaluate function without arguments'
+  )
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h2', (el, foo, bar) => `${el.textContent}-${foo}-${bar}`, 'foo', 'bar'),
+    ['hi-foo-bar', 'hello-foo-bar'],
+    'should evaluate function with arguments'
+  )
+
+  try {
+    await page.$$eval('h2', () => { throw new Error('oops') })
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that throws'
+    )
+  }
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h2', (el) => Promise.resolve(el.textContent)),
+    ['hi', 'hello'],
+    'should evaluate function that returns a resolved Promise'
+  )
+
+  try {
+    await page.$$eval('h2', () => Promise.reject(new Error('oops')))
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that returns a rejected Promise'
+    )
+  }
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h1', (el) => el.textContent),
+    [],
+    'should return an emptry array if nothing has been found'
+  )
+}))
+
 test('Page: `bringToFront()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
 
