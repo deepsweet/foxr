@@ -3,6 +3,7 @@ import EventEmitter from 'events'
 import { writeFile } from 'fs'
 import { promisify } from 'util'
 
+import Page from './Page'
 import Marionette from '../protocol'
 
 const pWriteFile = promisify(writeFile)
@@ -15,12 +16,14 @@ export type TElementId = {
 const cache = new Map<string, Element>()
 
 class Element extends EventEmitter {
+  private _page: Page
   private _id: TElementId
   private _send: Marionette['send']
 
-  constructor (params: { id: TElementId, send: TSend }) {
+  constructor (params: { page: Page, id: TElementId, send: Marionette['send'] }) {
     super()
 
+    this._page = params.page
     this._id = params.id
     this._send = params.send
 
@@ -29,6 +32,10 @@ class Element extends EventEmitter {
     }
 
     cache.set(params.id.ELEMENT, this)
+
+    params.page.on('close', () => {
+      cache.clear()
+    })
   }
 
   async $ (selector: string) {
@@ -44,6 +51,7 @@ class Element extends EventEmitter {
       }) as TResult
 
       return new Element({
+        page: this._page,
         id: value,
         send: this._send
       })
@@ -64,6 +72,7 @@ class Element extends EventEmitter {
     }) as TElementId[]
 
     return values.map((value) => new Element({
+      page: this._page,
       id: value,
       send: this._send
     }))

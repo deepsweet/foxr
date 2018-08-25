@@ -56,6 +56,7 @@ class Page extends EventEmitter {
       }) as TResult
 
       return new Element({
+        page: this,
         id: value,
         send: this._send
       })
@@ -75,6 +76,7 @@ class Page extends EventEmitter {
     }) as TElementId[]
 
     return values.map((value) => new Element({
+      page: this,
       id: value,
       send: this._send
     }))
