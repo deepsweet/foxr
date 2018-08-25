@@ -2,7 +2,7 @@ import EventEmitter from 'events'
 import { TJsonMap, TJsonArray } from 'typeon'
 import { Socket } from 'net'
 
-import { createParseStream, parse, stringify } from './transport'
+import { createParseStream, parse, stringify } from './json-protocol'
 import FoxrError from './Error'
 
 const CONNECTION_TIMEOUT = 10000
