@@ -6,6 +6,22 @@ import foxr from '../../src/'
 import Element from '../../src/api/Element'
 import { testWithFirefox } from '../helpers/firefox'
 
+test('Page: `close` event on browser close', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+  const onCloseSpy = createSpy(() => {})
+
+  page.on('close', onCloseSpy)
+
+  await browser.close()
+
+  t.deepEqual(
+    getSpyCalls(onCloseSpy),
+    [[]],
+    'should emit `close` event'
+  )
+}))
+
 test('Page: `$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
@@ -222,9 +238,12 @@ test('Page: `browser()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('Page: `close()`', testWithFirefox(async (t) => {
+test('Page: `close()` + `close` event', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
+  const onCloseSpy = createSpy(() => {})
+
+  page.on('close', onCloseSpy)
 
   await page.close()
 
@@ -234,6 +253,12 @@ test('Page: `close()`', testWithFirefox(async (t) => {
     pages.length,
     1,
     'should close page'
+  )
+
+  t.deepEqual(
+    getSpyCalls(onCloseSpy),
+    [[]],
+    'should emit `close` event'
   )
 }))
 

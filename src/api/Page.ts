@@ -37,6 +37,11 @@ class Page extends EventEmitter {
     }
 
     cache.set(params.id, this)
+
+    params.browser.on('disconnected', async () => {
+      this.emit('close')
+      cache.clear()
+    })
   }
 
   async $ (selector: string) {
@@ -139,6 +144,9 @@ class Page extends EventEmitter {
     await this._send('WebDriver:ExecuteScript', {
       script: 'window.close()'
     })
+
+    this.emit('close')
+    cache.delete(this._id)
   }
 
   async content (): Promise<string> {
