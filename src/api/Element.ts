@@ -2,7 +2,6 @@
 import EventEmitter from 'events'
 import { writeFile } from 'fs'
 import { promisify } from 'util'
-import makethen from 'makethen'
 
 import { TSend } from '../protocol'
 
