@@ -20,15 +20,15 @@ type TEvaluateResult = {
 
 class Page extends EventEmitter {
   private _browser: Browser
-  private _id: number
+  private _id: string
   private _send: TSend
 
-  constructor (arg: { browser: Browser, id: number, send: TSend }) {
+  constructor (params: { browser: Browser, id: string, send: TSend }) {
     super()
 
-    this._browser = arg.browser
-    this._id = arg.id
-    this._send = arg.send
+    this._browser = params.browser
+    this._id = params.id
+    this._send = params.send
   }
 
   async $ (selector: string) {
