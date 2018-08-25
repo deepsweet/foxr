@@ -25,9 +25,17 @@ test('Element: `$()`', testWithFirefox(async (t) => {
     'should return null if nothing has been found'
   )
 
+  const element = await div.$('h1')
+
   t.true(
-    (await div.$('h1')) instanceof Element,
+    element instanceof Element,
     'should return a single Element'
+  )
+
+  t.equal(
+    element,
+    await div.$('h1'),
+    'should return the same element twice'
   )
 
   try {
@@ -65,6 +73,12 @@ test('Element: `$$()`', testWithFirefox(async (t) => {
   t.true(
     elements.length === 2 && elements.every((el) => el instanceof Element),
     'should return multiple Elements'
+  )
+
+  t.deepEqual(
+    elements,
+    await div.$$('h2'),
+    'should return the same elements twice'
   )
 }))
 

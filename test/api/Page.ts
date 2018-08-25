@@ -25,6 +25,12 @@ test('Page: `$()`', testWithFirefox(async (t) => {
     'should return a single Element'
   )
 
+  t.equal(
+    element,
+    await await page.$('h2'),
+    'should return the same element twice'
+  )
+
   try {
     await page.$('(')
     t.fail()
@@ -53,6 +59,12 @@ test('Page: `$$()`', testWithFirefox(async (t) => {
   t.true(
     elements.length === 2 && elements.every((el) => el instanceof Element),
     'should return multiple Elements'
+  )
+
+  t.deepEqual(
+    elements,
+    await page.$$('h2'),
+    'should return the same elements twice'
   )
 }))
 

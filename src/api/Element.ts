@@ -13,6 +13,8 @@ export type TElementId = {
   ELEMENT: string
 }
 
+const cache = new Map<string, Element>()
+
 class Element extends EventEmitter {
   private _id: TElementId
   private _send: TSend
@@ -22,6 +24,12 @@ class Element extends EventEmitter {
 
     this._id = params.id
     this._send = params.send
+
+    if (cache.has(params.id.ELEMENT)) {
+      return cache.get(params.id.ELEMENT) as Element
+    }
+
+    cache.set(params.id.ELEMENT, this)
   }
 
   async $ (selector: string) {
