@@ -81,6 +81,12 @@ test('Browser: `pages()`', testWithFirefox(async (t) => {
 
   t.true(
     pages.every((page) => page instanceof Page),
-    'should return array of Pages'
+    'should return array of pages'
+  )
+
+  t.deepEqual(
+    pages,
+    await browser.pages(),
+    'should return the same pages twice'
   )
 }))

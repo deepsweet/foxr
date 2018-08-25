@@ -10,6 +10,8 @@ import Element, { TElementId } from './Element'
 
 const pWriteFile = promisify(writeFile)
 
+const cache = new Map<string, Page>()
+
 type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue> | void
 type TEvaluateResult = {
   value: {
@@ -29,6 +31,12 @@ class Page extends EventEmitter {
     this._browser = params.browser
     this._id = params.id
     this._send = params.send
+
+    if (cache.has(params.id)) {
+      return cache.get(params.id) as Page
+    }
+
+    cache.set(params.id, this)
   }
 
   async $ (selector: string) {
