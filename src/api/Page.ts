@@ -1,21 +1,14 @@
 /* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
-import { TJsonValue } from 'typeon'
 
 import Browser from './Browser'
-import Element, { TElementId } from './Element'
+import Element from './Element'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
+import { TStringifiableFunction, TEvaluateResult, TElementResult, TElementsResult, TStringResult } from './types'
+import { TJsonValue } from 'typeon'
 
 const cache = new Map<string, Page>()
-
-type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue> | void
-type TEvaluateResult = {
-  value: {
-    error: string | null,
-    value: TJsonValue
-  }
-}
 
 class Page extends EventEmitter {
   private _browser: Browser
@@ -43,14 +36,10 @@ class Page extends EventEmitter {
 
   async $ (selector: string) {
     try {
-      type TResult = {
-        value: TElementId
-      }
-
       const { value } = await this._send('WebDriver:FindElement', {
         value: selector,
         using: 'css selector'
-      }) as TResult
+      }) as TElementResult
 
       return new Element({
         page: this,
@@ -70,7 +59,7 @@ class Page extends EventEmitter {
     const values = await this._send('WebDriver:FindElements', {
       value: selector,
       using: 'css selector'
-    }) as TElementId[]
+    }) as TElementsResult
 
     return values.map((value) => new Element({
       page: this,
@@ -129,7 +118,7 @@ class Page extends EventEmitter {
   }
 
   async bringToFront () {
-    return this._send('WebDriver:SwitchToWindow', {
+    await this._send('WebDriver:SwitchToWindow', {
       name: this._id,
       focus: true
     })
@@ -149,11 +138,7 @@ class Page extends EventEmitter {
   }
 
   async content (): Promise<string> {
-    type TResult = {
-      value: string
-    }
-
-    const { value } = await this._send('WebDriver:GetPageSource') as TResult
+    const { value } = await this._send('WebDriver:GetPageSource') as TStringResult
 
     return value
   }
@@ -219,14 +204,10 @@ class Page extends EventEmitter {
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
-    type TResult = {
-      value: string
-    }
-
     const result = await this._send('WebDriver:TakeScreenshot', {
       full: true,
       hash: false
-    }) as TResult
+    }) as TStringResult
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
@@ -263,21 +244,13 @@ class Page extends EventEmitter {
   }
 
   async title (): Promise<string> {
-    type TResult = {
-      value: string
-    }
-
-    const result = await this._send('WebDriver:GetTitle') as TResult
+    const result = await this._send('WebDriver:GetTitle') as TStringResult
 
     return result.value
   }
 
   async url (): Promise<string> {
-    type TResult = {
-      value: string
-    }
-
-    const result = await this._send('WebDriver:GetCurrentURL') as TResult
+    const result = await this._send('WebDriver:GetCurrentURL') as TStringResult
 
     return result.value
   }

@@ -4,11 +4,7 @@ import EventEmitter from 'events'
 import Page from './Page'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
-
-export type TElementId = {
-  [key: string]: string,
-  ELEMENT: string
-}
+import { TElementId, TElementResult, TElementsResult, TStringResult } from './types'
 
 const cache = new Map<string, Element>()
 
@@ -37,15 +33,11 @@ class Element extends EventEmitter {
 
   async $ (selector: string) {
     try {
-      type TResult = {
-        value: TElementId
-      }
-
       const { value } = await this._send('WebDriver:FindElement', {
         element: this._id.ELEMENT,
         value: selector,
         using: 'css selector'
-      }) as TResult
+      }) as TElementResult
 
       return new Element({
         page: this._page,
@@ -66,7 +58,7 @@ class Element extends EventEmitter {
       element: this._id.ELEMENT,
       value: selector,
       using: 'css selector'
-    }) as TElementId[]
+    }) as TElementsResult
 
     return values.map((value) => new Element({
       page: this._page,
@@ -83,15 +75,11 @@ class Element extends EventEmitter {
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
-    type TResult = {
-      value: string
-    }
-
     const result = await this._send('WebDriver:TakeScreenshot', {
       id: this._id.ELEMENT,
       full: false,
       hash: false
-    }) as TResult
+    }) as TStringResult
     const buffer = Buffer.from(result.value, 'base64')
 
     if (typeof options.path === 'string') {
