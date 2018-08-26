@@ -1,7 +1,7 @@
 import test from 'blue-tape'
 import foxr from '../../src/'
 import Page from '../../src/api/Page'
-import { testWithFirefox } from '../helpers/firefox'
+import { testWithFirefox, stopFirefox } from '../helpers/firefox'
 import { createSpy, getSpyCalls } from 'spyfn'
 
 test('Browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
@@ -12,6 +12,21 @@ test('Browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
 
   // TODO: figure out how to test this for real
   await browser.close()
+
+  t.deepEqual(
+    getSpyCalls(onDisconnectSpy),
+    [[]],
+    'should emit `disconnected` event'
+  )
+}))
+
+test('Browser: socket close + `disconnected` event', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const onDisconnectSpy = createSpy(() => {})
+
+  browser.on('disconnected', onDisconnectSpy)
+
+  await stopFirefox()
 
   t.deepEqual(
     getSpyCalls(onDisconnectSpy),
