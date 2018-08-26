@@ -22,6 +22,22 @@ test('Page: `close` event on browser close', testWithFirefox(async (t) => {
   )
 }))
 
+test('Page: `close` event on browser disconnect', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+  const onCloseSpy = createSpy(() => {})
+
+  page.on('close', onCloseSpy)
+
+  await browser.disconnect()
+
+  t.deepEqual(
+    getSpyCalls(onCloseSpy),
+    [[]],
+    'should emit `close` event'
+  )
+}))
+
 test('Page: `$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
