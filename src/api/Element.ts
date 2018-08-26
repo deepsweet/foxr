@@ -1,9 +1,7 @@
-/* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
-
-import Page from './Page'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
+import Page from './Page'
 import { TElementId, TElementResult, TElementsResult, TStringResult } from './types'
 
 const cache = new Map<string, Element>()

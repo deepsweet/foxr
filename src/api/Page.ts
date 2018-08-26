@@ -1,12 +1,17 @@
 /* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
-
-import Browser from './Browser'
-import Element from './Element'
+import { TJsonValue } from 'typeon'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
-import { TStringifiableFunction, TEvaluateResult, TElementResult, TElementsResult, TStringResult } from './types'
-import { TJsonValue } from 'typeon'
+import Browser from './Browser'
+import Element from './Element'
+import {
+  TElementResult,
+  TElementsResult,
+  TEvaluateResult,
+  TStringifiableFunction,
+  TStringResult
+} from './types'
 
 const cache = new Map<string, Page>()
 
