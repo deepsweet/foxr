@@ -1,14 +1,11 @@
 /* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
-import { writeFile } from 'fs'
-import { promisify } from 'util'
 import { TJsonValue } from 'typeon'
 
 import Browser from './Browser'
 import Element, { TElementId } from './Element'
 import Marionette from '../Marionette'
-
-const pWriteFile = promisify(writeFile)
+import { pWriteFile } from '../utils'
 
 const cache = new Map<string, Page>()
 

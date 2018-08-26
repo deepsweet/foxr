@@ -1,12 +1,9 @@
 /* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
-import { writeFile } from 'fs'
-import { promisify } from 'util'
 
 import Page from './Page'
 import Marionette from '../Marionette'
-
-const pWriteFile = promisify(writeFile)
+import { pWriteFile } from '../utils'
 
 export type TElementId = {
   [key: string]: string,
