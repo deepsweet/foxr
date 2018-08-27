@@ -3,7 +3,7 @@ import test from 'blue-tape'
 import { mock, unmock } from 'mocku'
 import { createSpy, getSpyCalls } from 'spyfn'
 import foxr from '../../src/'
-import Element from '../../src/api/Element'
+import ElementHandle from '../../src/api/ElementHandle'
 import { testWithFirefox } from '../helpers/firefox'
 
 test('Page: `close` event on browser close', testWithFirefox(async (t) => {
@@ -53,7 +53,7 @@ test('Page: `$()`', testWithFirefox(async (t) => {
   const element = await page.$('h2')
 
   t.true(
-    element !== null && element instanceof Element,
+    element !== null && element instanceof ElementHandle,
     'should return a single Element'
   )
 
@@ -89,7 +89,7 @@ test('Page: `$$()`', testWithFirefox(async (t) => {
   const elements = await page.$$('h2')
 
   t.true(
-    elements.length === 2 && elements.every((el) => el instanceof Element),
+    elements.length === 2 && elements.every((el) => el instanceof ElementHandle),
     'should return multiple Elements'
   )
 

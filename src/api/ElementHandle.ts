@@ -4,7 +4,7 @@ import Page from './Page'
 import { TElementId, TElementResult, TElementsResult, TStringResult } from './types'
 import JSHandle from './JSHandle'
 
-class Element extends JSHandle {
+class ElementHandle extends JSHandle {
   private _page: Page
   public _id: TElementId
   private _send: Marionette['send']
@@ -25,7 +25,7 @@ class Element extends JSHandle {
         using: 'css selector'
       }) as TElementResult
 
-      return new Element({
+      return new ElementHandle({
         page: this._page,
         id: value,
         send: this._send
@@ -46,7 +46,7 @@ class Element extends JSHandle {
       using: 'css selector'
     }) as TElementsResult
 
-    return values.map((value) => new Element({
+    return values.map((value) => new ElementHandle({
       page: this._page,
       id: value,
       send: this._send
@@ -76,4 +76,4 @@ class Element extends JSHandle {
   }
 }
 
-export default Element
+export default ElementHandle

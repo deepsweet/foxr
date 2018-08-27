@@ -1,12 +1,12 @@
 import fs from 'fs'
 import test from 'blue-tape'
 import foxr from '../../src/'
-import Element from '../../src/api/Element'
+import ElementHandle from '../../src/api/ElementHandle'
 import { testWithFirefox } from '../helpers/firefox'
 import { getSpyCalls, createSpy } from 'spyfn'
 import { mock, unmock } from 'mocku'
 
-test('Element: `$()`', testWithFirefox(async (t) => {
+test('ElementHandle `$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -28,7 +28,7 @@ test('Element: `$()`', testWithFirefox(async (t) => {
   const element = await div.$('h1')
 
   t.true(
-    element instanceof Element,
+    element instanceof ElementHandle,
     'should return a single Element'
   )
 
@@ -49,7 +49,7 @@ test('Element: `$()`', testWithFirefox(async (t) => {
   }
 }))
 
-test('Element: `$$()`', testWithFirefox(async (t) => {
+test('ElementHandle `$$()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -71,7 +71,7 @@ test('Element: `$$()`', testWithFirefox(async (t) => {
   const elements = await div.$$('h2')
 
   t.true(
-    elements.length === 2 && elements.every((el) => el instanceof Element),
+    elements.length === 2 && elements.every((el) => el instanceof ElementHandle),
     'should return multiple Elements'
   )
 
@@ -82,7 +82,7 @@ test('Element: `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('Element: `focus()`', testWithFirefox(async (t) => {
+test('ElementHandle `focus()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
@@ -107,7 +107,7 @@ test('Element: `focus()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('Element: `screenshot()`', testWithFirefox(async (t) => {
+test('ElementHandle `screenshot()`', testWithFirefox(async (t) => {
   const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
 
   mock('../../src/', {

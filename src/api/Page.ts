@@ -4,7 +4,7 @@ import { TJsonValue } from 'typeon'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
 import Browser from './Browser'
-import Element from './Element'
+import ElementHandle from './ElementHandle'
 import {
   TElementResult,
   TElementsResult,
@@ -46,7 +46,7 @@ class Page extends EventEmitter {
         using: 'css selector'
       }) as TElementResult
 
-      return new Element({
+      return new ElementHandle({
         page: this,
         id: value,
         send: this._send
@@ -66,7 +66,7 @@ class Page extends EventEmitter {
       using: 'css selector'
     }) as TElementsResult
 
-    return values.map((value) => new Element({
+    return values.map((value) => new ElementHandle({
       page: this,
       id: value,
       send: this._send
