@@ -99,25 +99,25 @@ browser.pages(): Promise<TPage[]>
 #### `$`
 
 ```ts
-page.$(selector: string): Promise<TElement | null>
+page.$(selector: string): Promise<TElementHandle | null>
 ```
 
 #### `$$`
 
 ```ts
-page.$$(selector: string): Promise<TElement[]>
+page.$$(selector: string): Promise<TElementHandle[]>
 ```
 
 #### `$eval`
 
 ```ts
-page.$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue>
+page.$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue | void>
 ```
 
 #### `$$eval`
 
 ```ts
-page.$$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue[]>
+page.$$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue[] | void[]>
 ```
 
 #### `bringToFront`
@@ -147,8 +147,8 @@ page.content(): Promise<string>
 #### `evaluate`
 
 ```ts
-page.evaluate(target: string): Promise<TJsonValue>
-page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue>
+page.evaluate(target: string): Promise<TJsonValue | void>
+page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue | void>
 ```
 
 #### `focus`
@@ -199,30 +199,30 @@ page.url(): Promise<string>
 page.viewport(): Promise<{ width: number, height: number }>
 ```
 
-### Element
+### ElementHandle
 
 #### `$`
 
 ```ts
-element.$(selector: string): Promise<TElement>
+elementHandle.$(selector: string): Promise<TElementHandle | null>
 ```
 
 #### `$$`
 
 ```ts
-element.$$(selector: string): Promise<TElement[]>
+elementHandle.$$(selector: string): Promise<TElementHandle[]>
 ```
 
 #### `focus`
 
 ```ts
-element:focus(): Promise<void>
+elementHandle.focus(): Promise<void>
 ```
 
 #### `screenshot`
 
 ```ts
-element.screenshot(options?: { path?: string }): Promise<Buffer>
+elementHandle.screenshot(options?: { path?: string }): Promise<Buffer>
 ```
 
 ## Development
