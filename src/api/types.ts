@@ -5,7 +5,14 @@ export type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Pro
 export type TEvaluateResult = {
   value: {
     error: string | null,
-    value: TJsonValue
+    value: TJsonValue | void
+  }
+}
+
+export type TEvaluateResults = {
+  value: {
+    error: string | null,
+    value: TJsonValue[] | void[]
   }
 }
 
