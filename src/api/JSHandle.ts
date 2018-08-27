@@ -1,6 +1,5 @@
 import EventEmitter from 'events'
 import Marionette from '../Marionette'
-import { pWriteFile } from '../utils'
 import Page from './Page'
 import { TJSHandleId } from './types'
 
