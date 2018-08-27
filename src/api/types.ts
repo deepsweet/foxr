@@ -9,16 +9,16 @@ export type TEvaluateResult = {
   }
 }
 
-export type TElementId = {
+export type TJSHandleId = {
   [key: string]: string,
   ELEMENT: string
 }
 
-export type TElementResult = {
-  value: TElementId
+export type TElementHandleResult = {
+  value: TJSHandleId
 }
 
-export type TElementsResult = TElementId[]
+export type TElementHandlesResult = TJSHandleId[]
 
 export type TStringResult = {
   value: string

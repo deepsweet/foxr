@@ -6,8 +6,8 @@ import { pWriteFile } from '../utils'
 import Browser from './Browser'
 import ElementHandle from './ElementHandle'
 import {
-  TElementResult,
-  TElementsResult,
+  TElementHandleResult,
+  TElementHandlesResult,
   TEvaluateResult,
   TStringifiableFunction,
   TStringResult
@@ -44,7 +44,7 @@ class Page extends EventEmitter {
       const { value } = await this._send('WebDriver:FindElement', {
         value: selector,
         using: 'css selector'
-      }) as TElementResult
+      }) as TElementHandleResult
 
       return new ElementHandle({
         page: this,
@@ -64,7 +64,7 @@ class Page extends EventEmitter {
     const values = await this._send('WebDriver:FindElements', {
       value: selector,
       using: 'css selector'
-    }) as TElementsResult
+    }) as TElementHandlesResult
 
     return values.map((value) => new ElementHandle({
       page: this,

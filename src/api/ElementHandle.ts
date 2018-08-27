@@ -1,15 +1,15 @@
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
 import Page from './Page'
-import { TElementId, TElementResult, TElementsResult, TStringResult } from './types'
+import { TJSHandleId, TElementHandleResult, TElementHandlesResult, TStringResult } from './types'
 import JSHandle from './JSHandle'
 
 class ElementHandle extends JSHandle {
   private _page: Page
-  public _id: TElementId
+  public _id: TJSHandleId
   private _send: Marionette['send']
 
-  constructor (params: { page: Page, id: TElementId, send: Marionette['send'] }) {
+  constructor (params: { page: Page, id: TJSHandleId, send: Marionette['send'] }) {
     super(params)
 
     this._page = params.page
@@ -23,7 +23,7 @@ class ElementHandle extends JSHandle {
         element: this._id.ELEMENT,
         value: selector,
         using: 'css selector'
-      }) as TElementResult
+      }) as TElementHandleResult
 
       return new ElementHandle({
         page: this._page,
@@ -44,7 +44,7 @@ class ElementHandle extends JSHandle {
       element: this._id.ELEMENT,
       value: selector,
       using: 'css selector'
-    }) as TElementsResult
+    }) as TElementHandlesResult
 
     return values.map((value) => new ElementHandle({
       page: this._page,

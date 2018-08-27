@@ -2,16 +2,16 @@ import EventEmitter from 'events'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
 import Page from './Page'
-import { TElementId } from './types'
+import { TJSHandleId } from './types'
 
 const cache = new Map<string, JSHandle>()
 
 class JSHandle extends EventEmitter {
   // private _page: Page
-  public _id: TElementId | null
+  public _id: TJSHandleId | null
   // private _send: Marionette['send']
 
-  constructor (params: { page: Page, id: TElementId, send: Marionette['send'] }) {
+  constructor (params: { page: Page, id: TJSHandleId, send: Marionette['send'] }) {
     super()
 
     // this._page = params.page
@@ -29,6 +29,7 @@ class JSHandle extends EventEmitter {
     })
   }
 
+  // 🤔
   dispose () {
     this._id = null
   }
