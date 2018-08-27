@@ -1,32 +1,20 @@
-import EventEmitter from 'events'
 import Marionette from '../Marionette'
 import { pWriteFile } from '../utils'
 import Page from './Page'
 import { TElementId, TElementResult, TElementsResult, TStringResult } from './types'
+import JSHandle from './JSHandle'
 
-const cache = new Map<string, Element>()
-
-class Element extends EventEmitter {
+class Element extends JSHandle {
   private _page: Page
-  private _id: TElementId
+  public _id: TElementId
   private _send: Marionette['send']
 
   constructor (params: { page: Page, id: TElementId, send: Marionette['send'] }) {
-    super()
+    super(params)
 
     this._page = params.page
     this._id = params.id
     this._send = params.send
-
-    if (cache.has(params.id.ELEMENT)) {
-      return cache.get(params.id.ELEMENT) as Element
-    }
-
-    cache.set(params.id.ELEMENT, this)
-
-    params.page.on('close', () => {
-      cache.clear()
-    })
   }
 
   async $ (selector: string) {
