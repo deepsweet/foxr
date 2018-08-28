@@ -23,11 +23,6 @@ class JSHandle extends EventEmitter {
       cache.clear()
     })
   }
-
-  // 🤔
-  dispose () {
-    this._id = null
-  }
 }
 
 export default JSHandle
