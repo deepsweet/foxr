@@ -117,7 +117,7 @@ page.$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[])
 #### `$$eval`
 
 ```ts
-page.$$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue[] | void[]>
+page.$$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<Array<TJsonValue | void>>
 ```
 
 #### `bringToFront`

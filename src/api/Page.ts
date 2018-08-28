@@ -101,7 +101,7 @@ class Page extends EventEmitter {
     return result.value
   }
 
-  async $$eval (selector: string, func: TStringifiableFunction, ...args: TJsonValue[]) {
+  async $$eval (selector: string, func: TStringifiableFunction, ...args: TJsonValue[]): Promise<Array<TJsonValue | void>> {
     const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[arguments.length - 1]
@@ -115,7 +115,7 @@ class Page extends EventEmitter {
         .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `,
       args: [selector, ...args]
-    }) as TEvaluateResult
+    }) as TEvaluateResults
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
