@@ -118,7 +118,16 @@ test('Page: `$eval()`', testWithFirefox(async (t) => {
     // @ts-ignore
     await page.$eval('h1', (el, foo, bar) => `${el.tagName}-${foo}-${bar}`, 'foo', 'bar'),
     'H1-foo-bar',
-    'should evaluate function with found element and passed arguments'
+    'should evaluate function with arguments'
+  )
+
+  const bodyHandle = await page.evaluateHandle('document.body')
+
+  t.equal(
+    // @ts-ignore
+    await page.$eval('h1', (el, handle) => `${el.tagName}-${handle.tagName}`, bodyHandle),
+    'H1-BODY',
+    'should evaluate function with arguments as JSHandle'
   )
 
   try {
@@ -137,6 +146,20 @@ test('Page: `$eval()`', testWithFirefox(async (t) => {
     await page.$eval('h1', (el) => Promise.resolve(el.tagName)),
     'H1',
     'should evaluate function that returns a resolved Promise'
+  )
+
+  t.equal(
+    // @ts-ignore
+    await page.$eval('h1', (el, foo, bar) => Promise.resolve(`${el.tagName}-${foo}-${bar}`), 'foo', 'bar'),
+    'H1-foo-bar',
+    'should evaluate function with arguments that returns a resolved Promise'
+  )
+
+  t.equal(
+    // @ts-ignore
+    await page.$eval('h1', (el, handle) => Promise.resolve(`${el.tagName}-${handle.tagName}`), bodyHandle),
+    'H1-BODY',
+    'should evaluate function with arguments as JSHandle that returns a resolved Promise'
   )
 
   try {

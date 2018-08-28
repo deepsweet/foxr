@@ -11,11 +11,20 @@ import {
   TEvaluateResult,
   TStringifiableFunction,
   TStringResult,
-  TEvaluateHandleResult
+  TEvaluateHandleResult,
+  TEvaluateResults
 } from './types'
 import JSHandle from './JSHandle'
 
 const cache = new Map<string, Page>()
+
+const mapJSHandleArgs = (args: Array<TJsonValue | JSHandle>) => args.map((arg) => {
+  if (arg instanceof JSHandle) {
+    return arg._id
+  }
+
+  return arg
+})
 
 class Page extends EventEmitter {
   private _browser: Browser
@@ -75,7 +84,7 @@ class Page extends EventEmitter {
     }))
   }
 
-  async $eval (selector: string, func: TStringifiableFunction, ...args: TJsonValue[]) {
+  async $eval (selector: string, func: TStringifiableFunction, ...args: Array<TJsonValue | JSHandle>): Promise<TJsonValue | void> {
     const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[arguments.length - 1]
@@ -91,7 +100,7 @@ class Page extends EventEmitter {
           .then((value) => resolve({ error: null, value }))
           .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `,
-      args: [selector, ...args]
+      args: [selector, ...mapJSHandleArgs(args)]
     }) as TEvaluateResult
 
     if (result.error !== null) {
@@ -164,13 +173,7 @@ class Page extends EventEmitter {
             .then((value) => resolve({ error: null, value }))
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
-        args: args.map((arg) => {
-          if (arg instanceof JSHandle) {
-            return arg._id
-          }
-
-          return arg
-        })
+        args: mapJSHandleArgs(args)
       }) as TEvaluateResult
     } else {
       marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
@@ -214,13 +217,7 @@ class Page extends EventEmitter {
             })
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
-        args: args.map((arg) => {
-          if (arg instanceof JSHandle) {
-            return arg._id
-          }
-
-          return arg
-        })
+        args: mapJSHandleArgs(args)
       }) as TEvaluateHandleResult
     } else {
       marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
