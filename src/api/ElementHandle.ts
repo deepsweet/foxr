@@ -17,7 +17,7 @@ class ElementHandle extends JSHandle {
     this._send = params.send
   }
 
-  async $ (selector: string) {
+  async $ (selector: string): Promise<ElementHandle | null> {
     try {
       const { value } = await this._send('WebDriver:FindElement', {
         element: this._id.ELEMENT,
@@ -39,7 +39,7 @@ class ElementHandle extends JSHandle {
     }
   }
 
-  async $$ (selector: string) {
+  async $$ (selector: string): Promise<ElementHandle[]> {
     const values = await this._send('WebDriver:FindElements', {
       element: this._id.ELEMENT,
       value: selector,
@@ -53,7 +53,7 @@ class ElementHandle extends JSHandle {
     }))
   }
 
-  async focus () {
+  async focus (): Promise<void> {
     await this._send('WebDriver:ExecuteScript', {
       'script': 'arguments[0].focus()',
       args: [this._id]

@@ -5,7 +5,7 @@ const DEFAULT_HOST = 'localhost'
 const DEFAULT_PORT = 2828
 
 class Foxr {
-  async connect (options?: { host?: string, port?: number }) {
+  async connect (options?: { host?: string, port?: number }): Promise<Browser> {
     const { host, port } = {
       ...options,
       host: DEFAULT_HOST,

@@ -11,20 +11,20 @@ class Browser extends EventEmitter {
     this._send = arg.send
   }
 
-  async close () {
+  async close (): Promise<void> {
     await this._send('Marionette:AcceptConnections', { value: false })
     await this._send('Marionette:Quit')
 
     this.emit('disconnected')
   }
 
-  async disconnect () {
+  async disconnect (): Promise<void> {
     await this._send('WebDriver:DeleteSession')
 
     this.emit('disconnected')
   }
 
-  async newPage () {
+  async newPage (): Promise<Page> {
     await this._send('WebDriver:ExecuteScript', {
       script: 'window.open()'
     })
@@ -44,7 +44,7 @@ class Browser extends EventEmitter {
     })
   }
 
-  async pages () {
+  async pages (): Promise<Page[]> {
     const ids = await this._send('WebDriver:GetWindowHandles') as string[]
 
     return ids.map((id) => new Page({

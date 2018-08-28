@@ -50,7 +50,7 @@ class Page extends EventEmitter {
     })
   }
 
-  async $ (selector: string) {
+  async $ (selector: string): Promise<ElementHandle | null> {
     try {
       const { value } = await this._send('WebDriver:FindElement', {
         value: selector,
@@ -71,7 +71,7 @@ class Page extends EventEmitter {
     }
   }
 
-  async $$ (selector: string) {
+  async $$ (selector: string): Promise<ElementHandle[]> {
     const values = await this._send('WebDriver:FindElements', {
       value: selector,
       using: 'css selector'
@@ -133,18 +133,18 @@ class Page extends EventEmitter {
     return result.value
   }
 
-  async bringToFront () {
+  async bringToFront (): Promise<void> {
     await this._send('WebDriver:SwitchToWindow', {
       name: this._id,
       focus: true
     })
   }
 
-  browser () {
+  browser (): Browser {
     return this._browser
   }
 
-  async close () {
+  async close (): Promise<void> {
     await this._send('WebDriver:ExecuteScript', {
       script: 'window.close()'
     })
@@ -255,8 +255,8 @@ class Page extends EventEmitter {
     })
   }
 
-  async focus (selector: string) {
-    return this.evaluate(`{
+  async focus (selector: string): Promise<void> {
+    await this.evaluate(`{
       const el = document.querySelector('${selector}')
 
       if (el === null) {
@@ -271,7 +271,7 @@ class Page extends EventEmitter {
     }`)
   }
 
-  async goto (url: string) {
+  async goto (url: string): Promise<void> {
     await this._send('WebDriver:Navigate', { url })
   }
 
@@ -289,14 +289,14 @@ class Page extends EventEmitter {
     return buffer
   }
 
-  async setContent (html: string) {
-    return this._send('WebDriver:ExecuteScript', {
+  async setContent (html: string): Promise<void> {
+    await this._send('WebDriver:ExecuteScript', {
       script: 'document.documentElement.innerHTML = arguments[0]',
       args: [html]
     })
   }
 
-  async setViewport ({ width, height }: { width: number, height: number }) {
+  async setViewport ({ width, height }: { width: number, height: number }): Promise<void> {
     type TResult = {
       widthDelta: number,
       heightDelta: number
