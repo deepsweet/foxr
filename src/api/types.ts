@@ -2,10 +2,22 @@ import { TJsonValue } from 'typeon'
 
 export type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue> | void
 
+export type TJSHandleId = {
+  [key: string]: string,
+  ELEMENT: string
+}
+
 export type TEvaluateResult = {
   value: {
     error: string | null,
     value: TJsonValue | void
+  }
+}
+
+export type TEvaluateHandleResult = {
+  value: {
+    error: string | null,
+    value: TJSHandleId | null
   }
 }
 
@@ -14,11 +26,6 @@ export type TEvaluateResults = {
     error: string | null,
     value: TJsonValue[] | void[]
   }
-}
-
-export type TJSHandleId = {
-  [key: string]: string,
-  ELEMENT: string
 }
 
 export type TElementHandleResult = {

@@ -10,8 +10,10 @@ import {
   TElementHandlesResult,
   TEvaluateResult,
   TStringifiableFunction,
-  TStringResult
+  TStringResult,
+  TEvaluateHandleResult
 } from './types'
+import JSHandle from './JSHandle'
 
 const cache = new Map<string, Page>()
 
@@ -186,6 +188,70 @@ class Page extends EventEmitter {
     }
 
     return result.value
+  }
+
+  async evaluateHandle (target: TStringifiableFunction | string, ...args: Array<TJsonValue | JSHandle>): Promise<JSHandle> {
+    let marionetteResult = null
+
+    if (typeof target === 'function') {
+      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+        script: `
+          const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+          const resolve = arguments[arguments.length - 1]
+
+          Promise.resolve()
+            .then(() => (${target.toString()})(...args))
+            .then((value) => {
+              if (value instanceof Element) {
+                resolve({ error: null, value })
+              } else {
+                resolve({ error: null, value: null })
+              }
+            })
+            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+        `,
+        args: args.map((arg) => {
+          if (arg instanceof JSHandle) {
+            return arg._id
+          }
+
+          return arg
+        })
+      }) as TEvaluateHandleResult
+    } else {
+      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+        script: `
+          const resolve = arguments[0]
+
+          Promise.resolve()
+            .then(() => ${target})
+            .then((value) => {
+              if (value instanceof Element) {
+                resolve({ error: null, value })
+              } else {
+                resolve({ error: null, value: null })
+              }
+            })
+            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+        `
+      }) as TEvaluateHandleResult
+    }
+
+    const result = marionetteResult.value
+
+    if (result.error !== null) {
+      throw new Error(`Evaluation failed: ${result.error}`)
+    }
+
+    if (result.value === null) {
+      throw new Error('Unable to get a JSHandle')
+    }
+
+    return new JSHandle({
+      page: this,
+      id: result.value,
+      send: this._send
+    })
   }
 
   async focus (selector: string) {

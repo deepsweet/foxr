@@ -5,6 +5,7 @@ import { createSpy, getSpyCalls } from 'spyfn'
 import foxr from '../../src/'
 import ElementHandle from '../../src/api/ElementHandle'
 import { testWithFirefox } from '../helpers/firefox'
+import JSHandle from '../../src/api/JSHandle'
 
 test('Page: `close` event on browser close', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
@@ -371,6 +372,131 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
 
   try {
     await page.evaluate(() => Promise.reject(new Error('oops')))
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that returns a rejected Promise'
+    )
+  }
+}))
+
+test('Page: `evaluateHandle()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  t.true(
+    (await page.evaluateHandle('document.body')) instanceof JSHandle,
+    'should evaluate strings'
+  )
+
+  try {
+    await page.evaluateHandle('{ throw 123 }')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: 123',
+      'should evaluate strings that throws'
+    )
+  }
+
+  try {
+    await page.evaluateHandle('window._foo_')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Unable to get a JSHandle',
+      'should throw if no JSHandle has been returned from string'
+    )
+  }
+
+  t.true(
+    (await page.evaluateHandle('Promise.resolve(document.body)')) instanceof JSHandle,
+    'should evaluate resolved Promises as string'
+  )
+
+  try {
+    await page.evaluateHandle('Promise.reject(123)')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: 123',
+      'should evaluate rejected Promises as string'
+    )
+  }
+
+  t.true(
+    // @ts-ignore
+    (await page.evaluateHandle(() => document.body)) instanceof JSHandle,
+    'should evaluate functions without arguments'
+  )
+
+  t.true(
+    // @ts-ignore
+    (await page.evaluateHandle((prop) => document[prop], 'body')) instanceof JSHandle,
+    'should evaluate functions with arguments'
+  )
+
+  const bodyHandle = await page.evaluateHandle('document.body')
+
+  t.true(
+    // @ts-ignore
+    (await page.evaluateHandle((handle) => handle, bodyHandle)) instanceof JSHandle,
+    'should evaluate functions with JSHandle as arguments'
+  )
+
+  try {
+    // @ts-ignore
+    await page.evaluateHandle(() => window.__foo_)
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Unable to get a JSHandle',
+      'should throw if no JSHandle has been returned from function'
+    )
+  }
+
+  try {
+    await page.evaluateHandle(() => { throw new Error('oops') })
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Evaluation failed: oops',
+      'should evaluate functions that throws'
+    )
+  }
+
+  t.true(
+    // @ts-ignore
+    (await page.evaluateHandle((prop) => Promise.resolve(document[prop]), 'body')) instanceof JSHandle,
+    'should evaluate functions with arguments that returns a resolved Promise'
+  )
+
+  try {
+    // @ts-ignore
+    await page.evaluateHandle(() => Promise.resolve(window.__foo_))
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Unable to get a JSHandle',
+      'should throw if no JSHandle has been returned from function that returns a resolve Promise'
+    )
+  }
+
+  t.true(
+    (await page.evaluateHandle((handle) => Promise.resolve(handle), bodyHandle)) instanceof JSHandle,
+    'should evaluate functions with JSHandle arguments that returns a resolved Promise'
+  )
+
+  try {
+    await page.evaluateHandle(() => Promise.reject(new Error('oops')))
     t.fail()
   } catch (err) {
     t.equal(
