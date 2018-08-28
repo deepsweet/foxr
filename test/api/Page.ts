@@ -345,10 +345,18 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
 
   t.equal(
     // @ts-ignore
-    // TODO: explicitly cast args to numbers
     await page.evaluate((x, y) => { return x + y }, 1, 2),
     3,
     'should evaluate functions with arguments'
+  )
+
+  const bodyHandle = await page.evaluateHandle('document.body')
+
+  t.equal(
+    // @ts-ignore
+    await page.evaluate((handle) => handle.tagName, bodyHandle),
+    'BODY',
+    'should evaluate functions with JSHandle as arguments'
   )
 
   try {
@@ -364,10 +372,16 @@ test('Page: `evaluate()`', testWithFirefox(async (t) => {
 
   t.equal(
     // @ts-ignore
-    // TODO: explicitly cast args to numbers
     await page.evaluate((x, y) => Promise.resolve(x + y), 1, 2),
     3,
     'should evaluate functions with arguments that returns a resolved Promise'
+  )
+
+  t.equal(
+    // @ts-ignore
+    await page.evaluate((handle) => Promise.resolve(handle.tagName), bodyHandle),
+    'BODY',
+    'should evaluate functions with JSHandle as arguments that returns a resolved Promise'
   )
 
   try {

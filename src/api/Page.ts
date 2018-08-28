@@ -150,9 +150,11 @@ class Page extends EventEmitter {
     return value
   }
 
-  async evaluate (target: TStringifiableFunction | string, ...args: TJsonValue[]): Promise<TJsonValue | void> {
+  async evaluate (target: TStringifiableFunction | string, ...args: Array<TJsonValue | JSHandle>): Promise<TJsonValue | void> {
+    let marionetteResult = null
+
     if (typeof target === 'function') {
-      const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
+      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
           const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
           const resolve = arguments[arguments.length - 1]
@@ -162,26 +164,28 @@ class Page extends EventEmitter {
             .then((value) => resolve({ error: null, value }))
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
-        args
+        args: args.map((arg) => {
+          if (arg instanceof JSHandle) {
+            return arg._id
+          }
+
+          return arg
+        })
       }) as TEvaluateResult
+    } else {
+      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+        script: `
+          const resolve = arguments[0]
 
-      if (result.error !== null) {
-        throw new Error(`Evaluation failed: ${result.error}`)
-      }
-
-      return result.value
+          Promise.resolve()
+            .then(() => ${target})
+            .then((value) => resolve({ error: null, value }))
+            .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
+        `
+      }) as TEvaluateResult
     }
 
-    const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
-      script: `
-        const resolve = arguments[0]
-
-        Promise.resolve()
-          .then(() => ${target})
-          .then((value) => resolve({ error: null, value }))
-          .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
-      `
-    }) as TEvaluateResult
+    const result = marionetteResult.value
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
