@@ -206,6 +206,15 @@ test('Page: `$$eval()`', testWithFirefox(async (t) => {
     'should evaluate function with arguments'
   )
 
+  const bodyHandle = await page.evaluateHandle('document.body')
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h2', (el, handle) => `${el.textContent}-${handle.tagName}`, bodyHandle),
+    ['hi-BODY', 'hello-BODY'],
+    'should evaluate function with JSHandle as arguments'
+  )
+
   try {
     await page.$$eval('h2', () => { throw new Error('oops') })
     t.fail()
@@ -222,6 +231,20 @@ test('Page: `$$eval()`', testWithFirefox(async (t) => {
     await page.$$eval('h2', (el) => Promise.resolve(el.textContent)),
     ['hi', 'hello'],
     'should evaluate function that returns a resolved Promise'
+  )
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h2', (el, foo, bar) => Promise.resolve(`${el.textContent}-${foo}-${bar}`), 'foo', 'bar'),
+    ['hi-foo-bar', 'hello-foo-bar'],
+    'should evaluate function with arguments that returns a resolved Promise'
+  )
+
+  t.deepEqual(
+    // @ts-ignore
+    await page.$$eval('h2', (el, handle) => Promise.resolve(`${el.textContent}-${handle.tagName}`), bodyHandle),
+    ['hi-BODY', 'hello-BODY'],
+    'should evaluate function with JSHandle as arguments that returns a resolved Promise'
   )
 
   try {

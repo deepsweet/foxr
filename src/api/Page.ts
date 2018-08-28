@@ -123,7 +123,7 @@ class Page extends EventEmitter {
         .then((value) => resolve({ error: null, value }))
         .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `,
-      args: [selector, ...args]
+      args: [selector, ...mapJSHandleArgs(args)]
     }) as TEvaluateResults
 
     if (result.error !== null) {
