@@ -62,7 +62,7 @@ npm install --save-dev foxr
 Connect to the Marionette endpoint.
 
 ```ts
-foxr.connect(options?: { host?: string, port?: number }): Promise<TBrowser>
+foxr.connect(options?: { host?: string, port?: number }): Promise<Browser>
 ```
 
 * `host` – `'localhost'` by default
@@ -85,13 +85,13 @@ browser.disconnect(): Promise<void>
 #### `newPage`
 
 ```ts
-browser.newPage(): Promise<TPage>
+browser.newPage(): Promise<Page>
 ```
 
 #### `pages`
 
 ```ts
-browser.pages(): Promise<TPage[]>
+browser.pages(): Promise<Page[]>
 ```
 
 ### Page
@@ -99,25 +99,25 @@ browser.pages(): Promise<TPage[]>
 #### `$`
 
 ```ts
-page.$(selector: string): Promise<TElementHandle | null>
+page.$(selector: string): Promise<ElementHandle | null>
 ```
 
 #### `$$`
 
 ```ts
-page.$$(selector: string): Promise<TElementHandle[]>
+page.$$(selector: string): Promise<ElementHandle[]>
 ```
 
 #### `$eval`
 
 ```ts
-page.$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue | void>
+page.$eval(selector: string, func: TSerializableFunction, ...args: Array<TJsonValue | JSHandle>): Promise<TJsonValue | void>
 ```
 
 #### `$$eval`
 
 ```ts
-page.$$eval(selector: string, func: TSerializableFunction, ...args: TJsonValue[]): Promise<Array<TJsonValue | void>>
+page.$$eval(selector: string, func: TSerializableFunction, ...args: Array<TJsonValue | JSHandle>): Promise<Array<TJsonValue | void>>
 ```
 
 #### `bringToFront`
@@ -149,6 +149,13 @@ page.content(): Promise<string>
 ```ts
 page.evaluate(target: string): Promise<TJsonValue | void>
 page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue | void>
+```
+
+#### `evaluateHandle`
+
+```ts
+page.evaluate(target: string): Promise<JSHandle>
+page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<JSHandle>
 ```
 
 #### `focus`
@@ -199,18 +206,22 @@ page.url(): Promise<string>
 page.viewport(): Promise<{ width: number, height: number }>
 ```
 
+### JSHandle
+
+…
+
 ### ElementHandle
 
 #### `$`
 
 ```ts
-elementHandle.$(selector: string): Promise<TElementHandle | null>
+elementHandle.$(selector: string): Promise<ElementHandle | null>
 ```
 
 #### `$$`
 
 ```ts
-elementHandle.$$(selector: string): Promise<TElementHandle[]>
+elementHandle.$$(selector: string): Promise<ElementHandle[]>
 ```
 
 #### `focus`
