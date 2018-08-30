@@ -654,9 +654,9 @@
     eslint-plugin-standard "^3.0.1"
     typescript-eslint-parser "^18.0.0"
 
-"@deepsweet/start-preset-node-ts-lib@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.6.1.tgz#132c3fa817509a43ef33d8b12eb31f90756ddc8b"
+"@deepsweet/start-preset-node-ts-lib@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@deepsweet/start-preset-node-ts-lib/-/start-preset-node-ts-lib-0.6.3.tgz#4a3d14a100854375a8e4f774dfcc1596c5945c86"
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0"
@@ -683,7 +683,7 @@
     "@start/plugin-watch" "^0.2.0"
     "@start/plugin-write" "^0.2.0"
     "@start/reporter-verbose" "^0.1.0"
-    esm "^3.0.52"
+    esm "^3.0.81"
     tap-diff "^0.1.1"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -887,9 +887,13 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^10.7.1":
+"@types/node@*":
   version "10.7.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.7.1.tgz#b704d7c259aa40ee052eec678758a68d07132a2e"
+
+"@types/node@^10.9.4":
+  version "10.9.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
 
 "@types/tape@*":
   version "4.2.32"
@@ -1671,13 +1675,9 @@ eslint@^5.0.0, eslint@^5.4.0:
     table "^4.0.3"
     text-table "^0.2.0"
 
-esm@^3.0.52:
-  version "3.0.80"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.0.80.tgz#234c56d1509ff6246e26cd3aeccfa1d377517d6b"
-
-esm@^3.0.79:
-  version "3.0.79"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.0.79.tgz#19d0c8b8c574b36826df05d0f49c78d70619668c"
+esm@^3.0.81:
+  version "3.0.81"
+  resolved "https://registry.yarnpkg.com/esm/-/esm-3.0.81.tgz#3d78df013960b6d30bb5a5adfafe5d9da654b9d2"
 
 espree@^4.0.0:
   version "4.0.0"
@@ -1726,9 +1726,9 @@ execa@^0.10.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/execa/-/execa-0.11.0.tgz#0b3c71daf9b9159c252a863cd981af1b4410d97a"
+execa@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/execa/-/execa-1.0.0.tgz#c6236a5bb4df6d6f15e88e7f017798216749ddd8"
   dependencies:
     cross-spawn "^6.0.0"
     get-stream "^4.0.0"
@@ -3707,9 +3707,9 @@ typescript-eslint-parser@^18.0.0:
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
-typescript@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"
+typescript@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.3.tgz#4853b3e275ecdaa27f78fda46dc273a7eb7fc1c8"
 
 uglify-js@^2.6:
   version "2.8.29"

@@ -17,20 +17,20 @@
     "node": ">=8.6.0"
   },
   "dependencies": {
-    "esm": "^3.0.79",
+    "esm": "^3.0.81",
     "typeon": "^0.1.1"
   },
   "devDependencies": {
     "@deepsweet/eslint-config-node-ts": "^0.2.1",
-    "@deepsweet/start-preset-node-ts-lib": "^0.6.1",
+    "@deepsweet/start-preset-node-ts-lib": "^0.6.3",
     "@types/blue-tape": "^0.1.32",
     "@types/execa": "^0.9.0",
-    "@types/node": "^10.7.1",
+    "@types/node": "^10.9.4",
     "blue-tape": "^1.0.0",
-    "execa": "^0.11.0",
+    "execa": "^1.0.0",
     "mocku": "^0.3.2",
     "spyfn": "^0.1.1",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.3"
   },
   "eslintConfig": {
     "extends": "@deepsweet/eslint-config-node-ts",
