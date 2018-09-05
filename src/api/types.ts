@@ -1,4 +1,6 @@
 import { TJsonValue } from 'typeon'
+import JSHandle from './JSHandle'
+import ElementHandle from './ElementHandle'
 
 export type TStringifiableFunction = (...args: Array<TJsonValue | Element>) => TJsonValue | Promise<TJsonValue> | void
 
@@ -6,6 +8,8 @@ export type TJSHandleId = {
   [key: string]: string,
   ELEMENT: string
 }
+
+export type TEvaluateArg = TJsonValue | JSHandle | ElementHandle
 
 export type TEvaluateResult = {
   value: {

@@ -111,13 +111,13 @@ page.$$(selector: string): Promise<ElementHandle[]>
 #### `$eval`
 
 ```ts
-page.$eval(selector: string, func: TSerializableFunction, ...args: Array<TJsonValue | JSHandle>): Promise<TJsonValue | void>
+page.$eval(selector: string, func: TSerializableFunction, ...args: TEvaluateArg[]): Promise<TJsonValue | void>
 ```
 
 #### `$$eval`
 
 ```ts
-page.$$eval(selector: string, func: TSerializableFunction, ...args: Array<TJsonValue | JSHandle>): Promise<Array<TJsonValue | void>>
+page.$$eval(selector: string, func: TSerializableFunction, ...args: TEvaluateArg[]): Promise<Array<TJsonValue | void>>
 ```
 
 #### `bringToFront`
@@ -148,14 +148,14 @@ page.content(): Promise<string>
 
 ```ts
 page.evaluate(target: string): Promise<TJsonValue | void>
-page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<TJsonValue | void>
+page.evaluate(target: TSerializableFunction, ...args: TEvaluateArg[]): Promise<TJsonValue | void>
 ```
 
 #### `evaluateHandle`
 
 ```ts
 page.evaluate(target: string): Promise<JSHandle>
-page.evaluate(target: TSerializableFunction, ...args: TJsonValue[]): Promise<JSHandle>
+page.evaluate(target: TSerializableFunction, ...args: TEvaluateArg[]): Promise<JSHandle>
 ```
 
 #### `focus`

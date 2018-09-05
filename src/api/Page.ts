@@ -12,13 +12,14 @@ import {
   TStringifiableFunction,
   TStringResult,
   TEvaluateHandleResult,
-  TEvaluateResults
+  TEvaluateResults,
+  TEvaluateArg
 } from './types'
 import JSHandle from './JSHandle'
 
 const cache = new Map<string, Page>()
 
-const mapJSHandleArgs = (args: Array<TJsonValue | JSHandle>) => args.map((arg) => {
+const mapJSHandleArgs = (args: TEvaluateArg[]) => args.map((arg) => {
   if (arg instanceof JSHandle) {
     return arg._id
   }
@@ -84,7 +85,7 @@ class Page extends EventEmitter {
     }))
   }
 
-  async $eval (selector: string, func: TStringifiableFunction, ...args: Array<TJsonValue | JSHandle>): Promise<TJsonValue | void> {
+  async $eval (selector: string, func: TStringifiableFunction, ...args: TEvaluateArg[]): Promise<TJsonValue | void> {
     const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[arguments.length - 1]
@@ -110,7 +111,7 @@ class Page extends EventEmitter {
     return result.value
   }
 
-  async $$eval (selector: string, func: TStringifiableFunction, ...args: TJsonValue[]): Promise<Array<TJsonValue | void>> {
+  async $$eval (selector: string, func: TStringifiableFunction, ...args: TEvaluateArg[]): Promise<Array<TJsonValue | void>> {
     const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[arguments.length - 1]
@@ -159,7 +160,7 @@ class Page extends EventEmitter {
     return value
   }
 
-  async evaluate (target: TStringifiableFunction | string, ...args: Array<TJsonValue | JSHandle>): Promise<TJsonValue | void> {
+  async evaluate (target: TStringifiableFunction | string, ...args: TEvaluateArg[]): Promise<TJsonValue | void> {
     let marionetteResult = null
 
     if (typeof target === 'function') {
@@ -197,7 +198,7 @@ class Page extends EventEmitter {
     return result.value
   }
 
-  async evaluateHandle (target: TStringifiableFunction | string, ...args: Array<TJsonValue | JSHandle>): Promise<JSHandle> {
+  async evaluateHandle (target: TStringifiableFunction | string, ...args: TEvaluateArg[]): Promise<JSHandle> {
     let marionetteResult = null
 
     if (typeof target === 'function') {
