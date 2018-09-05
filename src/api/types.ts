@@ -1,6 +1,6 @@
 import { TJsonValue } from 'typeon'
 
-export type TStringifiableFunction = (...args: TJsonValue[]) => TJsonValue | Promise<TJsonValue> | void
+export type TStringifiableFunction = (...args: Array<TJsonValue | Element>) => TJsonValue | Promise<TJsonValue> | void
 
 export type TJSHandleId = {
   [key: string]: string,
