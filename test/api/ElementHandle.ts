@@ -82,6 +82,37 @@ test('ElementHandle `$$()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('ElementHandle `click()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<input type="checkbox"/>')
+
+  const target = await page.$('input')
+
+  if (target === null) {
+    t.fail('There should be element')
+    return
+  }
+
+  // TODO: test for `scrollIntoView()`
+  // TODO: test for `button`
+  // TODO: test for `clickCount`
+  await target.click()
+
+  t.true(
+    await page.evaluate('document.querySelector("input").checked'),
+    'should check checkbox'
+  )
+
+  await target.click()
+
+  t.false(
+    await page.evaluate('document.querySelector("input").checked'),
+    'should uncheck checkbox'
+  )
+}))
+
 test('ElementHandle `focus()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()

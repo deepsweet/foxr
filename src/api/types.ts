@@ -37,3 +37,14 @@ export type TElementHandlesResult = TJSHandleId[]
 export type TStringResult = {
   value: string
 }
+
+export type TNumberResult = {
+  value: number
+}
+
+export type TMouseButton = 'left' | 'middle' | 'right'
+
+export type TClickOptions = {
+  button?: TMouseButton,
+  clickCount?: number
+}

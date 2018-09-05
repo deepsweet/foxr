@@ -1,26 +1,36 @@
 import Marionette from '../Marionette'
-import { pWriteFile } from '../utils'
+import { pWriteFile, MOUSE_BUTTON } from '../utils'
 import Page from './Page'
-import { TJSHandleId, TElementHandleResult, TElementHandlesResult, TStringResult } from './types'
+import {
+  TJSHandleId,
+  TElementHandleResult,
+  TElementHandlesResult,
+  TStringResult,
+  TClickOptions,
+  TMouseButton,
+  TNumberResult
+} from './types'
 import JSHandle from './JSHandle'
 
 class ElementHandle extends JSHandle {
   private _page: Page
-  public _id: TJSHandleId
+  public _handleId: TJSHandleId
   private _send: Marionette['send']
+  private _actionId: number | null
 
   constructor (params: { page: Page, id: TJSHandleId, send: Marionette['send'] }) {
     super(params)
 
     this._page = params.page
-    this._id = params.id
+    this._handleId = params.id
     this._send = params.send
+    this._actionId = null
   }
 
   async $ (selector: string): Promise<ElementHandle | null> {
     try {
       const { value } = await this._send('WebDriver:FindElement', {
-        element: this._id.ELEMENT,
+        element: this._handleId.ELEMENT,
         value: selector,
         using: 'css selector'
       }) as TElementHandleResult
@@ -41,7 +51,7 @@ class ElementHandle extends JSHandle {
 
   async $$ (selector: string): Promise<ElementHandle[]> {
     const values = await this._send('WebDriver:FindElements', {
-      element: this._id.ELEMENT,
+      element: this._handleId.ELEMENT,
       value: selector,
       using: 'css selector'
     }) as TElementHandlesResult
@@ -53,6 +63,29 @@ class ElementHandle extends JSHandle {
     }))
   }
 
+  async click (userOptions?: TClickOptions) {
+    const options = {
+      button: 'left',
+      clickCount: 1,
+      ...userOptions
+    }
+    const mouseButton = MOUSE_BUTTON[options.button as TMouseButton]
+
+    /* istanbul ignore next */
+    await this._page.evaluate((el) => {
+      (el as Element).scrollIntoView()
+    }, this._handleId)
+
+    const result = await this._send('Marionette:ActionChain', {
+      chain: [
+        ['click', this._handleId.ELEMENT, mouseButton, options.clickCount]
+      ],
+      nextId: this._actionId
+    }) as TNumberResult
+
+    this._actionId = result.value
+  }
+
   async focus (): Promise<void> {
     await this._send('WebDriver:ExecuteScript', {
       'script': 'arguments[0].focus()',
@@ -62,7 +95,7 @@ class ElementHandle extends JSHandle {
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
     const result = await this._send('WebDriver:TakeScreenshot', {
-      id: this._id.ELEMENT,
+      id: this._handleId.ELEMENT,
       full: false,
       hash: false
     }) as TStringResult
