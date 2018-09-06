@@ -191,6 +191,39 @@ test('ElementHandle `focus()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('ElementHandle `hover()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<div>hi</div>')
+
+  await page.evaluate(() => {
+    const el = document.querySelector('div')
+
+    if (el !== null) {
+      el.addEventListener('mouseenter', (e) => {
+        // @ts-ignore
+        window.__hover__ = true
+      })
+    }
+  })
+
+  const target = await page.$('div')
+
+  if (target === null) {
+    t.fail('There should be element')
+    return
+  }
+
+  // TODO: test for `scrollIntoView()`
+  await target.hover()
+
+  t.true(
+    await page.evaluate('window.__hover__'),
+    'should hover'
+  )
+}))
+
 test('ElementHandle `screenshot()`', testWithFirefox(async (t) => {
   const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
 

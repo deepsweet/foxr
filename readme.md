@@ -241,6 +241,12 @@ elementHandle.click(options?: TOptions): Promise<void>
 elementHandle.focus(): Promise<void>
 ```
 
+#### `hover`
+
+```ts
+elementHandle.hover(): Promise<void>
+```
+
 #### `screenshot`
 
 ```ts

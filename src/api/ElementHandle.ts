@@ -27,6 +27,13 @@ class ElementHandle extends JSHandle {
     this._actionId = null
   }
 
+  private async _scrollIntoView (): Promise<void> {
+    /* istanbul ignore next */
+    await this._page.evaluate((el) => {
+      (el as Element).scrollIntoView()
+    }, this._handleId)
+  }
+
   async $ (selector: string): Promise<ElementHandle | null> {
     try {
       const { value } = await this._send('WebDriver:FindElement', {
@@ -71,10 +78,7 @@ class ElementHandle extends JSHandle {
     }
     const mouseButton = MOUSE_BUTTON[options.button as TMouseButton]
 
-    /* istanbul ignore next */
-    await this._page.evaluate((el) => {
-      (el as Element).scrollIntoView()
-    }, this._handleId)
+    await this._scrollIntoView()
 
     const result = await this._send('Marionette:ActionChain', {
       chain: [
@@ -91,6 +95,19 @@ class ElementHandle extends JSHandle {
       'script': 'arguments[0].focus()',
       args: [this._id]
     })
+  }
+
+  async hover (): Promise<void> {
+    await this._scrollIntoView()
+
+    const result = await this._send('Marionette:ActionChain', {
+      chain: [
+        ['move', this._handleId.ELEMENT]
+      ],
+      nextId: this._actionId
+    }) as TNumberResult
+
+    this._actionId = result.value
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
