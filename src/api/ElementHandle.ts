@@ -3,12 +3,8 @@ import { pWriteFile, MOUSE_BUTTON } from '../utils'
 import Page from './Page'
 import {
   TJSHandleId,
-  TElementHandleResult,
-  TElementHandlesResult,
-  TStringResult,
   TClickOptions,
-  TMouseButton,
-  TNumberResult
+  TMouseButton
 } from './types'
 import JSHandle from './JSHandle'
 
@@ -36,15 +32,15 @@ class ElementHandle extends JSHandle {
 
   async $ (selector: string): Promise<ElementHandle | null> {
     try {
-      const { value } = await this._send('WebDriver:FindElement', {
+      const id = await this._send('WebDriver:FindElement', {
         element: this._handleId.ELEMENT,
         value: selector,
         using: 'css selector'
-      }) as TElementHandleResult
+      }, 'value') as TJSHandleId
 
       return new ElementHandle({
         page: this._page,
-        id: value,
+        id,
         send: this._send
       })
     } catch (err) {
@@ -57,15 +53,15 @@ class ElementHandle extends JSHandle {
   }
 
   async $$ (selector: string): Promise<ElementHandle[]> {
-    const values = await this._send('WebDriver:FindElements', {
+    const ids = await this._send('WebDriver:FindElements', {
       element: this._handleId.ELEMENT,
       value: selector,
       using: 'css selector'
-    }) as TElementHandlesResult
+    }) as TJSHandleId[]
 
-    return values.map((value) => new ElementHandle({
+    return ids.map((id) => new ElementHandle({
       page: this._page,
-      id: value,
+      id,
       send: this._send
     }))
   }
@@ -80,14 +76,14 @@ class ElementHandle extends JSHandle {
 
     await this._scrollIntoView()
 
-    const result = await this._send('Marionette:ActionChain', {
+    const id = await this._send('Marionette:ActionChain', {
       chain: [
         ['click', this._handleId.ELEMENT, mouseButton, options.clickCount]
       ],
       nextId: this._actionId
-    }) as TNumberResult
+    }) as number
 
-    this._actionId = result.value
+    this._actionId = id
   }
 
   async focus (): Promise<void> {
@@ -100,14 +96,14 @@ class ElementHandle extends JSHandle {
   async hover (): Promise<void> {
     await this._scrollIntoView()
 
-    const result = await this._send('Marionette:ActionChain', {
+    const id = await this._send('Marionette:ActionChain', {
       chain: [
         ['move', this._handleId.ELEMENT]
       ],
       nextId: this._actionId
-    }) as TNumberResult
+    }) as number
 
-    this._actionId = result.value
+    this._actionId = id
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
@@ -115,8 +111,8 @@ class ElementHandle extends JSHandle {
       id: this._handleId.ELEMENT,
       full: false,
       hash: false
-    }) as TStringResult
-    const buffer = Buffer.from(result.value, 'base64')
+    }, 'value') as string
+    const buffer = Buffer.from(result, 'base64')
 
     if (typeof options.path === 'string') {
       await pWriteFile(options.path, buffer)

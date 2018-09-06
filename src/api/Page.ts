@@ -6,14 +6,12 @@ import { pWriteFile, mapEvaluateArgs } from '../utils'
 import Browser from './Browser'
 import ElementHandle from './ElementHandle'
 import {
-  TElementHandleResult,
-  TElementHandlesResult,
   TEvaluateResult,
   TStringifiableFunction,
-  TStringResult,
   TEvaluateHandleResult,
   TEvaluateResults,
-  TEvaluateArg
+  TEvaluateArg,
+  TJSHandleId
 } from './types'
 import JSHandle from './JSHandle'
 
@@ -45,14 +43,14 @@ class Page extends EventEmitter {
 
   async $ (selector: string): Promise<ElementHandle | null> {
     try {
-      const { value } = await this._send('WebDriver:FindElement', {
+      const id = await this._send('WebDriver:FindElement', {
         value: selector,
         using: 'css selector'
-      }) as TElementHandleResult
+      }, 'value') as TJSHandleId
 
       return new ElementHandle({
         page: this,
-        id: value,
+        id,
         send: this._send
       })
     } catch (err) {
@@ -65,20 +63,20 @@ class Page extends EventEmitter {
   }
 
   async $$ (selector: string): Promise<ElementHandle[]> {
-    const values = await this._send('WebDriver:FindElements', {
+    const ids = await this._send('WebDriver:FindElements', {
       value: selector,
       using: 'css selector'
-    }) as TElementHandlesResult
+    }) as TJSHandleId[]
 
-    return values.map((value) => new ElementHandle({
+    return ids.map((id) => new ElementHandle({
       page: this,
-      id: value,
+      id,
       send: this._send
     }))
   }
 
   async $eval (selector: string, func: TStringifiableFunction, ...args: TEvaluateArg[]): Promise<TJsonValue | void> {
-    const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
+    const result = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[arguments.length - 1]
         const el = document.querySelector(arguments[0])
@@ -94,7 +92,7 @@ class Page extends EventEmitter {
           .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `,
       args: [selector, ...mapEvaluateArgs(args)]
-    }) as TEvaluateResult
+    }, 'value') as TEvaluateResult
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
@@ -104,7 +102,7 @@ class Page extends EventEmitter {
   }
 
   async $$eval (selector: string, func: TStringifiableFunction, ...args: TEvaluateArg[]): Promise<Array<TJsonValue | void>> {
-    const { value: result } = await this._send('WebDriver:ExecuteAsyncScript', {
+    const result = await this._send('WebDriver:ExecuteAsyncScript', {
       script: `
         const resolve = arguments[arguments.length - 1]
         const els = Array.from(document.querySelectorAll(arguments[0]))
@@ -117,7 +115,7 @@ class Page extends EventEmitter {
         .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
       `,
       args: [selector, ...mapEvaluateArgs(args)]
-    }) as TEvaluateResults
+    }, 'value') as TEvaluateResults
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
@@ -146,17 +144,15 @@ class Page extends EventEmitter {
     cache.delete(this._id)
   }
 
-  async content (): Promise<string> {
-    const { value } = await this._send('WebDriver:GetPageSource') as TStringResult
-
-    return value
+  content (): Promise<string> {
+    return this._send('WebDriver:GetPageSource', {}, 'value') as Promise<string>
   }
 
   async evaluate (target: TStringifiableFunction | string, ...args: TEvaluateArg[]): Promise<TJsonValue | void> {
-    let marionetteResult = null
+    let result = null
 
     if (typeof target === 'function') {
-      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+      result = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
           const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
           const resolve = arguments[arguments.length - 1]
@@ -167,9 +163,9 @@ class Page extends EventEmitter {
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
         args: mapEvaluateArgs(args)
-      }) as TEvaluateResult
+      }, 'value') as TEvaluateResult
     } else {
-      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+      result = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
           const resolve = arguments[0]
 
@@ -178,10 +174,8 @@ class Page extends EventEmitter {
             .then((value) => resolve({ error: null, value }))
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `
-      }) as TEvaluateResult
+      }, 'value') as TEvaluateResult
     }
-
-    const result = marionetteResult.value
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
@@ -191,10 +185,10 @@ class Page extends EventEmitter {
   }
 
   async evaluateHandle (target: TStringifiableFunction | string, ...args: TEvaluateArg[]): Promise<JSHandle> {
-    let marionetteResult = null
+    let result = null
 
     if (typeof target === 'function') {
-      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+      result = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
           const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
           const resolve = arguments[arguments.length - 1]
@@ -211,9 +205,9 @@ class Page extends EventEmitter {
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `,
         args: mapEvaluateArgs(args)
-      }) as TEvaluateHandleResult
+      }, 'value') as TEvaluateHandleResult
     } else {
-      marionetteResult = await this._send('WebDriver:ExecuteAsyncScript', {
+      result = await this._send('WebDriver:ExecuteAsyncScript', {
         script: `
           const resolve = arguments[0]
 
@@ -228,10 +222,8 @@ class Page extends EventEmitter {
             })
             .catch((error) => resolve({ error: error instanceof Error ? error.message : error }))
         `
-      }) as TEvaluateHandleResult
+      }, 'value') as TEvaluateHandleResult
     }
-
-    const result = marionetteResult.value
 
     if (result.error !== null) {
       throw new Error(`Evaluation failed: ${result.error}`)
@@ -272,8 +264,8 @@ class Page extends EventEmitter {
     const result = await this._send('WebDriver:TakeScreenshot', {
       full: true,
       hash: false
-    }) as TStringResult
-    const buffer = Buffer.from(result.value, 'base64')
+    }, 'value') as string
+    const buffer = Buffer.from(result, 'base64')
 
     if (typeof options.path === 'string') {
       await pWriteFile(options.path, buffer)
@@ -308,16 +300,12 @@ class Page extends EventEmitter {
     })
   }
 
-  async title (): Promise<string> {
-    const result = await this._send('WebDriver:GetTitle') as TStringResult
-
-    return result.value
+  title (): Promise<string> {
+    return this._send('WebDriver:GetTitle', {}, 'value') as Promise<string>
   }
 
-  async url (): Promise<string> {
-    const result = await this._send('WebDriver:GetCurrentURL') as TStringResult
-
-    return result.value
+  url (): Promise<string> {
+    return this._send('WebDriver:GetCurrentURL', {}, 'value') as Promise<string>
   }
 
   async viewport (): Promise<{ width: number, height: number }> {

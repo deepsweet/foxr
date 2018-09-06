@@ -12,38 +12,18 @@ export type TJSHandleId = {
 export type TEvaluateArg = TJsonValue | JSHandle | ElementHandle
 
 export type TEvaluateResult = {
-  value: {
-    error: string | null,
-    value: TJsonValue | void
-  }
+  error: string | null,
+  value: TJsonValue | void
 }
 
 export type TEvaluateHandleResult = {
-  value: {
-    error: string | null,
-    value: TJSHandleId | null
-  }
+  error: string | null,
+  value: TJSHandleId | null
 }
 
 export type TEvaluateResults = {
-  value: {
-    error: string | null,
-    value: TJsonValue[] | void[]
-  }
-}
-
-export type TElementHandleResult = {
-  value: TJSHandleId
-}
-
-export type TElementHandlesResult = TJSHandleId[]
-
-export type TStringResult = {
-  value: string
-}
-
-export type TNumberResult = {
-  value: number
+  error: string | null,
+  value: TJsonValue[] | void[]
 }
 
 export type TMouseButton = 'left' | 'middle' | 'right'

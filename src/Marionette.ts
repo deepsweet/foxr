@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { Socket } from 'net'
-import { TJsonArray, TJsonMap } from 'typeon'
+import { TJsonArray, TJsonMap, TJsonValue } from 'typeon'
 import FoxrError from './Error'
 import { createParseStream, parse, stringify } from './json-protocol'
 
@@ -16,7 +16,8 @@ class Marionette extends EventEmitter {
   private globalId: number
   private queue: {
     id: number,
-    resolve: (arg: TJsonMap | TJsonArray) => void,
+    key?: string,
+    resolve: (arg: TJsonValue) => void,
     reject: (error: Error) => void
   }[]
   private socket: Socket
@@ -76,6 +77,8 @@ class Marionette extends EventEmitter {
           if (item.id === id) {
             if (error !== null) {
               item.reject(new FoxrError(error.message))
+            } else if (typeof item.key === 'string') {
+              item.resolve((result as TJsonMap)[item.key])
             } else {
               item.resolve(result)
             }
@@ -97,12 +100,12 @@ class Marionette extends EventEmitter {
     this.socket.end()
   }
 
-  async send (name: string, params: TJsonMap = {}) {
-    return new Promise<TJsonMap | TJsonArray>((resolve, reject) => {
+  async send (name: string, params: TJsonMap = {}, key?: string) {
+    return new Promise<TJsonValue>((resolve, reject) => {
       const data = stringify([0, this.globalId, name, params])
 
       this.socket.write(data, 'utf8', () => {
-        this.queue.push({ id: this.globalId, resolve, reject })
+        this.queue.push({ id: this.globalId, key, resolve, reject })
         this.globalId += 1
       })
     })
