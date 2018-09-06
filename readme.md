@@ -224,6 +224,17 @@ elementHandle.$(selector: string): Promise<ElementHandle | null>
 elementHandle.$$(selector: string): Promise<ElementHandle[]>
 ```
 
+#### `click`
+
+```ts
+type TOptions = {
+  button?: 'left' | 'middle' | 'right',
+  clickCount?: number
+}
+
+elementHandle.click(options?: TOptions): Promise<void>
+```
+
 #### `focus`
 
 ```ts

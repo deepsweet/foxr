@@ -63,7 +63,7 @@ class ElementHandle extends JSHandle {
     }))
   }
 
-  async click (userOptions?: TClickOptions) {
+  async click (userOptions?: TClickOptions): Promise<void> {
     const options = {
       button: 'left',
       clickCount: 1,

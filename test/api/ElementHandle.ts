@@ -86,9 +86,31 @@ test('ElementHandle `click()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
-  await page.setContent('<input type="checkbox"/>')
+  await page.setContent('<div>hi</div>')
 
-  const target = await page.$('input')
+  // >There are two properties for finding out which mouse button has been clicked: which and button.
+  // >Please note that these properties don’t always work on a click event.
+  // >To safely detect a mouse button you have to use the mousedown or mouseup events.
+  // https://www.quirksmode.org/js/events_properties.html#button
+  await page.evaluate(() => {
+    const el = document.querySelector('div')
+
+    if (el !== null) {
+      el.addEventListener('mouseup', (e) => {
+        // @ts-ignore
+        window.__click__ = {
+          button: e.button
+        }
+      })
+
+      el.addEventListener('dblclick', () => {
+        // @ts-ignore
+        window.__dblclick__ = true
+      })
+    }
+  })
+
+  const target = await page.$('div')
 
   if (target === null) {
     t.fail('There should be element')
@@ -96,20 +118,51 @@ test('ElementHandle `click()`', testWithFirefox(async (t) => {
   }
 
   // TODO: test for `scrollIntoView()`
-  // TODO: test for `button`
-  // TODO: test for `clickCount`
   await target.click()
 
-  t.true(
-    await page.evaluate('document.querySelector("input").checked'),
-    'should check checkbox'
+  t.deepEqual(
+    await page.evaluate('window.__click__'),
+    { button: 0 },
+    'should click with the left mouse button by default'
   )
 
-  await target.click()
+  await target.click({
+    button: 'left'
+  })
 
-  t.false(
-    await page.evaluate('document.querySelector("input").checked'),
-    'should uncheck checkbox'
+  t.deepEqual(
+    await page.evaluate('window.__click__'),
+    { button: 0 },
+    'should click with the left mouse button'
+  )
+
+  await target.click({
+    button: 'middle'
+  })
+
+  t.deepEqual(
+    await page.evaluate('window.__click__'),
+    { button: 1 },
+    'should click with the middle mouse button'
+  )
+
+  await target.click({
+    button: 'right'
+  })
+
+  t.deepEqual(
+    await page.evaluate('window.__click__'),
+    { button: 2 },
+    'should click with the right mouse button'
+  )
+
+  await target.click({
+    clickCount: 2
+  })
+
+  t.true(
+    await page.evaluate('window.__dblclick__'),
+    'should double click'
   )
 }))
 
