@@ -22,5 +22,5 @@ branches:
     - master
 matrix:
   fast_finish: true
-before_script: docker pull deepsweet/firefox-headless-remote:61
+before_script: docker pull deepsweet/firefox-headless-remote:62
 script: yarn start ci
