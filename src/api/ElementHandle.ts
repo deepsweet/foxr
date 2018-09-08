@@ -1,5 +1,4 @@
 import Marionette from '../Marionette'
-import { pWriteFile, MOUSE_BUTTON } from '../utils'
 import Page from './Page'
 import {
   TJSHandleId,
@@ -7,6 +6,8 @@ import {
   TMouseButton
 } from './types'
 import JSHandle from './JSHandle'
+import { pWriteFile, MOUSE_BUTTON, hasKey } from '../utils'
+import KEYS from '../keys'
 
 class ElementHandle extends JSHandle {
   private _page: Page
@@ -104,6 +105,28 @@ class ElementHandle extends JSHandle {
     }, 'value') as number
 
     this._actionId = id
+  }
+
+  async press (key: string): Promise<void> {
+    if (hasKey(KEYS, key)) {
+      await this._send('WebDriver:ElementSendKeys', {
+        id: this._handleId.ELEMENT,
+        text: KEYS[key]
+      })
+
+      return
+    }
+
+    if (key.length === 1) {
+      await this._send('WebDriver:ElementSendKeys', {
+        id: this._handleId.ELEMENT,
+        text: key
+      })
+
+      return
+    }
+
+    throw new Error(`Unknown key: ${key}`)
   }
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {

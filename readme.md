@@ -247,6 +247,14 @@ elementHandle.focus(): Promise<void>
 elementHandle.hover(): Promise<void>
 ```
 
+#### `press`
+
+```ts
+elementHandle.press(key: string): Promise<void>
+```
+
+Where `key` is of the [possible keys](./src/keys.ts) or a single character.
+
 #### `screenshot`
 
 ```ts

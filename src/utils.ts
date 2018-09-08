@@ -18,3 +18,10 @@ export const mapEvaluateArgs = (args: TEvaluateArg[]) => args.map((arg) => {
 
   return arg
 })
+
+// ESLint fails to parse this written as arrow function
+function hasKey <T> (obj: T, key: any): key is keyof T {
+  return key in obj
+}
+
+export { hasKey }

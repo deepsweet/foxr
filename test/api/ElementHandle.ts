@@ -224,6 +224,48 @@ test('ElementHandle `hover()`', testWithFirefox(async (t) => {
   )
 }))
 
+test('ElementHandle `press()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<input type="text" value="hhellloo"/>')
+
+  const target = await page.$('input')
+
+  if (target === null) {
+    t.fail('There should be element')
+    return
+  }
+
+  await target.press('Backspace')
+  await target.press('ArrowLeft')
+  await target.press('Backspace')
+  await target.press('ArrowLeft')
+  await target.press('ArrowLeft')
+  await target.press('Backspace')
+  await target.press('ArrowLeft')
+  await target.press('Delete')
+  await target.press('e')
+
+  t.equal(
+    await page.evaluate('document.querySelector("input").value'),
+    'hello',
+    'should press keys'
+  )
+
+  try {
+    // @ts-ignore
+    await target.press('Pepe')
+    t.fail()
+  } catch (err) {
+    t.equal(
+      err.message,
+      'Unknown key: Pepe',
+      'should throw if there is no such a key'
+    )
+  }
+}))
+
 test('ElementHandle `screenshot()`', testWithFirefox(async (t) => {
   const writeFileSpy = createSpy(({ args }) => args[args.length - 1](null))
 
