@@ -1,14 +1,13 @@
 import EventEmitter from 'events'
-import Marionette from '../Marionette'
 import Page from './Page'
-import { TJSHandleId } from './types'
+import { TJSHandleId, TSend } from './types'
 
 const cache = new Map<string, JSHandle>()
 
 class JSHandle extends EventEmitter {
   public _id: TJSHandleId | null
 
-  constructor (params: { page: Page, id: TJSHandleId, send: Marionette['send'] }) {
+  constructor (params: { page: Page, id: TJSHandleId, send: TSend }) {
     super()
 
     this._id = params.id

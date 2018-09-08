@@ -1,9 +1,9 @@
-import Marionette from '../Marionette'
 import Page from './Page'
 import {
   TJSHandleId,
   TClickOptions,
-  TMouseButton
+  TMouseButton,
+  TSend
 } from './types'
 import JSHandle from './JSHandle'
 import { pWriteFile, MOUSE_BUTTON, hasKey } from '../utils'
@@ -12,10 +12,10 @@ import KEYS from '../keys'
 class ElementHandle extends JSHandle {
   private _page: Page
   public _handleId: TJSHandleId
-  private _send: Marionette['send']
+  private _send: TSend
   private _actionId: number | null
 
-  constructor (params: { page: Page, id: TJSHandleId, send: Marionette['send'] }) {
+  constructor (params: { page: Page, id: TJSHandleId, send: TSend }) {
     super(params)
 
     this._page = params.page

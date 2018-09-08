@@ -1,6 +1,7 @@
 import { TJsonValue } from 'typeon'
 import JSHandle from './JSHandle'
 import ElementHandle from './ElementHandle'
+import Marionette from '../Marionette'
 
 export type TStringifiableFunction = (...args: Array<TJsonValue | Element>) => TJsonValue | Promise<TJsonValue> | void
 
@@ -32,3 +33,5 @@ export type TClickOptions = {
   button?: TMouseButton,
   clickCount?: number
 }
+
+export type TSend = Marionette['send']

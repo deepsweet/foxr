@@ -1,11 +1,11 @@
 import EventEmitter from 'events'
-import Marionette from '../Marionette'
 import Page from './Page'
+import { TSend } from './types'
 
 class Browser extends EventEmitter {
-  private _send: Marionette['send']
+  private _send: TSend
 
-  constructor (arg: { send: Marionette['send'] }) {
+  constructor (arg: { send: TSend }) {
     super()
 
     this._send = arg.send

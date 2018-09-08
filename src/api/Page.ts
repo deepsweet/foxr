@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 import EventEmitter from 'events'
 import { TJsonValue } from 'typeon'
-import Marionette from '../Marionette'
 import { pWriteFile, mapEvaluateArgs } from '../utils'
 import Browser from './Browser'
 import ElementHandle from './ElementHandle'
@@ -11,7 +10,8 @@ import {
   TEvaluateHandleResult,
   TEvaluateResults,
   TEvaluateArg,
-  TJSHandleId
+  TJSHandleId,
+  TSend
 } from './types'
 import JSHandle from './JSHandle'
 
@@ -20,9 +20,9 @@ const cache = new Map<string, Page>()
 class Page extends EventEmitter {
   private _browser: Browser
   private _id: string
-  private _send: Marionette['send']
+  private _send: TSend
 
-  constructor (params: { browser: Browser, id: string, send: Marionette['send'] }) {
+  constructor (params: { browser: Browser, id: string, send: TSend }) {
     super()
 
     this._browser = params.browser
