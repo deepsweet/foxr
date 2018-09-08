@@ -81,7 +81,7 @@ class ElementHandle extends JSHandle {
         ['click', this._handleId.ELEMENT, mouseButton, options.clickCount]
       ],
       nextId: this._actionId
-    }) as number
+    }, 'value') as number
 
     this._actionId = id
   }
@@ -101,7 +101,7 @@ class ElementHandle extends JSHandle {
         ['move', this._handleId.ELEMENT]
       ],
       nextId: this._actionId
-    }) as number
+    }, 'value') as number
 
     this._actionId = id
   }
