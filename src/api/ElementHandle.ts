@@ -120,6 +120,13 @@ class ElementHandle extends JSHandle {
 
     return buffer
   }
+
+  async type (text: string): Promise<void> {
+    await this._send('WebDriver:ElementSendKeys', {
+      id: this._handleId.ELEMENT,
+      text
+    })
+  }
 }
 
 export default ElementHandle

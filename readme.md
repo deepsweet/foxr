@@ -253,6 +253,12 @@ elementHandle.hover(): Promise<void>
 elementHandle.screenshot(options?: { path?: string }): Promise<Buffer>
 ```
 
+#### `type`
+
+```ts
+elementHandle.type(text: string): Promise<void>
+```
+
 ## Development
 
 See [my Start task runner preset](https://github.com/deepsweet/_/tree/master/packages/start-preset-node-ts-lib) for details.

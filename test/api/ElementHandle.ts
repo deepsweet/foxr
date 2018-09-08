@@ -275,3 +275,25 @@ test('ElementHandle `screenshot()`', testWithFirefox(async (t) => {
 
   unmock('../../src/')
 }))
+
+test('ElementHandle `type()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.setContent('<input type="text"/>')
+
+  const target = await page.$('input')
+
+  if (target === null) {
+    t.fail('There should be element')
+    return
+  }
+
+  await target.type('hello')
+
+  t.equal(
+    await page.evaluate('document.querySelector("input").value'),
+    'hello',
+    'should type'
+  )
+}))
