@@ -13,9 +13,9 @@ test('Foxr: `connect()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('Foxr: `launch()`', async (t) => {
+test.skip('Foxr: `launch()`', async (t) => {
   // TODO: download Firefox for real
-  const firefoxPath = process.env.TRAVIS ? '/usr/bin/firefox' : '/Applications/Firefox.app/Contents/MacOS/firefox'
+  const firefoxPath = '/Applications/Firefox.app/Contents/MacOS/firefox'
 
   const foxr = new Foxr()
 
