@@ -12,3 +12,33 @@ test('Foxr: `connect()`', testWithFirefox(async (t) => {
     'should return `browser`'
   )
 }))
+
+test('Foxr: `launch()`', async (t) => {
+  // TODO: download Firefox for real
+  const firefoxPath = process.env.TRAVIS ? '/usr/bin/firefox' : '/Applications/Firefox.app/Contents/MacOS/firefox'
+
+  const foxr = new Foxr()
+
+  const browser1 = await foxr.launch({
+    executablePath: firefoxPath
+  })
+
+  t.true(
+    browser1 instanceof Browser,
+    'should return `browser`'
+  )
+
+  await browser1.close()
+
+  try {
+    // @ts-ignore
+    await foxr.launch()
+    t.fail('should not get here')
+  } catch (err) {
+    t.equal(
+      err.message,
+      '`executablePath` option is required, Foxr doesn\'t download Firefox automatically',
+      'should throw if there is no `executablePath` option'
+    )
+  }
+})

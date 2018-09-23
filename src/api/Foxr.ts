@@ -1,11 +1,27 @@
+import execa from 'execa'
+// @ts-ignore
+import onExit from 'signal-exit'
 import Marionette from '../Marionette'
 import Browser from './Browser'
+import { waitForPort } from '../utils'
 
 const DEFAULT_HOST = 'localhost'
 const DEFAULT_PORT = 2828
 
+export type TConnectOptions = {
+  host?: string,
+  port?: number
+}
+
+export type TLaunchOptions = {
+  args?: string[],
+  dumpio?: boolean,
+  executablePath: string,
+  headless?: boolean
+}
+
 class Foxr {
-  async connect (options?: { host?: string, port?: number }): Promise<Browser> {
+  async connect (options?: TConnectOptions): Promise<Browser> {
     const { host, port } = {
       ...options,
       host: DEFAULT_HOST,
@@ -30,6 +46,43 @@ class Foxr {
     })
 
     return browser
+  }
+
+  async launch (userOptions: TLaunchOptions): Promise<Browser> {
+    const options = {
+      headless: true,
+      dumpio: false,
+      ...userOptions
+    } as TLaunchOptions
+
+    if (typeof options.executablePath !== 'string') {
+      throw new Error('`executablePath` option is required, Foxr doesn\'t download Firefox automatically')
+    }
+
+    const args = ['-marionette', '-safe-mode', '-no-remote']
+
+    if (options.headless === true) {
+      args.push('-headless')
+    }
+
+    if (Array.isArray(options.args)) {
+      args.push(...options.args)
+    }
+
+    const firefoxProcess = execa(options.executablePath, args, {
+      detached: true,
+      stdio: options.dumpio ? 'inherit' : 'ignore'
+    })
+
+    onExit(() => {
+      firefoxProcess.kill()
+    })
+
+    firefoxProcess.unref()
+
+    await waitForPort(DEFAULT_HOST, DEFAULT_PORT)
+
+    return this.connect()
   }
 }
 
