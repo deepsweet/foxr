@@ -22,9 +22,9 @@ export type TLaunchOptions = {
 class Foxr {
   async connect (options?: TConnectOptions): Promise<Browser> {
     const { host, port } = {
-      ...options,
       host: DEFAULT_HOST,
-      port: DEFAULT_PORT
+      port: DEFAULT_PORT,
+      ...options
     }
 
     const marionette = new Marionette()
