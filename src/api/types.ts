@@ -6,8 +6,7 @@ import Marionette from '../Marionette'
 export type TStringifiableFunction = (...args: Array<TJsonValue | Element>) => TJsonValue | Promise<TJsonValue> | void
 
 export type TJSHandleId = {
-  [key: string]: string,
-  ELEMENT: string
+  [key: string]: string
 }
 
 export type TEvaluateArg = TJsonValue | JSHandle | ElementHandle

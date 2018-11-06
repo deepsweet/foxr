@@ -1,17 +1,11 @@
 import Page from './Page'
-import {
-  TJSHandleId,
-  TClickOptions,
-  TMouseButton,
-  TSend
-} from './types'
+import { TJSHandleId, TClickOptions, TMouseButton, TSend } from './types'
 import JSHandle from './JSHandle'
-import { pWriteFile, MOUSE_BUTTON, hasKey } from '../utils'
+import { pWriteFile, MOUSE_BUTTON, hasKey, getElementId } from '../utils'
 import KEYS from '../keys'
 
 class ElementHandle extends JSHandle {
   private _page: Page
-  public _handleId: TJSHandleId
   private _send: TSend
   private _actionId: number | null
 
@@ -19,7 +13,6 @@ class ElementHandle extends JSHandle {
     super(params)
 
     this._page = params.page
-    this._handleId = params.id
     this._send = params.send
     this._actionId = null
   }
@@ -34,7 +27,7 @@ class ElementHandle extends JSHandle {
   async $ (selector: string): Promise<ElementHandle | null> {
     try {
       const id = await this._send('WebDriver:FindElement', {
-        element: this._handleId.ELEMENT,
+        element: this._elementId,
         value: selector,
         using: 'css selector'
       }, 'value') as TJSHandleId
@@ -55,7 +48,7 @@ class ElementHandle extends JSHandle {
 
   async $$ (selector: string): Promise<ElementHandle[]> {
     const ids = await this._send('WebDriver:FindElements', {
-      element: this._handleId.ELEMENT,
+      element: this._elementId,
       value: selector,
       using: 'css selector'
     }) as TJSHandleId[]
@@ -79,7 +72,7 @@ class ElementHandle extends JSHandle {
 
     const id = await this._send('Marionette:ActionChain', {
       chain: [
-        ['click', this._handleId.ELEMENT, mouseButton, options.clickCount]
+        ['click', this._elementId, mouseButton, options.clickCount]
       ],
       nextId: this._actionId
     }, 'value') as number
@@ -90,7 +83,7 @@ class ElementHandle extends JSHandle {
   async focus (): Promise<void> {
     await this._send('WebDriver:ExecuteScript', {
       'script': 'arguments[0].focus()',
-      args: [this._id]
+      args: [this._handleId]
     })
   }
 
@@ -99,7 +92,7 @@ class ElementHandle extends JSHandle {
 
     const id = await this._send('Marionette:ActionChain', {
       chain: [
-        ['move', this._handleId.ELEMENT]
+        ['move', this._elementId]
       ],
       nextId: this._actionId
     }, 'value') as number
@@ -110,7 +103,7 @@ class ElementHandle extends JSHandle {
   async press (key: string): Promise<void> {
     if (hasKey(KEYS, key)) {
       await this._send('WebDriver:ElementSendKeys', {
-        id: this._handleId.ELEMENT,
+        id: this._elementId,
         text: KEYS[key]
       })
 
@@ -119,7 +112,7 @@ class ElementHandle extends JSHandle {
 
     if (key.length === 1) {
       await this._send('WebDriver:ElementSendKeys', {
-        id: this._handleId.ELEMENT,
+        id: this._elementId,
         text: key
       })
 
@@ -131,7 +124,7 @@ class ElementHandle extends JSHandle {
 
   async screenshot (options: { path?: string } = {}): Promise<Buffer> {
     const result = await this._send('WebDriver:TakeScreenshot', {
-      id: this._handleId.ELEMENT,
+      id: this._elementId,
       full: false,
       hash: false
     }, 'value') as string
@@ -146,7 +139,7 @@ class ElementHandle extends JSHandle {
 
   async type (text: string): Promise<void> {
     await this._send('WebDriver:ElementSendKeys', {
-      id: this._handleId.ELEMENT,
+      id: this._elementId,
       text
     })
   }

@@ -1,7 +1,7 @@
 import { writeFile } from 'fs'
 import { promisify } from 'util'
 import { Socket } from 'net'
-import { TEvaluateArg } from './api/types'
+import { TEvaluateArg, TJSHandleId } from './api/types'
 import JSHandle from './api/JSHandle'
 
 export const pWriteFile = promisify(writeFile)
@@ -14,11 +14,13 @@ export const MOUSE_BUTTON = {
 
 export const mapEvaluateArgs = (args: TEvaluateArg[]) => args.map((arg) => {
   if (arg instanceof JSHandle) {
-    return arg._id
+    return arg._handleId
   }
 
   return arg
 })
+
+export const getElementId = (JSHandleId: TJSHandleId) => Object.values(JSHandleId)[0]
 
 // ESLint fails to parse this written as arrow function
 export function hasKey <T> (obj: T, key: any): key is keyof T {
