@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import execa from 'execa'
+// @ts-ignore
 import onExit from 'signal-exit'
 import Marionette from '../Marionette'
 import Browser from './Browser'
