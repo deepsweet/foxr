@@ -5,11 +5,27 @@ import { testWithFirefox } from '../helpers/firefox'
 
 test('Foxr: `connect()`', testWithFirefox(async (t) => {
   const foxr = new Foxr()
-  const browser = await foxr.connect()
+  const browser = await foxr.connect({
+    defaultViewport: {
+      width: 801,
+      height: 601
+    }
+  })
 
   t.true(
     browser instanceof Browser,
     'should return `browser`'
+  )
+
+  const pages = await browser.pages()
+
+  t.deepEqual(
+    await pages[0].viewport(),
+    {
+      width: 801,
+      height: 601
+    },
+    'should change default viewport'
   )
 }))
 

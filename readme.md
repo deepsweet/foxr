@@ -62,11 +62,23 @@ npm install --save-dev foxr
 Connect to the Marionette endpoint.
 
 ```ts
-foxr.connect(options?: { host?: string, port?: number }): Promise<Browser>
+export type TConnectOptions = {
+  host?: string,
+  port?: number,
+  defaultViewport?: {
+    width?: number,
+    height?: number
+  }
+}
+
+foxr.connect(options?: TConnectOptions): Promise<Browser>
 ```
 
 * `host` – `'localhost'` by default
 * `port` – `2828` by default
+* `defaultViewport`
+  * `width` – `800` by default
+  * `height` – `600` by default
 
 ### Browser
 
