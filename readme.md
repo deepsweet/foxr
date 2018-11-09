@@ -62,7 +62,7 @@ npm install --save-dev foxr
 Connect to the Marionette endpoint.
 
 ```ts
-export type TConnectOptions = {
+type TConnectOptions = {
   host?: string,
   port?: number,
   defaultViewport?: {
@@ -79,6 +79,24 @@ foxr.connect(options?: TConnectOptions): Promise<Browser>
 * `defaultViewport`
   * `width` – `800` by default
   * `height` – `600` by default
+
+#### `launch`
+
+```ts
+type TLaunchOptions = {
+  args?: string[],
+  dumpio?: boolean,
+  executablePath: string,
+  headless?: boolean
+} & TConnectOptions
+
+foxr.launch(options?: TLaunchOptions): Promise<Browser>
+```
+
+* `args` – array of additional args, `['-marionette', '-safe-mode', '-no-remote']` by default
+* `dumpio` – print browser process stdout and stderr, `false` by default
+* `executablePath` – path to Firefox executable, required
+* `headless` – whether to run browser in headless mode, `true` by default
 
 ### Browser
 
