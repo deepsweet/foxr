@@ -732,24 +732,16 @@ test('Page: `screenshot()`', testWithFirefox(async (t) => {
   unmock('../../src/')
 }))
 
-test('Page: `setViewport()` + `viewport()`', testWithFirefox(async (t) => {
+test('Page: `viewport()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const page = await browser.newPage()
 
-  const { width: widthBefore, height: heightBefore } = await page.viewport()
+  const result = await page.viewport()
 
-  await page.setViewport({ width: 501, height: 502 })
-
-  const { width: widthAfter, height: heightAfter } = await page.viewport()
-
-  t.true(
-    widthBefore !== widthAfter && widthAfter === 501,
-    'should change width'
-  )
-
-  t.true(
-    heightBefore !== heightAfter && heightAfter === 502,
-    'should change height'
+  t.deepEqual(
+    result,
+    { width: 800, height: 600 },
+    'should return width and height'
   )
 }))
 
