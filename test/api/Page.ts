@@ -759,3 +759,29 @@ test('Page: `title()`', testWithFirefox(async (t) => {
     'should get page title'
   )
 }))
+test('Page: `goback()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.goto('data:text/html,<title>hi</title>')
+
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hi</title>',
+    'should change page url'
+  )
+
+  await page.goto('data:text/html,<title>hello</title>')
+
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hello</title>',
+    'should change page url again'
+  )
+  await page.goBack();
+  t.equal(
+    await page.url(),
+    'data:text/html/,<title>hi<title>',
+    'should go back to previous page'
+  )
+}))
