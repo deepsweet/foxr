@@ -302,8 +302,8 @@ class Page extends EventEmitter {
       })
     `) as TResult
   }
-  async goBack(): Promise<string> {
-    return this._send('WebDriver:Back', {} ) as Promise<string>
+  async goBack(): Promise<void> {
+    await this._send('WebDriver:Back', {} )
 }
 }
 
