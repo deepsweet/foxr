@@ -778,7 +778,7 @@ test('Page: `goback()`', testWithFirefox(async (t) => {
     'data:text/html,<title>hello</title>',
     'should change page url again'
   )
-  await page.goBack();
+  await page.goBack()
   t.equal(
     await page.url(),
     'data:text/html/,<title>hi<title>',
