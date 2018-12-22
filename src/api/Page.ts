@@ -302,6 +302,9 @@ class Page extends EventEmitter {
       })
     `) as TResult
   }
+  async goBack (): Promise<void> {
+    await this._send('WebDriver:Back', {})
+  }
 }
 
 export default Page
