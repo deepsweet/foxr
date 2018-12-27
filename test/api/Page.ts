@@ -785,3 +785,35 @@ test('Page: `goback()`', testWithFirefox(async (t) => {
     'should go back to previous page'
   )
 }))
+test('Page: `goforward()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const page = await browser.newPage()
+
+  await page.goto('data:text/html,<title>hi</title>')
+
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hi</title>',
+    'should change page url'
+  )
+
+  await page.goto('data:text/html,<title>hello</title>')
+
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hello</title>',
+    'should change page url again'
+  )
+  await page.goBack()
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hi</title>',
+    'should go back to previous page'
+  )
+  await page.goForward()
+  t.equal(
+    await page.url(),
+    'data:text/html,<title>hello</title>',
+    'should go forward to next page'
+  )
+}))
