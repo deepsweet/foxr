@@ -305,9 +305,6 @@ class Page extends EventEmitter {
   async goBack (): Promise<void> {
     await this._send('WebDriver:Back', {})
   }
-  async goForward (): Promise<void> {
-    await this._send('WebDriver:Forward', {})
-  }
 }
 
 export default Page
