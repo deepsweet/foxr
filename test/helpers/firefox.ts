@@ -1,9 +1,13 @@
 import execa from 'execa'
 import { Test } from 'blue-tape'
 import waitForMarionette from './wait-for-marionette'
+import { join } from 'path'
+
+const localExtPath = join(process.cwd(), 'test', 'extension')
+export const containerExtPath = '/home/firefox/extension'
 
 export const runFirefox = () => execa('docker',
-  'run -id --rm --shm-size 2g -p 2828:2828 --name foxr-firefox deepsweet/firefox-headless-remote:63'.split(' ')
+  `run -v ${localExtPath}:${containerExtPath} -id --rm --shm-size 2g -p 2828:2828 --name foxr-firefox deepsweet/firefox-headless-remote:63`.split(' ')
 )
 
 export const stopFirefox = () => execa('docker',
