@@ -27,7 +27,7 @@
     "@deepsweet/start-preset-node-ts-lib": "^0.6.4",
     "@types/blue-tape": "^0.1.32",
     "@types/execa": "^0.9.0",
-    "@types/node": "^10.10.1",
+    "@types/node": "^11.11.3",
     "blue-tape": "^1.0.0",
     "mocku": "^0.4.0",
     "spyfn": "^0.1.1",
