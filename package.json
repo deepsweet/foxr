@@ -18,7 +18,7 @@
   "dependencies": {
     "execa": "^1.0.0",
     "signal-exit": "^3.0.2",
-    "typeon": "^0.2.0"
+    "typeon": "^0.3.0"
   },
   "devDependencies": {
     "@deepsweet/eslint-config-node-ts": "^0.2.1",

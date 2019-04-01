@@ -1739,11 +1739,6 @@ eslint@^5.16.0, eslint@^5.4.0:
     table "^5.2.3"
     text-table "^0.2.0"
 
-esm@^3.0.84:
-  version "3.2.22"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.22.tgz#5062c2e22fee3ccfee4e8f20da768330da90d6e3"
-  integrity sha512-z8YG7U44L82j1XrdEJcqZOLUnjxco8pO453gKOlaMD1/md1n/5QrscAmYG+oKUspsmDLuBFZrpbxI6aQ67yRxA==
-
 espree@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/espree/-/espree-5.0.1.tgz#5d6526fa4fc7f0788a5cf75b15f30323e2f81f7a"
@@ -4059,12 +4054,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typeon@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/typeon/-/typeon-0.2.0.tgz#6336ad0857bf4189a9d2694ecbf2c6e6edbfdd9a"
-  integrity sha512-rflP8d6c1+vrXB2Or2BLOLXeojn4Jogzt4xYlQYoSQJefXrXlPGWZLnTBng1NyjeMA1ictlBBkeE9HgIZB1BNg==
-  dependencies:
-    esm "^3.0.84"
+typeon@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/typeon/-/typeon-0.3.0.tgz#124d18d2bc7e656f894daeb2c3e277a3ecd5b7b6"
+  integrity sha512-XRgnZdagk44NXl85NGStv+AEgkyICCF7qeDgGzT8b2DpMaF87joJT0+c+Bfdl6SAuBgqchDtYZbCGXE1EmKnxw==
 
 typescript-eslint-parser@^18.0.0:
   version "18.0.0"
