@@ -22,10 +22,10 @@
   },
   "devDependencies": {
     "@deepsweet/eslint-config-node-ts": "^0.2.1",
-    "@deepsweet/start-preset-node-ts-lib": "^0.8.2",
+    "@deepsweet/start-preset-node-ts-lib": "^0.9.0",
     "@types/blue-tape": "^0.1.32",
     "@types/execa": "^0.9.0",
-    "@types/node": "^11.12.2",
+    "@types/node": "^12.0.0",
     "blue-tape": "^1.0.0",
     "mocku": "^0.5.0",
     "spyfn": "^0.2.0",
