@@ -20,6 +20,7 @@ cache:
 branches:
   only:
     - master
+    - /^greenkeeper/.*$/
 matrix:
   fast_finish: true
 before_script: docker pull deepsweet/firefox-headless-remote:62
