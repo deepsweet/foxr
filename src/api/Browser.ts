@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import Page from './Page'
-import { TSend } from './types'
+import { TSend, TInstallAddonResult } from './types'
 
 class Browser extends EventEmitter {
   private _send: TSend
@@ -22,6 +22,19 @@ class Browser extends EventEmitter {
     await this._send('WebDriver:DeleteSession')
 
     this.emit('disconnected')
+  }
+
+  async install (path:string, temporary:boolean): Promise<string|null> {
+    try {
+      const { value } = await this._send('Addon:Install', {
+        path,
+        temporary
+      }) as TInstallAddonResult
+
+      return value
+    } catch (e) {
+      throw e
+    }
   }
 
   async newPage (): Promise<Page> {
@@ -52,6 +65,14 @@ class Browser extends EventEmitter {
       id,
       send: this._send
     }))
+  }
+
+  async uninstall (id:string): Promise<void> {
+    try {
+      await this._send('Addon:Uninstall', {id})
+    } catch (e) {
+      throw e
+    }
   }
 }
 

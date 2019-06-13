@@ -1,7 +1,7 @@
 import test from 'blue-tape'
 import foxr from '../../src/'
 import Page from '../../src/api/Page'
-import { testWithFirefox, stopFirefox } from '../helpers/firefox'
+import { testWithFirefox, stopFirefox, containerExtPath } from '../helpers/firefox'
 import { createSpy, getSpyCalls } from 'spyfn'
 
 test('Browser: `close()` + `disconnected` event', testWithFirefox(async (t) => {
@@ -104,4 +104,41 @@ test('Browser: `pages()`', testWithFirefox(async (t) => {
     await browser.pages(),
     'should return the same pages twice'
   )
+}))
+
+test('Browser: `install() and uninstall()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+  const id = await browser.install(containerExtPath, true)
+
+  t.assert(
+    typeof id === 'string' && id !== '',
+    'should install the test extension'
+  )
+
+  try {
+    // @ts-ignore
+    await browser.install('impossible_path')
+    t.fail()
+  } catch (err) {
+    t.pass('should fail to install invalid extension')
+  }
+
+  try {
+    // @ts-ignore
+    await browser.uninstall(id)
+    t.pass('should uninstall the test extension')
+  } catch (err) {
+    t.fail(err)
+  }
+
+  try {
+    // @ts-ignore
+    await browser.uninstall(id)
+    t.fail()
+  } catch (err) {
+    t.assert(
+      err.message.includes('candidate is null'),
+      'should fail to uninstall a second time the test extension'
+    )
+  }
 }))

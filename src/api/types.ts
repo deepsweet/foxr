@@ -34,3 +34,7 @@ export type TClickOptions = {
 }
 
 export type TSend = Marionette['send']
+
+export type TInstallAddonResult = {
+  value: string | null
+}
