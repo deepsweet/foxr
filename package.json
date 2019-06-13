@@ -16,6 +16,7 @@
     "node": ">=8.6.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.5",
     "execa": "^1.0.0",
     "signal-exit": "^3.0.2",
     "typeon": "^0.3.0"
