@@ -106,39 +106,40 @@ test('Browser: `pages()`', testWithFirefox(async (t) => {
   )
 }))
 
-test('Browser: `install() and uninstall()`', testWithFirefox(async (t) => {
+test('Browser: `install()` + `uninstall()`', testWithFirefox(async (t) => {
   const browser = await foxr.connect()
   const id = await browser.install(containerExtPath, true)
 
-  t.assert(
+  t.true(
     typeof id === 'string' && id !== '',
-    'should install the test extension'
+    'should install test extension'
   )
 
+  if (id === null) {
+    return t.fail('unable to install test extension')
+  }
+
   try {
-    // @ts-ignore
-    await browser.install('impossible_path')
+    await browser.install('impossible_path', true)
     t.fail()
   } catch (err) {
     t.pass('should fail to install invalid extension')
   }
 
   try {
-    // @ts-ignore
     await browser.uninstall(id)
-    t.pass('should uninstall the test extension')
+    t.pass('should uninstall test extension')
   } catch (err) {
     t.fail(err)
   }
 
   try {
-    // @ts-ignore
     await browser.uninstall(id)
     t.fail()
   } catch (err) {
-    t.assert(
+    t.true(
       err.message.includes('candidate is null'),
-      'should fail to uninstall a second time the test extension'
+      'should fail to uninstall already uninstalled test extension'
     )
   }
 }))

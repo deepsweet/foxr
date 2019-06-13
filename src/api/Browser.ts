@@ -24,17 +24,13 @@ class Browser extends EventEmitter {
     this.emit('disconnected')
   }
 
-  async install (path:string, temporary:boolean): Promise<string|null> {
-    try {
-      const { value } = await this._send('Addon:Install', {
-        path,
-        temporary
-      }) as TInstallAddonResult
+  async install (path: string, isTemporary: boolean): Promise<string | null> {
+    const { value } = await this._send('Addon:Install', {
+      path,
+      temporary: isTemporary
+    }) as TInstallAddonResult
 
-      return value
-    } catch (e) {
-      throw e
-    }
+    return value
   }
 
   async newPage (): Promise<Page> {
@@ -67,12 +63,8 @@ class Browser extends EventEmitter {
     }))
   }
 
-  async uninstall (id:string): Promise<void> {
-    try {
-      await this._send('Addon:Uninstall', {id})
-    } catch (e) {
-      throw e
-    }
+  async uninstall (id: string): Promise<void> {
+    await this._send('Addon:Uninstall', { id })
   }
 }
 
