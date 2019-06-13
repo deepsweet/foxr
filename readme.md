@@ -24,7 +24,7 @@ Run a locally installed Firefox:
 Or a [dockerized version](https://github.com/deepsweet/firefox-headless-remote):
 
 ```sh
-docker run -it --rm --shm-size 2g -p 2828:2828 deepsweet/firefox-headless-remote:63
+docker run -it --rm --shm-size 2g -p 2828:2828 deepsweet/firefox-headless-remote:67
 ```
 
 ```js

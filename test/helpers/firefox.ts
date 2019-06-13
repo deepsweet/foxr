@@ -7,7 +7,7 @@ const localExtPath = resolve('test', 'extension')
 export const containerExtPath = '/home/firefox/extension'
 
 export const runFirefox = () => execa('docker',
-  `run -id --rm --shm-size 2g -v ${localExtPath}:${containerExtPath} -p 2828:2828 --name foxr-firefox deepsweet/firefox-headless-remote:66`.split(' ')
+  `run -id --rm --shm-size 2g -v ${localExtPath}:${containerExtPath} -p 2828:2828 --name foxr-firefox deepsweet/firefox-headless-remote:67`.split(' ')
 )
 
 export const stopFirefox = () => execa('docker',
