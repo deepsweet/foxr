@@ -124,6 +124,18 @@ browser.newPage(): Promise<Page>
 browser.pages(): Promise<Page[]>
 ```
 
+#### `install`
+
+```ts
+browser.install(extensionPath: string, isTemporary: boolean): Promise<string | null>
+```
+
+#### `uninstall`
+
+```ts
+browser.install(extensionId: string): Promise<void>
+```
+
 ### Page
 
 #### `$`
