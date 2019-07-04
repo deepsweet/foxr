@@ -38,3 +38,11 @@ export type TSend = Marionette['send']
 export type TInstallAddonResult = {
   value: string | null
 }
+
+export type TPref = string | number | boolean
+export type TGetPrefResult = TPref | undefined | null
+
+export enum Context {
+  CHROME = 'chrome',
+  CONTENT = 'content'
+}
