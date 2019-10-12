@@ -136,6 +136,18 @@ browser.install(extensionPath: string, isTemporary: boolean): Promise<string | n
 browser.install(extensionId: string): Promise<void>
 ```
 
+#### `getPref`
+
+```ts
+browser.getPref(pref: string, defaultBranch: boolean = false): Promise<any>
+```
+
+#### `setPref`
+
+```ts
+browser.setPref(pref: string, value: string | number | boolean, defaultBranch: boolean = false): Promise<void>
+```
+
 ### Page
 
 #### `$`
