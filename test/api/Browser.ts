@@ -143,3 +143,34 @@ test('Browser: `install()` + `uninstall()`', testWithFirefox(async (t) => {
     )
   }
 }))
+
+test('Browser: `getPref()` + `setPref()`', testWithFirefox(async (t) => {
+  const browser = await foxr.connect()
+
+  let defaultBranchPref = await browser.getPref('browser.startup.page', true)
+  let nonDefaultBranchPref = await browser.getPref('browser.startup.page', false)
+  t.assert(defaultBranchPref === 1 && nonDefaultBranchPref === 0, 'should give the default value')
+
+  await browser.setPref('browser.startup.page', 0, true)
+  defaultBranchPref = await browser.getPref('browser.startup.page', true)
+  t.equal(defaultBranchPref, 0, 'should give the new value in default branch')
+
+  await browser.setPref('browser.startup.page', 1, false)
+  nonDefaultBranchPref = await browser.getPref('browser.startup.page', false)
+  t.equal(nonDefaultBranchPref, 1, 'should give the new value in non-default branch')
+
+  await browser.setPref('browser.startup.page', 1, true)
+  defaultBranchPref = await browser.getPref('browser.startup.page', true)
+  t.equal(defaultBranchPref, 1, 'should give the new value in default branch')
+
+  await browser.setPref('browser.startup.page', 0, false)
+  nonDefaultBranchPref = await browser.getPref('browser.startup.page', false)
+  t.equal(nonDefaultBranchPref, 0, 'should give the new value in non-default branch')
+
+  try {
+    await browser.setPref('browser.startup.page', 'string', true)
+    t.fail()
+  } catch (err) {
+    t.pass('should fail to set pref of invalid type')
+  }
+}))

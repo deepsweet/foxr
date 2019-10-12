@@ -1,6 +1,11 @@
 import EventEmitter from 'events'
 import Page from './Page'
-import { TSend, TInstallAddonResult } from './types'
+import {
+  TSend,
+  TInstallAddonResult,
+  Context,
+  TGetPrefResult
+} from './types'
 
 class Browser extends EventEmitter {
   private _send: TSend
@@ -22,6 +27,27 @@ class Browser extends EventEmitter {
     await this._send('WebDriver:DeleteSession')
 
     this.emit('disconnected')
+  }
+
+  async getPref (pref: string, defaultBranch: boolean = false): Promise<TGetPrefResult> {
+    await this._setContext(Context.CHROME)
+
+    const value = await this._send(
+      'WebDriver:ExecuteScript',
+      {
+        script: `let [pref, defaultBranch] = arguments;
+          Cu.import('resource://gre/modules/Preferences.jsm');
+
+          let prefs = new Preferences({defaultBranch});
+
+          return prefs.get(pref);`,
+        args: [pref, defaultBranch]
+      },
+      'value') as TGetPrefResult
+
+    await this._setContext(Context.CONTENT)
+
+    return value
   }
 
   async install (path: string, isTemporary: boolean): Promise<string | null> {
@@ -61,6 +87,35 @@ class Browser extends EventEmitter {
       id,
       send: this._send
     }))
+  }
+
+  private async _setContext (context: Context): Promise<void> {
+    await this._send('Marionette:SetContext', { value: context })
+  }
+
+  async setPref (pref: string, value: string | number | boolean, defaultBranch: boolean = false): Promise<void> {
+    await this._setContext(Context.CHROME)
+
+    const error = await this._send('WebDriver:ExecuteScript', {
+      script: `let [pref, value, defaultBranch] = arguments;
+          Cu.import('resource://gre/modules/Preferences.jsm');
+
+          let prefs = new Preferences({defaultBranch});
+
+          try {
+            prefs.set(pref,value);
+            return null;
+          } catch(e) {
+            return e;
+          }`,
+      args: [pref, value, defaultBranch]
+    }, 'value') as Error|null
+
+    await this._setContext(Context.CONTENT)
+
+    if (error) {
+      throw new Error(`SetPref failed: ${error.message}`)
+    }
   }
 
   async uninstall (id: string): Promise<void> {
