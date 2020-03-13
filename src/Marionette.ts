@@ -1,4 +1,4 @@
-import EventEmitter from 'events'
+import { EventEmitter } from 'events'
 import { Socket } from 'net'
 import { TJsonArray, TJsonMap, TJsonValue } from 'typeon'
 import FoxrError from './Error'

@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import EventEmitter from 'events'
+import { EventEmitter } from 'events'
 import { TJsonValue } from 'typeon'
 import { pWriteFile, mapEvaluateArgs } from '../utils'
 import Browser from './Browser'
