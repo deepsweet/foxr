@@ -114,7 +114,7 @@ class Foxr {
 
     firefoxProcess.unref()
 
-    await waitForPort(DEFAULT_HOST, DEFAULT_PORT)
+    await waitForPort(options.host || DEFAULT_HOST, options.port || DEFAULT_PORT)
 
     return this.connect(options)
   }
