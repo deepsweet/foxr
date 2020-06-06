@@ -104,7 +104,8 @@ class Foxr {
 
     const firefoxProcess = execa(options.executablePath, args, {
       detached: true,
-      stdio: options.dumpio ? 'inherit' : 'ignore'
+      stdio: options.dumpio ? 'inherit' : 'ignore',
+      shell: true
     })
 
     onExit(() => {

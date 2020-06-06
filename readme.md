@@ -93,7 +93,7 @@ type TLaunchOptions = {
 foxr.launch(options?: TLaunchOptions): Promise<Browser>
 ```
 
-* `args` – array of additional args, `['-marionette', '-safe-mode', '-no-remote']` by default
+* `args` – array of additional args. Ex: `['--profile <path-to-profile>']`. `['-marionette', '-safe-mode', '-no-remote']` by default
 * `dumpio` – print browser process stdout and stderr, `false` by default
 * `executablePath` – path to Firefox executable, required
 * `headless` – whether to run browser in headless mode, `true` by default
